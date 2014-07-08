@@ -1,0 +1,8 @@
+build-*/
+gitpoller-work
+http.log
+slaves.json
+state.sqlite
+twistd.log
+twistd.pid
+users.json
