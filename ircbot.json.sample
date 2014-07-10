@@ -1,0 +1,6 @@
+{
+    "server": "irc.freenode.net",
+    "nickname": "cpt-obvious",
+    "password": "secret",
+    "channels": ["#cpt-obvious"]
+}

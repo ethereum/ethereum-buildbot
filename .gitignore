@@ -1,6 +1,7 @@
 build-*/
 gitpoller-work
 http.log
+ircbot.json
 slaves.json
 state.sqlite
 twistd.log
