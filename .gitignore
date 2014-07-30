@@ -7,3 +7,4 @@ state.sqlite
 twistd.log
 twistd.pid
 users.json
+*.pyc
