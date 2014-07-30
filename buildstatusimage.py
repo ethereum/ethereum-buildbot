@@ -35,24 +35,26 @@ class BuildStatusImageResource(HtmlResource):
         try:
             builder = status.getBuilder(name)
         except:
-            return "unknown builder"
+            # unknown builder
+            return self._image('unknown')
 
         # Check if the build in parameter exists.
         build = builder.getLastFinishedBuild()
         if not build:
-            return "unknown build"
+            # unknown build
+            return self._image('unknown')
 
         #SUCCESS, WARNINGS, FAILURE, SKIPPED or EXCEPTION
         res = build.getResults()
         resname = Results[res]
+        return self._image(resname)
 
+    def _image(self, resname):
         img = 'public_html/status_%s.svg' % resname
         here = os.path.dirname(__file__)
         imgfile = os.path.join(here, img)
 
-        imgcontent = open(imgfile, 'rb').read()
-
-        return imgcontent
+        return open(imgfile, 'rb').read()
 
 #class WebStatus(html.WebStatus):
 #    def setupUsualPages(self, numbuilds, num_events, num_events_max):
