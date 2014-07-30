@@ -30,7 +30,6 @@ class BuildStatusImageResource(HtmlResource):
 
         # Get the parameters.
         name = request.args.get("builder", [None])[0]
-        number = -1  # latest
 
         # Check if the builder in parameter exists.
         try:
@@ -39,9 +38,9 @@ class BuildStatusImageResource(HtmlResource):
             return "unknown builder"
 
         # Check if the build in parameter exists.
-        build = builder.getBuild(int(number))
+        build = builder.getLastFinishedBuild()
         if not build:
-            return "unknown build %s" % number
+            return "unknown build"
 
         #SUCCESS, WARNINGS, FAILURE, SKIPPED or EXCEPTION
         res = build.getResults()
