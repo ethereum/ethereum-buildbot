@@ -1,4 +1,5 @@
 build-*/
+gitpoller-work/
 gitpoller-workdir/
 http.log
 ircbot.json
