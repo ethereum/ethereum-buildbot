@@ -2,5 +2,5 @@
     "server": "irc.freenode.net",
     "nickname": "cpt-obvious",
     "password": "secret",
-    "channels": ["#cpt-obvious"]
+    "channels": ["#cpt-obvious", "#ethereum-dev"]
 }
