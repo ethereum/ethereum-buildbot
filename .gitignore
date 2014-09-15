@@ -1,10 +1,13 @@
 build-*/
-gitpoller-work
+gitpoller-workdir/
 http.log
 ircbot.json
+public_html/builds/
+runtests/
 slaves.json
 state.sqlite
-twistd.log
+twistd.log*
 twistd.pid
 users.json
 *.pyc
+*.swp
