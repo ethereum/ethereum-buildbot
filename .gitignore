@@ -3,6 +3,7 @@ gitpoller-work/
 gitpoller-workdir/
 http.log
 ircbot.json
+master.cfg.sample
 public_html/builds/
 runtests/
 slaves.json
