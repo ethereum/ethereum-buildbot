@@ -1,6 +1,8 @@
 [
     {"name": "selfslave", "password": "secret"},
+    {"name": "dockerslave", "password": "secret"},
     {"name": "slave", "password": "secret"},
     {"name": "winslave", "password": "secret"},
+    {"name": "osxvps", "password": "secret"},
     {"name": "osxslave", "password": "secret"}
 ]
