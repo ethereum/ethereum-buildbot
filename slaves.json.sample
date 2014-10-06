@@ -2,6 +2,8 @@
     {"name": "selfslave", "password": "secret"},
     {"name": "slave-cpp", "password": "secret"},
     {"name": "slave-go", "password": "secret"},
+    {"name": "slave-python", "password": "secret"},
+    {"name": "slave-java", "password": "secret"},
     {"name": "slave", "password": "secret"},
     {"name": "winslave", "password": "secret"},
     {"name": "osxvps", "password": "secret"},
