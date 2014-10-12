@@ -1,0 +1,6 @@
+{
+    "REPO": {
+        "owner": "REPO_OWNER",
+        "token": "REPO_TOKEN"
+    }
+}
