@@ -8,6 +8,7 @@ public_html/builds/
 runtests/
 slaves.json
 state.sqlite
+tokens.json
 twistd.log*
 twistd.pid
 users.json
