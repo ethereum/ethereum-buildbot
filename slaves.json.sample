@@ -2,6 +2,7 @@
     {"name": "selfslave", "password": "secret"},
     {"name": "slave-cpp", "password": "secret"},
     {"name": "slave-cpp-pr", "password": "secret"},
+    {"name": "slave-cpp-deb", "password": "secret"},
     {"name": "slave-go", "password": "secret"},
     {"name": "slave-go-pr", "password": "secret"},
     {"name": "slave-python", "password": "secret"},
