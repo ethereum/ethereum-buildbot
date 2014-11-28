@@ -5,7 +5,12 @@ Changes to this repository are automatically deployed once they are pushed to Gi
 
 ## Configuration / Development
 
-To create a local installation of buildbot (for development purposes):
+To create a local installation of buildbot (for development purposes). You'll need `libffi` development headers to be able to install `bcrypt`, which is a dependency of `txgithub`:
+```
+sudo apt-get install libffi-dev
+```
+
+Then we can download and install `ethereum-buildbot`:
 
 ```
 git clone https://github.com/ethereum/ethereum-buildbot.git
