@@ -4,6 +4,7 @@ gitpoller-workdir/
 http.log
 ircbot.json
 master.cfg.sample
+buildbot.tac.new
 public_html/builds/
 runtests/
 slaves.json
@@ -12,5 +13,7 @@ tokens.json
 twistd.log*
 twistd.pid
 users.json
+venv/
 *.pyc
+*~
 *.swp
