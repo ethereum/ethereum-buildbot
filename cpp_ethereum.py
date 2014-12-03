@@ -10,12 +10,11 @@ from buildbot.steps.trigger import Trigger
 from buildbot.status.results import SUCCESS, WARNINGS, SKIPPED # FAILURE, EXCEPTION, RETRY
 from buildbot.steps.transfer import FileDownload
 
+from twisted.python import log
 
-import logging
-
-# TODO initial test to check how buildbot actually works.
+# TODO this should simply check if 'build.py' exists in the current workdir. However, getProperty('workdir') does not return the right workdir. How to get the correct workdir?
 def support_dep_build(step):
-    logging.info (step.build.getProperty('workdir'))
+    log.msg ("Workdir is : " + step.build.getProperty('workdir'))
     return False
 
 # C++
