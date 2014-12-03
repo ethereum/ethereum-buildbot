@@ -11,6 +11,13 @@ from buildbot.status.results import SUCCESS, WARNINGS, SKIPPED # FAILURE, EXCEPT
 from buildbot.steps.transfer import FileDownload
 
 
+import logging
+
+# TODO initial test to check how buildbot actually works.
+def support_dep_build(step):
+    logging.info (step.build.getProperty('workdir'))
+    return False
+
 # C++
 def create_factory(branch='master', deb=False):
     factory = BuildFactory()
@@ -57,6 +64,15 @@ def create_factory(branch='master', deb=False):
             command='sed -ne "s/.*Version = \\"\(.*\)\\";/\\1/p" libdevcore/Common.cpp',
             property="version",
             workdir = 'cpp-ethereum-%s' % branch
+        ),
+        ShellCommand(
+            description = 'compiling',
+            descriptionDone = 'compile',
+            descriptionSuffix = 'dependencies',
+            command = ['./build.py', 'dep'],           
+            workdir = 'cpp-ethereum-%s' % branch,
+            logEnviron = False,
+            doStepIf = support_dep_build
         ),
         Configure(
             haltOnFailure = True,
