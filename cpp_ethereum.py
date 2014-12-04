@@ -10,12 +10,6 @@ from buildbot.steps.trigger import Trigger
 from buildbot.status.results import SUCCESS, WARNINGS, SKIPPED # FAILURE, EXCEPTION, RETRY
 from buildbot.steps.transfer import FileDownload
 
-from twisted.python import log
-
-# TODO this should simply check if 'build.py' exists in the current workdir. However, getProperty('workdir') does not return the right workdir. How to get the correct workdir?
-def support_dep_build(step):
-    log.msg ("Workdir is : " + step.build.getProperty('workdir'))
-    return False
 
 # C++
 def create_factory(branch='master', deb=False):
@@ -63,15 +57,6 @@ def create_factory(branch='master', deb=False):
             command='sed -ne "s/.*Version = \\"\(.*\)\\";/\\1/p" libdevcore/Common.cpp',
             property="version",
             workdir = 'cpp-ethereum-%s' % branch
-        ),
-        ShellCommand(
-            description = 'compiling',
-            descriptionDone = 'compile',
-            descriptionSuffix = 'dependencies',
-            command = ['./build.py', 'dep'],           
-            workdir = 'cpp-ethereum-%s' % branch,
-            logEnviron = False,
-            doStepIf = support_dep_build
         ),
         Configure(
             haltOnFailure = True,
