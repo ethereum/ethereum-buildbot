@@ -11,8 +11,6 @@
     {"name": "slave-python-pr", "password": "secret"},
     {"name": "slave-java", "password": "secret"},
     {"name": "slave-java-pr", "password": "secret"},
-    {"name": "slave", "password": "secret"},
     {"name": "winslave", "password": "secret"},
-    {"name": "osxvps", "password": "secret"},
-    {"name": "osxslave", "password": "secret"}
+    {"name": "osxvps", "password": "secret"}
 ]
