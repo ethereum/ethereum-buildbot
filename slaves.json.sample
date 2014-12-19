@@ -1,5 +1,7 @@
 [
     {"name": "selfslave", "password": "secret"},
+    {"name": "buildslave-one", "password": "secret"},
+    {"name": "buildslave-two", "password": "secret"},
     {"name": "slave-cpp", "password": "secret"},
     {"name": "slave-cpp-develop", "password": "secret"},
     {"name": "slave-cpp-pr", "password": "secret"},
