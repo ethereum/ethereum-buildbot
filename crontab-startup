@@ -1,0 +1,21 @@
+# crontab buildslave startup on reboot
+
+@reboot cd /home/buildslave && /usr/local/bin/buildslave start slave
+
+# cpp-ethereum
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-cpp
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-cpp-pr
+@reboot /usr/bin/docker run -d --privileged=true -t cptobvious/buildslave-cpp-deb
+
+# go-ethereum
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-go
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-go-pr
+@reboot /usr/bin/docker run -d --privileged=true -t cptobvious/buildslave-go-deb
+
+# pyethereum
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-python
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-python-pr
+
+# ethereumj
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-java
+@reboot /usr/bin/docker run -d -t cptobvious/buildslave-java-pr
