@@ -1,4 +1,5 @@
 # ccache
+sudo chmod a+w /var/cache/pbuilder/ccache
 EXTRAPACKAGES=ccache
 CCACHEDIR=/var/cache/pbuilder/ccache
 
