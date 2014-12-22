@@ -1,0 +1,6 @@
+# ccache
+EXTRAPACKAGES=ccache
+CCACHEDIR=/var/cache/pbuilder/ccache
+
+# Ethereum PPA as OTHERMIRROR gets echoed below,
+# leave at least one blank line
