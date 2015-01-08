@@ -2,6 +2,8 @@
     {"name": "selfslave", "password": "secret"},
     {"name": "buildslave-one", "password": "secret"},
     {"name": "buildslave-two", "password": "secret"},
+    {"name": "poc-server-master", "password": "secret"},
+    {"name": "poc-server-develop", "password": "secret"},
     {"name": "slave-cpp", "password": "secret"},
     {"name": "slave-cpp-pr", "password": "secret"},
     {"name": "slave-cpp-deb", "password": "secret"},

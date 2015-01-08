@@ -3,6 +3,6 @@
 # TODO change to real values, manage credentials in ansible-vault
 
 basedir: buildslave-ethereum 
-buildslave_name: poc-server
+buildslave_name: poc-server-develop
 password: password
-buildmaster_url: buildmaster.ethdev.com:8007
+buildmaster_url: build.ethdev.com:9989
