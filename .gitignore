@@ -15,5 +15,6 @@ twistd.pid
 users.json
 venv/
 *.pyc
+ansible/.vagrant
 *~
 *.swp

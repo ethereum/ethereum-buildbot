@@ -1,0 +1,18 @@
+---
+- name: install buildslave dependencies
+  sudo: true
+  apt: name={{ item }}
+  with_items:
+      - python-pip
+      - python-dev    
+
+- name: install buildslave
+  sudo: true
+  pip: name=buildbot-slave
+
+
+- name: create dedicated buildslave account
+  sudo: true
+  user: name=buildslave 
+
+  # TODO set up credentials, ssh access

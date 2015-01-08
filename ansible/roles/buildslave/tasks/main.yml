@@ -1,0 +1,8 @@
+---
+- name: create buildslave project directory
+  file: 
+    path: "{{ basedir }}"
+    state: directory
+
+- name: create buildslave default config
+  shell: buildslave create-slave {{ basedir }} {{ buildmaster_url }} {{ buildslave_name }} {{ password }}
