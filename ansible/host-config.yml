@@ -1,8 +1,7 @@
 ---
-- name: Provision the operation system for buildslave
-  # testing
+- name: Provision the OS for buildslave
   hosts: all
-  # live
-  # hosts: poc-8.ethdev.com
+  remote_user: root
   roles:
       - common
+      - user

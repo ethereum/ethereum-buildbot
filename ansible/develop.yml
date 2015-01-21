@@ -1,3 +1,4 @@
 ---
+# only used on vagrant machines.
 - include: host-config.yml
 - include: buildslave-config.yml

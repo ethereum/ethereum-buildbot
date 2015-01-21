@@ -1,0 +1,12 @@
+---
+- name: create default group for buildslave account
+  sudo: true 
+  group: name=buildslave  
+
+- name: create dedicated buildslave account
+  sudo: true
+  user: 
+      name: buildslave 
+      password: "{{ buildslave_salted_password | default('password') }}"
+      group: buildslave
+      shell: /bin/bash

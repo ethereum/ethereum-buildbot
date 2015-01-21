@@ -1,18 +1,21 @@
 ---
-- name: install buildslave dependencies
+- name: install package dependencies
   sudo: true
-  apt: name={{ item }}
+  apt: name={{ item }} install_recommends=no 
   with_items:
       - python-pip
       - python-dev    
+      - python-apt
+      - htop
+
+- name: install ethereum ppa
+  sudo: true
+  apt_repository: repo=ppa:ethereum/ethereum
+
+- name: install initial ethereum dependencies
+  sudo: true
+  apt: name=ethereum install_recommends=no
 
 - name: install buildslave
   sudo: true
   pip: name=buildbot-slave
-
-
-- name: create dedicated buildslave account
-  sudo: true
-  user: name=buildslave 
-
-  # TODO set up credentials, ssh access

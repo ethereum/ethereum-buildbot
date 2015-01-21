@@ -27,20 +27,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # using a specific IP.
   # config.vm.network "private_network", ip: "192.168.33.10"
 
-  # Create a public network, which generally matched to bridged network.
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
-  # config.vm.network "public_network"
-
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
   # config.ssh.forward_agent = true
-
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -65,10 +54,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # View the documentation for the provider you're using for more
   # information on available options.
  
-  
-  # Ansible
-  config.vm.provision "ansible" do |ansible|
-    	ansible.playbook = "site.yml"
+  # Ansible local develop setup
+  config.vm.provision "develop-config", type: "ansible" do |dc|
+    	dc.playbook = "develop.yml"
+		dc.inventory_path = "inventory/develop"
+		dc.limit = "vagrant"
+		dc.extra_vars = { ansible_ssh_user: 'vagrant' }
   end
 
 end
