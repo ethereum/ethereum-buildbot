@@ -7,6 +7,7 @@
   sudo: true
   user: 
       name: buildslave 
-      password: "{{ buildslave_salted_password | default('password') }}"
+      # http://docs.ansible.com/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
+      password: "{{ buildslave_user_salted_password | default('password') }}"
       group: buildslave
       shell: /bin/bash
