@@ -29,5 +29,6 @@
     {"name": "slave-java-one", "password": "secret"},
     {"name": "slave-java-one-pr", "password": "secret"},
     {"name": "winslave", "password": "secret"},
-    {"name": "osxvps", "password": "secret"}
+    {"name": "osxvps", "password": "secret"},
+    {"name": "osx", "password": "secret"}
 ]
