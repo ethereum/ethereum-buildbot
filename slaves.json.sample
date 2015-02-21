@@ -47,17 +47,5 @@
     {"name": "slave-java-two", "password": "secret"},
     {"name": "slave-java-two-pr", "password": "secret"},
     {"name": "winslave", "password": "secret"},
-    {"name": "osx", "password": "secret"},
-    {"name": "slave-cpp", "password": "secret"},
-    {"name": "slave-cpp-develop", "password": "secret"},
-    {"name": "slave-cpp-deb", "password": "secret"},
-    {"name": "slave-cpp-pr", "password": "secret"},
-    {"name": "slave-go", "password": "secret"},
-    {"name": "slave-go-develop", "password": "secret"},
-    {"name": "slave-go-deb", "password": "secret"},
-    {"name": "slave-go-pr", "password": "secret"},
-    {"name": "slave-python", "password": "secret"},
-    {"name": "slave-python-pr", "password": "secret"},
-    {"name": "slave-java", "password": "secret"},
-    {"name": "slave-java-pr", "password": "secret"}
+    {"name": "osx", "password": "secret"}
 ]
