@@ -1,0 +1,6 @@
+---
+- name: setting up docker
+  hosts: all
+  remote_user: root
+  roles:
+      - docker

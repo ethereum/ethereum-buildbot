@@ -1,20 +1,12 @@
 ---
 - name: install package dependencies
   sudo: true
-  apt: name={{ item }} install_recommends=no 
+  apt: name={{ item }} install_recommends=no
   with_items:
       - python-pip
       - python-dev    
       - python-apt
       - htop
-
-- name: install ethereum ppa
-  sudo: true
-  apt_repository: repo=ppa:ethereum/ethereum
-
-- name: install initial ethereum dependencies
-  sudo: true
-  apt: name=ethereum install_recommends=no
 
 - name: install buildslave
   sudo: true

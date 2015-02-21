@@ -4,6 +4,5 @@
     path: "{{ basedir }}"
     state: directory
 
-  # TODO instead of creating the config, just upload the config
-- name: create buildslave default config
-  shell: buildslave create-slave {{ basedir }} {{ buildmaster_url }} {{ buildslave_name }} {{ buildslave_service_password | default('password') }}
+- name: create buildslave
+  shell: buildslave create-slave {{ basedir }} {{ buildmaster_url }} {{ buildslave_name }} "{{ buildslave_service_password | default('password') }}"

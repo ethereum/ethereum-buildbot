@@ -1,0 +1,38 @@
+---
+
+- name: Make sure apt-transport-https is installed
+  apt:
+    pkg: "apt-transport-https"
+    state: installed
+
+- name: Add Docker repository key
+  apt_key:
+    id: "36A1D7869245C8950F966E92D8576A8BA88D21E9"
+    keyserver: "hkp://keyserver.ubuntu.com:80"
+    state: present
+
+- name: Add Docker repository and update apt cache
+  apt_repository:
+    repo: "deb http://get.docker.io/ubuntu docker main"
+    update_cache: yes
+    state: present
+
+- name: Install lxc-docker
+  apt:
+    pkg: "lxc-docker"
+    state: installed
+
+- name: Install docker-py
+  pip:
+    name: docker-py
+
+- name: Make sure docker is running
+  service:
+    name: docker
+    state: started
+
+- name: Add buildslave to docker group
+  shell: gpasswd -a buildslave docker
+
+- name: Restart Docker
+  shell: gpasswd -a buildslave docker

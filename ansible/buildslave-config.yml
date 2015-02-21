@@ -1,7 +1,0 @@
----
-- name: setting up buildslave configuration
-  hosts: all
-  remote_user: buildslave
-  
-  roles:
-      - buildslave

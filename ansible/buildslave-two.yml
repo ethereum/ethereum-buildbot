@@ -1,0 +1,16 @@
+---
+- include: host-config.yml
+
+- name: setting up buildslave configuration
+  hosts: all
+  remote_user: buildslave
+  vars:
+      buildslave_name: buildslave-two
+  roles:
+      - buildslave
+
+- name: setting up docker configuration
+  hosts: all
+  remote_user: root
+  roles:
+      - docker

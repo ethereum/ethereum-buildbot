@@ -1,0 +1,6 @@
+---
+- name: setting up poc-server-develop
+  hosts: all
+  remote_user: root
+  roles:
+      - poc-server-develop

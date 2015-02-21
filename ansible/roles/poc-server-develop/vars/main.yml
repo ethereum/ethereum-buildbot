@@ -1,3 +1,4 @@
 ---
 basedir: slave
+buildslave_name: poc-server-develop
 buildmaster_url: build.ethdev.com:9989

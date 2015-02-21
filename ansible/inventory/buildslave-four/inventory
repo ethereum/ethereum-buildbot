@@ -2,8 +2,7 @@
 buildslave-test ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200
 
 [production]
-5.1.83.225
-5.1.83.226
+5.35.254.57
 
 [servers:children]
 vagrant

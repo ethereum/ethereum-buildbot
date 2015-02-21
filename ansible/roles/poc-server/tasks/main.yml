@@ -1,0 +1,8 @@
+---
+- name: install ethereum ppa
+  sudo: true
+  apt_repository: repo=ppa:ethereum/ethereum
+
+- name: install ethereum
+  sudo: true
+  apt: name=ethereum install_recommends=no
