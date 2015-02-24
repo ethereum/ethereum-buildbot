@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 19:17:46
+# @Last Modified time: 2015-02-23 19:21:26
 
 from buildbot import locks
 
@@ -35,7 +35,6 @@ reload(go_ethereum_brew)
 reload(ethereumj)
 reload(pyethereum)
 reload(serpent)
-reload(dependencies)
 reload(debian)
 reload(poc_servers)
 
