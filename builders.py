@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 17:23:32
+# @Last Modified time: 2015-02-23 19:17:46
 
 from buildbot import locks
 
@@ -21,7 +21,6 @@ from factories import go_ethereum_brew
 from factories import ethereumj
 from factories import pyethereum
 from factories import serpent
-from factories import dependencies
 from factories import debian
 from factories import poc_servers
 
