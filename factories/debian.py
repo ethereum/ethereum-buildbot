@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 17:07:47
+# @Last Modified time: 2015-02-25 06:37:21
 
 import factory
 reload(factory)
@@ -125,7 +125,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             # if branch == 'master':
             #     otherppa = "http://ppa.launchpad.net/ubuntu-sdk-team/ppa/ubuntu"
             # else:
-            otherppa = "http://ppa.launchpad.net/beineri/opt-qt54-trusty/ubuntu"
+            otherppa = "http://ppa.launchpad.net/beineri/opt-qt541-trusty/ubuntu"
 
             factory.addStep(ShellCommand(
                 logEnviron = False,
