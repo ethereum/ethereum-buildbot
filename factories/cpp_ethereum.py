@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:17
+# @Last Modified time: 2015-02-25 07:29:14
 
 import factory
 reload(factory)
@@ -130,9 +130,20 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
                     "database": Interpolate("%(prop:database)s"),
                     "protocol": Interpolate("%(prop:protocol)s"),
                     "version": Interpolate("%(prop:version)s")
-                }
-            )
+                })
         ]: factory.addStep(step)
+
+        if branch is not 'master':
+            for step in [
+                Trigger(
+                    schedulerNames=["cpp-ethereum-integration"],
+                    waitForFinish=False,
+                    set_properties={
+                        "database": Interpolate("%(prop:database)s"),
+                        "protocol": Interpolate("%(prop:protocol)s"),
+                        "version": Interpolate("%(prop:version)s")
+                    })
+            ]: factory.addStep(step)
 
         if deb:
             for architecture in ['i386', 'amd64']:
@@ -143,8 +154,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
                             waitForFinish=False,
                             set_properties={
                                 "version": Interpolate("%(prop:version)s")
-                            }
-                        )
+                            })
                     ]: factory.addStep(step)
 
     # Run all tests, warnings let the build pass, failures marks the build with warnings

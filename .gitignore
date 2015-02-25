@@ -1,11 +1,13 @@
 build-*/
 gitpoller-work/
 gitpoller-workdir/
+changehook.passwd
 http.log
 ircbot.json
 master.cfg.sample
 buildbot.tac.new
 public_html/builds/
+public_html/reports/
 runtests/
 slaves.json
 state.sqlite

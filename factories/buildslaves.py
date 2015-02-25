@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:05:40
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:56:00
+# @Last Modified time: 2015-02-25 07:25:24
 
 import factory
 reload(factory)
@@ -98,8 +98,18 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 description="building %s deb buildslave" % lang,
                 descriptionDone="build %s deb buildslave" % lang,
                 command=["docker", "build", "--no-cache", "-t", "cptobvious/buildslave-%s-deb" % lang, "%s-buildslave-deb" % client]
-            )
-        )
+            ))
+
+    if lang in ['cpp']:
+        factory.addStep(
+            ShellCommand(
+                warnOnFailure = True,
+                logEnviron = False,
+                name="buildslave-%s-integration" % lang,
+                description="building %s integration buildslave" % lang,
+                descriptionDone="build %s integration buildslave" % lang,
+                command=["docker", "build", "--no-cache", "-t", "cptobvious/buildslave-%s-integration" % lang, "%s-buildslave-integration" % client]
+            ))
 
     for step in [
         ShellCommand(
@@ -159,6 +169,18 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 description="starting %s deb buildslave" % lang,
                 descriptionDone="start %s deb buildslave" % lang,
                 command=["docker", "run", "-d", "--privileged=true", "-t", "cptobvious/buildslave-%s-deb" % lang]
+            )
+        ]: factory.addStep(step)
+
+    if lang in ['cpp']:
+        for step in [
+            ShellCommand(
+                warnOnFailure = True,
+                logEnviron = False,
+                name="buildslave-%s-integration-run" % lang,
+                description="starting %s integration buildslave" % lang,
+                descriptionDone="start %s integration buildslave" % lang,
+                command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-integration" % lang]
             )
         ]: factory.addStep(step)
 

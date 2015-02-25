@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 19:21:26
+# @Last Modified time: 2015-02-25 07:26:00
 
 from buildbot import locks
 
@@ -23,6 +23,7 @@ from factories import pyethereum
 from factories import serpent
 from factories import debian
 from factories import poc_servers
+from factories import integration
 
 reload(self_update)
 reload(buildslaves)
@@ -37,6 +38,7 @@ reload(pyethereum)
 reload(serpent)
 reload(debian)
 reload(poc_servers)
+reload(integration)
 
 from factories.self_update import *
 from factories.buildslaves import *
@@ -52,6 +54,7 @@ from factories.pyethereum import *
 from factories.serpent import *
 from factories.debian import *
 from factories.poc_servers import *
+from factories.integration import *
 
 
 ####### BUILDERS
@@ -402,6 +405,17 @@ for builder in [
         builddir="build-cpp-ethereum-win-pr",
         slavenames=["winslave"],
         factory=win_cpp_factory(branch='develop', isPullRequest=True),
-        locks=[win_lock.access('counting')])
+        locks=[win_lock.access('counting')]),
+
+    # Integration
+    BuilderConfig(
+      name="Linux C++ integration",
+      builddir="build-cpp-ethereum-integration",
+      slavenames=[
+          "slave-cpp-one-integration",
+          "slave-cpp-two-integration"
+      ],
+      factory=integration_factory(),
+      locks=[build_lock.access('counting')])
 
 ]: builders.append(builder)

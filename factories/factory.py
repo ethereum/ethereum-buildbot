@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:10:52
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 17:01:50
+# @Last Modified time: 2015-02-25 06:29:57
 
 import re
 import time
@@ -20,7 +20,7 @@ from buildbot.steps.shell import Configure, Compile, SetPropertyFromCommand, She
 from buildbot.steps.transfer import FileDownload, FileUpload, DirectoryUpload
 from buildbot.steps.trigger import Trigger
 from buildbot.steps.vstudio import MsBuild12
-from buildbot.status.results import SUCCESS, WARNINGS, SKIPPED # FAILURE, EXCEPTION, RETRY
+from buildbot.status.results import SUCCESS, WARNINGS, SKIPPED, FAILURE #, EXCEPTION, RETRY
 # from buildbot.steps.cppcheck import Cppcheck # TODO native on nine
 
 @properties.renderer
@@ -43,17 +43,26 @@ def urlbuildername(props):
 #         return "." + str(int(props['old_revision']) + 1)
 #     return 1
 
-# def _no_warnings(self):
-#     fail = False
-#     steps = self.build.getStatus().getSteps()
-#     for step in steps:
-#         (step_result, text) = step.getResults()
-#         if step_result != SUCCESS and step_result != SKIPPED and step_result != None:
-#             fail = True
-#     if fail:
-#         return False
-#     else:
-#         return True
+def warnings(self):
+    fail = False
+    steps = self.build.getStatus().getSteps()
+    for step in steps:
+        (step_result, text) = step.getResults()
+        if step_result != SUCCESS and step_result != SKIPPED and step_result != None:
+            fail = True
+    return fail
+
+def no_warnings(self):
+    fail = False
+    steps = self.build.getStatus().getSteps()
+    for step in steps:
+        (step_result, text) = step.getResults()
+        if step_result != SUCCESS and step_result != SKIPPED and step_result != None:
+            fail = True
+    if fail:
+        return False
+    else:
+        return True
 
 #
 # OSX factories
