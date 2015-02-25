@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 13:54:29
+# @Last Modified time: 2015-02-25 14:17:32
 
 import StringIO
 
@@ -25,7 +25,7 @@ class XvfbNoseTest(ShellCommand):
         count_packages = len(package_names)
         name_packages = package_names[0] + ' test' if count_packages == 1 else 'tests'
 
-        command = Interpolate('DISPLAY=:1 xvfb-run -s "-screen 0 1280x1024x8" nosetests -v --with-html --html-file=report/index.html --cover-tests --with-coverage ' + cover_packages + ' --cover-min-percentage=' + str(min_coverage) + ' --cover-erase --cover-html --cover-html-dir=report/coverage' + test_paths)
+        command = Interpolate('DISPLAY=:1 xvfb-run -s "-screen 0 1280x1200x8" nosetests -v --with-html --html-file=report/index.html --cover-tests --with-coverage ' + cover_packages + ' --cover-min-percentage=' + str(min_coverage) + ' --cover-erase --cover-html --cover-html-dir=report/coverage' + test_paths)
         description = 'running ' + name_packages
         descriptionDone = name_packages
         ShellCommand.__init__(
