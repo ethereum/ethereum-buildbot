@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 08:26:20
+# @Last Modified time: 2015-02-25 13:54:29
 
 import StringIO
 
@@ -233,6 +233,9 @@ def integration_factory():
 
         # Upload screenshot
         FileUpload(
+            haltOnFailure = False,
+            flunkOnFailure = False,
+            warnOnFailure = True,
             name = 'upload-screenshot',
             slavesrc = "screenshot.png",
             masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot.png"),
@@ -242,6 +245,9 @@ def integration_factory():
 
         # Upload failure screenshot
         FileUpload(
+            haltOnFailure = False,
+            flunkOnFailure = False,
+            warnOnFailure = True,
             name = 'upload-fail-screenshot',
             doStepIf = warnings,
             slavesrc = "screenshot-fail.png",
@@ -252,6 +258,9 @@ def integration_factory():
 
         # Upload final screenshot
         FileUpload(
+            haltOnFailure = False,
+            flunkOnFailure = False,
+            warnOnFailure = True,
             name = 'upload-final-screenshot',
             doStepIf = no_warnings,
             slavesrc = "screenshot-final.png",
