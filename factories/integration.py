@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 14:17:32
+# @Last Modified time: 2015-02-25 18:45:27
 
 import StringIO
 
@@ -178,6 +178,23 @@ def integration_factory():
             descriptionDone="download init script",
             mastersrc="eth-supervisord-integration.conf",
             slavedest="eth-supervisord-integration.conf"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="stop",
+            description="stopping",
+            descriptionDone="stop",
+            command="kill `ps aux | grep 'supervisord -c eth-supervisord-integration.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="clean-chain",
+            description="cleaning chain",
+            descriptionDone="clean chain",
+            command=["rm", "-rf", ".ethereum_eth"]
         ),
         ShellCommand(
             haltOnFailure = True,
