@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-26 04:43:26
+# @Last Modified time: 2015-02-26 04:50:27
 
 import StringIO
 
@@ -106,7 +106,7 @@ def integration_factory():
 
     test_files = ['integration']
     package_names = ['integration']
-    min_coverage = 90
+    min_coverage = 80
 
     for step in [
         Git(
