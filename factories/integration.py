@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 21:06:02
+# @Last Modified time: 2015-02-26 04:43:26
 
 import StringIO
 
@@ -19,7 +19,7 @@ class XvfbNoseTest(ShellCommand):
     def __init__(self, test_files, package_names, min_coverage):
         test_paths = ''
         for test_file in test_files:
-            test_paths += ' ./' + test_file + '.py'
+            test_paths += ' ' + test_file + '.py'
         self.packages = package_names
         cover_packages = '--cover-package=' + ','.join(test_files)
         count_packages = len(package_names)
@@ -53,7 +53,7 @@ class XvfbNoseTest(ShellCommand):
         buildername = self.getProperty('buildername')
         buildnumber = self.getProperty('buildnumber')
 
-        build_report_path = 'reports/' + buildername + '/' + str(buildnumber) + '/report/'
+        build_report_path = '/reports/' + buildername + '/' + str(buildnumber) + '/report/'
 
         lines = list(StringIO.StringIO(log.getText()).readlines())
 
@@ -76,7 +76,7 @@ class XvfbNoseTest(ShellCommand):
                 percentage = line.split()[-1]
                 break
         url = build_report_path + 'coverage'
-        self.addURL("coverage %s" %percentage, url)
+        self.addURL("coverage %s" % percentage, url)
 
     def _getRatio(self, lines):
         '''Returns total and passed tests'''
@@ -201,9 +201,18 @@ def integration_factory():
             haltOnFailure = True,
             logEnviron = False,
             name="clean-chain",
-            description="cleaning chain",
+            description="cleaning up",
             descriptionDone="clean chain",
             command=["rm", "-rf", ".ethereum_eth"]
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="clean-report",
+            description="cleaning report",
+            descriptionDone="clean report",
+            command="rm -f screenshot* && rm -rf report && rm -f *.pyc",
+            workdir="integration/tests"
         ),
         ShellCommand(
             haltOnFailure = True,
@@ -299,7 +308,7 @@ def integration_factory():
         DirectoryUpload(
             name = 'upload-reports',
             compress = 'gz',
-            slavesrc = Interpolate("report"),
+            slavesrc = "report",
             masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/report"),
             url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/report/"),
             workdir="integration/tests"
