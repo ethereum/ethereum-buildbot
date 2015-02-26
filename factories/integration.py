@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 20:39:24
+# @Last Modified time: 2015-02-25 20:45:19
 
 import StringIO
 
@@ -161,7 +161,7 @@ def integration_factory():
             name="test-requirements",
             description="installing test requirements",
             descriptionDone="install test requirements",
-            command=["pip", "install", "--upgrade", "--no-deps", "-r", "dev_requirements.txt"],
+            command=["pip", "install", "--upgrade", "--force-reinstall", "-r", "dev_requirements.txt"],
             workdir="integration"
         ),
         Test(
