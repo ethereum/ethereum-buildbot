@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-26 04:50:27
+# @Last Modified time: 2015-02-26 13:01:07
 
 import StringIO
 
@@ -296,11 +296,11 @@ def integration_factory():
             haltOnFailure = False,
             flunkOnFailure = False,
             warnOnFailure = True,
-            name = 'upload-final-screenshot',
+            name = 'upload-screenshot-passed',
             doStepIf = no_warnings,
-            slavesrc = "screenshot-final.png",
-            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-final.png"),
-            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-final.png"),
+            slavesrc = "screenshot-passed.png",
+            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-passed.png"),
+            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-passed.png"),
             workdir="integration/tests"
         ),
 
