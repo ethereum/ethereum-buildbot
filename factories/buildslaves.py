@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:05:40
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 07:25:24
+# @Last Modified time: 2015-02-26 23:17:11
 
 import factory
 reload(factory)
@@ -33,12 +33,21 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             retry=(5, 3)
         ),
         ShellCommand(
-            haltOnFailure = True,
+            flunkOnFailure = False,
             logEnviron = False,
-            name="cleanup",
-            description="cleaning up",
-            descriptionDone="clean up",
-            command=["./bin/docker-cleanup"],
+            name="cleanup-containers",
+            description="cleaning up containers",
+            descriptionDone="clean up containers",
+            command="docker rm $(docker ps -a -q)",
+            decodeRC={0:SUCCESS, 1:WARNINGS, 123:WARNINGS}
+        ),
+        ShellCommand(
+            flunkOnFailure = False,
+            logEnviron = False,
+            name="cleanup-images",
+            description="cleaning up images",
+            descriptionDone="clean up images",
+            command="docker rmi $(docker images -f 'dangling=true' -q)",
             decodeRC={0:SUCCESS, 1:WARNINGS, 123:WARNINGS}
         ),
         ShellCommand(
