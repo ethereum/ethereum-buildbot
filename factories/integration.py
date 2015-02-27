@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-26 22:45:33
+# @Last Modified time: 2015-02-27 03:04:37
 
 import StringIO
 
@@ -230,20 +230,14 @@ def integration_factory():
             command=["mkdir", "-p", "report", "screenshots"],
             workdir="integration/tests"
         ),
-    ]: factory.addStep(step)
+        FileDownload(
+            haltOnFailure = True,
+            descriptionDone="download catalog test",
+            mastersrc="tests/catalog.py",
+            slavedest="tests/catalog.py",
+            workdir="integration"
+        ),
 
-    for test_file in test_files:
-        for step in [
-            FileDownload(
-                haltOnFailure = True,
-                descriptionDone="download %s test" % test_file,
-                mastersrc="tests/%s.py" % test_file,
-                slavedest="tests/%s.py" % test_file,
-                workdir="integration"
-            )
-        ]: factory.addStep(step)
-
-    for step in [
         # NoseTests using xvfb
         XvfbNoseTest(test_files, package_names, min_coverage),
 
