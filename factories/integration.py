@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-26 13:01:07
+# @Last Modified time: 2015-02-26 22:45:33
 
 import StringIO
 
@@ -53,15 +53,14 @@ class XvfbNoseTest(ShellCommand):
         buildername = self.getProperty('buildername')
         buildnumber = self.getProperty('buildnumber')
 
-        build_report_path = '/reports/' + buildername + '/' + str(buildnumber) + '/report/'
+        url = '/reports/' + buildername + '/' + str(buildnumber) + '/report'
 
         lines = list(StringIO.StringIO(log.getText()).readlines())
 
         #
         # HTML test report
         #
-        url = build_report_path
-        passed, total = self._getRatio(lines)
+        passed, total = self._getRatio(lines, len(self.packages))
         # os.chmod(report, stat.S_IROTH) # ?
         self.addURL('passed %s/%s' % (passed, total), url)
 
@@ -75,37 +74,22 @@ class XvfbNoseTest(ShellCommand):
             if 'TOTAL' in line and 'ERROR' not in line:
                 percentage = line.split()[-1]
                 break
-        url = build_report_path + 'coverage'
-        self.addURL("coverage %s" % percentage, url)
+        self.addURL("coverage %s" % percentage, url + '/coverage')
 
-    def _getRatio(self, lines):
+    def _getRatio(self, lines, total):
         '''Returns total and passed tests'''
-        passed = None
-        total = 0
+        passed = 0
         for line in lines:
-            if line.startswith('Ran'):
-                total = line.split()[1]
-            if line.startswith('FAILED'):
-                regex = re.compile("FAILED \((errors=[0-9]+)?(, )?(failures=[0-9]+)?\)")
-                r = regex.search(line)
-                groups = r.groups()
-                passed = int(total)
-                if isinstance(groups, basestring):
-                    passed = passed - int(groups[0].split('=')[-1])
-                    break
-                if len(groups) == 3 and isinstance(groups[2], basestring):
-                    passed = passed - int(groups[2].split('=')[-1])
-                    break
-        if passed is None:
-            passed = total
+            if "... ok" in line:
+                passed += 1
         return (passed, total)
 
 
 def integration_factory():
     factory = BuildFactory()
 
-    test_files = ['integration']
-    package_names = ['integration']
+    test_files = ['catalog', 'integration']
+    package_names = ['catalog', 'integration']
     min_coverage = 80
 
     for step in [
@@ -208,10 +192,10 @@ def integration_factory():
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="clean-report",
-            description="cleaning report",
-            descriptionDone="clean report",
-            command="rm -f screenshot* && rm -rf report && rm -f *.pyc",
+            name="clean-up",
+            description="cleaning up",
+            descriptionDone="clean up",
+            command="rm -rf screenshots && rm -rf report && rm -f *.pyc",
             workdir="integration/tests"
         ),
         ShellCommand(
@@ -240,20 +224,27 @@ def integration_factory():
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="report-folder",
-            description="creating report folder",
-            descriptionDone="create report folder",
-            command=["mkdir", "-p", "report"],
+            name="create-folders",
+            description="creating folders",
+            descriptionDone="create folders",
+            command=["mkdir", "-p", "report", "screenshots"],
             workdir="integration/tests"
         ),
-        # FileDownload(
-        #     haltOnFailure = True,
-        #     descriptionDone="download integration test",
-        #     mastersrc="tests/integration.py",
-        #     slavedest="tests/integration.py",
-        #     workdir="integration"
-        # ),
+    ]: factory.addStep(step)
 
+    for test_file in test_files:
+        for step in [
+            FileDownload(
+                haltOnFailure = True,
+                descriptionDone="download %s test" % test_file,
+                mastersrc="tests/%s.py" % test_file,
+                slavedest="tests/%s.py" % test_file,
+                workdir="integration"
+            )
+        ]: factory.addStep(step)
+
+    for step in [
+        # NoseTests using xvfb
         XvfbNoseTest(test_files, package_names, min_coverage),
 
         ShellCommand(
@@ -265,45 +256,26 @@ def integration_factory():
             command="kill `ps aux | grep 'supervisord -c eth-supervisord-integration.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
             decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
         ),
-
-        # Upload screenshot
-        FileUpload(
+        ShellCommand(
             haltOnFailure = False,
             flunkOnFailure = False,
             warnOnFailure = True,
-            name = 'upload-screenshot',
-            slavesrc = "screenshot.png",
-            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot.png"),
-            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot.png"),
+            logEnviron = False,
+            name="move-screenshots",
+            description="moving screenshots",
+            descriptionDone="move screenshots",
+            command="mv *.png screenshots/",
             workdir="integration/tests"
         ),
-
-        # Upload failure screenshot
-        FileUpload(
-            haltOnFailure = False,
-            flunkOnFailure = False,
-            warnOnFailure = True,
-            name = 'upload-fail-screenshot',
-            doStepIf = warnings,
-            slavesrc = "screenshot-fail.png",
-            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-fail.png"),
-            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-fail.png"),
+        # Upload screenshots
+        DirectoryUpload(
+            name = 'upload-screenshots',
+            compress = 'gz',
+            slavesrc = "screenshots",
+            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots"),
+            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots/"),
             workdir="integration/tests"
         ),
-
-        # Upload final screenshot
-        FileUpload(
-            haltOnFailure = False,
-            flunkOnFailure = False,
-            warnOnFailure = True,
-            name = 'upload-screenshot-passed',
-            doStepIf = no_warnings,
-            slavesrc = "screenshot-passed.png",
-            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-passed.png"),
-            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshot-passed.png"),
-            workdir="integration/tests"
-        ),
-
         # Upload HTML and coverage report
         DirectoryUpload(
             name = 'upload-reports',

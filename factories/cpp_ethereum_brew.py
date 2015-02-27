@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:31
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 17:05:46
+# @Last Modified time: 2015-02-26 22:34:34
 
 import factory
 reload(factory)
@@ -278,14 +278,16 @@ def brew_cpp_factory(branch='develop'):
                 decodeRC = {0:SUCCESS,1:WARNINGS,2:WARNINGS}
             ),
             ShellCommand(
-                haltOnFailure = True,
+                haltOnFailure = False,
+                flunkOnFailure = False,
                 logEnviron = False,
                 name = "unload",
                 descriptionDone = 'unload',
                 command = ['launchctl', 'unload', '/usr/local/opt/ethereum/homebrew.mxcl.ethereum.plist'],
             ),
             ShellCommand(
-                haltOnFailure = True,
+                haltOnFailure = False,
+                flunkOnFailure = False,
                 logEnviron = False,
                 name = "load",
                 descriptionDone = 'load',

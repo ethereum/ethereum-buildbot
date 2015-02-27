@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:02:59
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:45
+# @Last Modified time: 2015-02-26 22:34:47
 
 import factory
 reload(factory)
@@ -226,14 +226,16 @@ def brew_go_factory(branch='develop'):
                 decodeRC = {0:SUCCESS,1:WARNINGS,2:WARNINGS}
             ),
             ShellCommand(
-                haltOnFailure = True,
+                haltOnFailure = False,
+                flunkOnFailure = False,
                 logEnviron = False,
                 name = "unload",
                 descriptionDone = 'unload',
                 command = ['launchctl', 'unload', '/usr/local/opt/go-ethereum/homebrew.mxcl.go-ethereum.plist'],
             ),
             ShellCommand(
-                haltOnFailure = True,
+                haltOnFailure = False,
+                flunkOnFailure = False,
                 logEnviron = False,
                 name = "load",
                 descriptionDone = 'load',
