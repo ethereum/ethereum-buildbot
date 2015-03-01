@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 07:26:00
+# @Last Modified time: 2015-03-01 07:59:50
 
 from buildbot import locks
 
@@ -67,7 +67,7 @@ builders = []
 
 self_lock = locks.SlaveLock("self_update", maxCount = 1)
 build_lock = locks.SlaveLock("slave_builds", maxCount = 2)
-package_lock = locks.SlaveLock("slave_packaging", maxCount = 4)
+package_lock = locks.SlaveLock("slave_packaging", maxCount = 2)
 go_lock = locks.SlaveLock("go_builds", maxCount = 1)
 osx_lock = locks.SlaveLock("osx_builds", maxCount = 2)
 brew_lock = locks.SlaveLock("brew_builds", maxCount = 1)
