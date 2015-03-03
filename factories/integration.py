@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-03 13:16:12
+# @Last Modified time: 2015-03-03 15:45:34
 
 import StringIO
 
@@ -109,6 +109,16 @@ def integration_factory():
         Git(
             haltOnFailure = True,
             logEnviron = False,
+            repourl='https://github.com/ethereum/ethereum.js.git',
+            branch='master',
+            mode='incremental',
+            codebase='ethereumjs',
+            retry=(5, 3),
+            workdir="ethereumjs"
+        ),
+        Git(
+            haltOnFailure = True,
+            logEnviron = False,
             repourl='https://github.com/etherex/etherex.git',
             branch='master',
             mode='incremental',
@@ -163,11 +173,29 @@ def integration_factory():
         Test(
             flunkOnFailure = False,
             logEnviron = False,
-            description="testing",
+            description="py.testing",
             descriptionDone="py.test",
-            name="test-py.test",
+            name="py.test",
             command=["py.test", "-vvrs"],
             workdir="integration"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="npm-install",
+            description="npm installing",
+            descriptionDone="npm install",
+            command=["npm", "install"],
+            workdir="ethereumjs"
+        ),
+        Test(
+            flunkOnFailure = False,
+            logEnviron = False,
+            description="npm testing",
+            descriptionDone="npm test",
+            name="npm-test",
+            command=["npm", "test"],
+            workdir="ethereumjs"
         ),
         ShellCommand(
             haltOnFailure = True,

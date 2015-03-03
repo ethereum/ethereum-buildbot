@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-24 23:26:19
+# @Last Modified time: 2015-03-03 13:30:23
 
 ####### SCHEDULERS
 
@@ -83,6 +83,13 @@ brew_codebases={
         'revision': None
     }
 }
+ethereumjs_codebases={
+    'ethereumjs': {
+        'repository': 'https://github.com/ethereum/ethereum.js.git',
+        'branch': 'master',
+        'revision': None
+    }
+}
 integration_codebases={
     'integration': {
         'repository': 'https://github.com/etherex/etherex.git',
@@ -110,6 +117,7 @@ all_brew_go_codebases=go_ethereum_codebases.copy()
 all_brew_go_codebases.update(brew_codebases)
 
 all_integration_codebases=cpp_ethereum_codebases.copy()
+all_integration_codebases.update(ethereumjs_codebases)
 all_integration_codebases.update(integration_codebases)
 
 
@@ -432,7 +440,7 @@ for scheduler in [
     ForceScheduler(
         name="force-cpp-ethereum-integration",
         builderNames=["Linux C++ integration"],
-        codebases=["cpp-ethereum", "integration"])
+        codebases=["cpp-ethereum", "ethereumjs", "integration"])
 ]: schedulers.append(scheduler)
 
 for buildslave in ["one", "two", "three", "four"]:
