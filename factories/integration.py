@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-03 12:17:32
+# @Last Modified time: 2015-03-03 13:16:12
 
 import StringIO
 
@@ -271,13 +271,6 @@ def integration_factory():
             descriptionDone="download catalog test",
             mastersrc="tests/catalog.py",
             slavedest="tests/catalog.py",
-            workdir="integration"
-        ),
-        FileDownload(
-            haltOnFailure = True,
-            descriptionDone="download integration-user test",
-            mastersrc="tests/integration-user.py",
-            slavedest="tests/integration-user.py",
             workdir="integration"
         ),
         XvfbNoseTest(test_files, min_coverage),
