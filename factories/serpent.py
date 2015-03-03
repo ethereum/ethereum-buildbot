@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:30
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-03 11:50:25
+# @Last Modified time: 2015-03-03 16:57:25
 
 import factory
 reload(factory)
@@ -47,7 +47,7 @@ def serpent_factory(branch='master'):
             name="pip-install",
             description="installing",
             descriptionDone="install",
-            command=["pip", "install", "."]
+            command=["pip", "install", "-e", "."]
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
