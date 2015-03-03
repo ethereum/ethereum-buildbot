@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:30
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:56:59
+# @Last Modified time: 2015-03-03 11:50:25
 
 import factory
 reload(factory)
@@ -62,7 +62,7 @@ def serpent_factory(branch='master'):
             name="test-requirements",
             description="installing test requirements",
             descriptionDone="install test requirements",
-            command="pip install pytest && pip install pyethereum"
+            command="pip install pytest && pip install --upgrade --no-deps pyethereum"
         ),
         Test(
             flunkOnFailure = False,

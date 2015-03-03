@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:15
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:54
+# @Last Modified time: 2015-03-03 11:49:06
 
 import factory
 reload(factory)
@@ -30,6 +30,14 @@ def pyethereum_factory(branch='master'):
             description="installing requirements",
             descriptionDone="install requirements",
             command=["pip", "install", "-r", "requirements.txt"]
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="upgrade-requirements",
+            description="upgrading test requirements",
+            descriptionDone="upgrade test requirements",
+            command=["pip", "install", "--upgrade", "--no-deps", "-r", "requirements.txt"]
         ),
         ShellCommand(
             haltOnFailure = True,

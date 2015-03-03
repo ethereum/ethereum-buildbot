@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-27 03:04:37
+# @Last Modified time: 2015-03-03 12:17:32
 
 import StringIO
 
@@ -16,16 +16,19 @@ integration_lock = locks.SlaveLock("integration", maxCount = 1)
 
 class XvfbNoseTest(ShellCommand):
 
-    def __init__(self, test_files, package_names, min_coverage):
+    def __init__(self, test_files, min_coverage, reportdir=""):
         test_paths = ''
         for test_file in test_files:
             test_paths += ' ' + test_file + '.py'
-        self.packages = package_names
+        self.packages = test_files
         cover_packages = '--cover-package=' + ','.join(test_files)
-        count_packages = len(package_names)
-        name_packages = package_names[0] + ' test' if count_packages == 1 else 'tests'
+        count_packages = len(test_files)
+        name_packages = test_files[0] + ' test' if count_packages == 1 else 'tests'
+        if reportdir:
+            reportdir = "/" + reportdir
+        self.reportdir = reportdir
 
-        command = Interpolate('DISPLAY=:1 xvfb-run -s "-screen 0 1280x1200x8" nosetests -v --with-html --html-file=report/index.html --cover-tests --with-coverage ' + cover_packages + ' --cover-min-percentage=' + str(min_coverage) + ' --cover-erase --cover-html --cover-html-dir=report/coverage' + test_paths)
+        command = Interpolate('DISPLAY=:1 xvfb-run -s "-screen 0 1280x1200x8" nosetests -v --with-html --html-file=report%s/index.html --cover-tests --with-coverage ' % reportdir + cover_packages + ' --cover-min-percentage=' + str(min_coverage) + ' --cover-erase --cover-html --cover-html-dir=report%s/coverage' % reportdir + test_paths)
         description = 'running ' + name_packages
         descriptionDone = name_packages
         ShellCommand.__init__(
@@ -53,7 +56,7 @@ class XvfbNoseTest(ShellCommand):
         buildername = self.getProperty('buildername')
         buildnumber = self.getProperty('buildnumber')
 
-        url = '/reports/' + buildername + '/' + str(buildnumber) + '/report'
+        url = '/reports/' + buildername + '/' + str(buildnumber) + '/report' + self.reportdir
 
         lines = list(StringIO.StringIO(log.getText()).readlines())
 
@@ -89,7 +92,7 @@ def integration_factory():
     factory = BuildFactory()
 
     test_files = ['catalog', 'integration']
-    package_names = ['catalog', 'integration']
+    user_test_files = ['integration-user']
     min_coverage = 80
 
     for step in [
@@ -166,12 +169,6 @@ def integration_factory():
             command=["py.test", "-vvrs"],
             workdir="integration"
         ),
-        FileDownload(
-            haltOnFailure = True,
-            descriptionDone="download init script",
-            mastersrc="eth-supervisord-integration.conf",
-            slavedest="eth-supervisord-integration.conf"
-        ),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -198,12 +195,18 @@ def integration_factory():
             command="rm -rf screenshots && rm -rf report && rm -f *.pyc",
             workdir="integration/tests"
         ),
+        FileDownload(
+            haltOnFailure = True,
+            descriptionDone="download init script",
+            mastersrc="eth-supervisord-integration.conf",
+            slavedest="eth-supervisord-integration.conf"
+        ),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="start",
-            description="starting",
-            descriptionDone="start",
+            name="start-eth",
+            description="starting eth",
+            descriptionDone="start eth",
             command="supervisord -c eth-supervisord-integration.conf && sleep 5",
             logfiles={
                 "eth.log": "eth.log",
@@ -224,6 +227,39 @@ def integration_factory():
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
+            name="get-address",
+            description="getting address",
+            descriptionDone="get address",
+            command="curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_coinbase\",\"params\":null,\"id\":2}' http://localhost:8080 > address.json"
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="parse-address",
+            description="parsing address",
+            descriptionDone="parse address",
+            command="sed -ne 's/.*result\":\"\(.*\)\"}/\\1/p' address.json",
+            property="address"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="fill-address",
+            description="filling address",
+            descriptionDone="fill address",
+            command=Interpolate("curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_transact\",\"params\":[{\"to\": \"%(prop:address)s\", \"gas\": \"500\", \"value\": \"100000000000000000000\"}],\"id\":72}' http://localhost:8080")
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="stop-mining",
+            description="stopping mining",
+            descriptionDone="stop mining",
+            command="sleep 20 && curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_setMining\",\"params\":[false],\"id\":1}' http://localhost:8080"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
             name="create-folders",
             description="creating folders",
             descriptionDone="create folders",
@@ -237,17 +273,51 @@ def integration_factory():
             slavedest="tests/catalog.py",
             workdir="integration"
         ),
-
-        # NoseTests using xvfb
-        XvfbNoseTest(test_files, package_names, min_coverage),
-
+        FileDownload(
+            haltOnFailure = True,
+            descriptionDone="download integration-user test",
+            mastersrc="tests/integration-user.py",
+            slavedest="tests/integration-user.py",
+            workdir="integration"
+        ),
+        XvfbNoseTest(test_files, min_coverage),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="stop",
+            name="stop-eth",
             description="stopping",
             descriptionDone="stop",
-            command="kill `ps aux | grep 'supervisord -c eth-supervisord-integration.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            command="kill `ps aux | grep 'eth-supervisord-integration.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
+        ),
+        FileDownload(
+            haltOnFailure = True,
+            descriptionDone="download init script",
+            mastersrc="eth-supervisord-integration-user.conf",
+            slavedest="eth-supervisord-integration-user.conf"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="start-eth-user",
+            description="starting eth",
+            descriptionDone="start eth",
+            command="supervisord -c eth-supervisord-integration-user.conf && sleep 5",
+            logfiles={
+                "eth.log": "eth.log",
+                "eth.err": "eth.err",
+                "supervisord.log": "eth-supervisord.log"
+            },
+            lazylogfiles=True
+        ),
+        XvfbNoseTest(user_test_files, min_coverage, reportdir="enduser"),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="stop-final",
+            description="stopping",
+            descriptionDone="stop",
+            command="kill `ps aux | grep 'eth-supervisord-integration-user.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
             decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
         ),
         ShellCommand(
