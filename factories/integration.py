@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-03 15:45:34
+# @Last Modified time: 2015-03-04 14:20:27
 
 import StringIO
 
@@ -200,15 +200,6 @@ def integration_factory():
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="stop",
-            description="stopping",
-            descriptionDone="stop",
-            command="kill `ps aux | grep 'supervisord -c eth-supervisord-integration.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
-            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
-        ),
-        ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
             name="clean-chain",
             description="cleaning up",
             descriptionDone="clean chain",
@@ -308,7 +299,7 @@ def integration_factory():
             name="stop-eth",
             description="stopping",
             descriptionDone="stop",
-            command="kill `ps aux | grep 'eth-supervisord-integration.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            command="kill `ps aux | grep 'eth-supervisord-integration.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
             decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
         ),
         FileDownload(
@@ -338,7 +329,7 @@ def integration_factory():
             name="stop-final",
             description="stopping",
             descriptionDone="stop",
-            command="kill `ps aux | grep 'eth-supervisord-integration-user.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            command="kill `ps aux | grep 'eth-supervisord-integration-user.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
             decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
         ),
         ShellCommand(

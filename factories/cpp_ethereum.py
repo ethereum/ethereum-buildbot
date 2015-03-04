@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 07:29:14
+# @Last Modified time: 2015-03-04 14:18:18
 
 import factory
 reload(factory)
@@ -197,7 +197,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
                 name="stop",
                 description="stopping",
                 descriptionDone="stop",
-                command="kill `ps aux | grep 'supervisord -c eth-supervisord.conf' | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+                command="kill `ps aux | grep 'supervisord -c eth-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
                 decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
             ),
             ShellCommand(

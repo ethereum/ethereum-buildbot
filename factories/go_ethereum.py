@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:41
+# @Last Modified time: 2015-03-04 14:18:47
 
 import factory
 reload(factory)
@@ -131,7 +131,7 @@ def go_ethereum_factory(branch='master', deb=False):
             name="stop",
             description="stopping",
             descriptionDone="stop",
-            command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | awk '{print $2}'` && kill `pidof ethereum` && sleep 5",
+            command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof ethereum` && sleep 5",
             decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
         ),
         ShellCommand(
