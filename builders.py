@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-01 08:31:34
+# @Last Modified time: 2015-03-04 21:59:30
 
 from buildbot import locks
 
@@ -129,6 +129,7 @@ for buildslave in ['one', 'two']:
             locks=[build_lock.access('counting')])
     ]: builders.append(builder)
 
+# Main builders
 for branch in ['master', 'develop']:
     for builder in [
         BuilderConfig(
