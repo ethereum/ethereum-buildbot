@@ -22,7 +22,9 @@ Install Docker using the [official documentation](https://docs.docker.com/instal
 
 Make sure you have `pip` installed, then install the requirements:
 ```
-sudo apt-get install python-pip python-dev
+sudo apt-get install python-dev
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python get-pip.py
 sudo pip install -r requirements.txt
 ```
 
