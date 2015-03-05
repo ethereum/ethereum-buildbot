@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:30
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-05 05:21:35
+# @Last Modified time: 2015-03-05 05:33:30
 
 import factory
 reload(factory)
@@ -73,6 +73,14 @@ def serpent_factory(branch='develop'):
             description="installing pyethereum dev_requirements",
             descriptionDone="install pyethereum dev_requirements",
             command=["pip", "install", "--upgrade", "--no-deps", "-r", "dev_requirements.txt"],
+            workdir="pyethereum"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="test-submodule",
+            descriptionDone="update test submodule",
+            command="git submodule init && git submodule update --recursive",
             workdir="pyethereum"
         ),
         Test(
