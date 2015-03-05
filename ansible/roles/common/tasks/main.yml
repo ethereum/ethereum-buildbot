@@ -4,7 +4,7 @@
   apt: name={{ item }} install_recommends=no
   with_items:
       - python-pip
-      - python-dev    
+      - python-dev
       - python-apt
       - htop
 

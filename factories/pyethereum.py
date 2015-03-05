@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:15
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-03 16:57:35
+# @Last Modified time: 2015-03-05 04:42:02
 
 import factory
 reload(factory)
@@ -65,6 +65,14 @@ def pyethereum_factory(branch='master'):
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
+            name="upgrade-requirements",
+            description="upgrading test requirements",
+            descriptionDone="upgrade test requirements",
+            command=["pip", "install", "--upgrade", "--no-deps", "-r", "dev_requirements.txt"]
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
             name="test-submodule",
             descriptionDone="update test submodule",
             command="git submodule init && git submodule update --recursive"
@@ -75,7 +83,7 @@ def pyethereum_factory(branch='master'):
             description="testing",
             descriptionDone="py.test",
             name="test-py.test",
-            command="py.test"
+            command=["py.test", "-vvrs"],
         )
     ]: factory.addStep(step)
 

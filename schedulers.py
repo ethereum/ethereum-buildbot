@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-03 13:30:23
+# @Last Modified time: 2015-03-05 04:34:52
 
 ####### SCHEDULERS
 
@@ -109,6 +109,7 @@ all_ethereumj_codebases=ethereumj_codebases.copy()
 all_pyethereum_codebases=pyethereum_codebases.copy()
 
 all_serpent_codebases=serpent_codebases.copy()
+all_serpent_codebases.update(pyethereum_codebases)
 
 all_brew_cpp_codebases=cpp_ethereum_codebases.copy()
 all_brew_cpp_codebases.update(brew_codebases)
@@ -364,7 +365,7 @@ for branch in ['master', 'develop']:
         ForceScheduler(
             name="force-serpent-%s" % branch,
             builderNames=["Linux Serpent %s" % branch],
-            codebases=["serpent"]),
+            codebases=["serpent", "pyethereum"]),
         ForceScheduler(
             name="force-pyethereum-osx-%s" % branch,
             builderNames=["OSX PyEthereum %s" % branch],
@@ -372,7 +373,7 @@ for branch in ['master', 'develop']:
         ForceScheduler(
             name="force-serpent-osx-%s" % branch,
             builderNames=["OSX Serpent %s" % branch],
-            codebases=["serpent"])
+            codebases=["serpent", "pyethereum"])
     ]: schedulers.append(scheduler)
 
 for scheduler in [
@@ -402,7 +403,7 @@ for scheduler in [
     ForceScheduler(
         name="force-serpent-pr",
         builderNames=["Linux Serpent PRs"],
-        codebases=["pyethereum"]),
+        codebases=["serpent", "pyethereum"]),
     ForceScheduler(
         name="force-ethereumj-pr",
         builderNames=["Linux EthereumJ PRs"],
@@ -428,7 +429,7 @@ for scheduler in [
     ForceScheduler(
         name="force-serpent-osx-pr",
         builderNames=["OSX Serpent PRs"],
-        codebases=["serpent"]),
+        codebases=["serpent", "pyethereum"]),
 
     # Windows
     ForceScheduler(

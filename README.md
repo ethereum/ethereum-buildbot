@@ -22,7 +22,7 @@ Install Docker using the [official documentation](https://docs.docker.com/instal
 
 Make sure you have `pip` installed, then install the requirements:
 ```
-sudo apt-get install python-pip
+sudo apt-get install python-pip python-dev
 sudo pip install -r requirements.txt
 ```
 
@@ -54,10 +54,15 @@ buildbot checkconfig
 
 You should get `Config file is good!` from the last step. Run `buildbot checkconfig` after making changes, especially before pushing changes or making pull requests. This will catch syntax errors and will notify you if you missed something in your buildbot configurations.
 
+**Note:** For local testing, you'll need to change the WebStatus' `http_port` in `status.py` to something else than the SSL configurations, typically `8010`.
+
 You should now be able to start your buildmaster instance with:
 ```
 buildbot start .
 ```
+
+Your buildmaster should now be accessible at `http://localhost:8010`
+
 
 ### Buildslaves configuration
 
