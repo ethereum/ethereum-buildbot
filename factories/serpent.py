@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:30
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-05 04:39:29
+# @Last Modified time: 2015-03-05 05:21:35
 
 import factory
 reload(factory)
@@ -51,18 +51,29 @@ def serpent_factory(branch='develop'):
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="install-pytest",
-            description="installing py.test",
-            descriptionDone="install py.test",
-            command=["pip", "install", "pytest"]
+            name="install-pyethereum",
+            description="installing pyethereum",
+            descriptionDone="install pyethereum",
+            command=["pip", "install", "-e", "."],
+            workdir="pyethereum"
         ),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="install-pyethereum",
-            description="installing pyethereum",
-            descriptionDone="install pyethereum",
-            command=["pip", "install", "--upgrade", "--no-deps", "https://github.com/ethereum/pyethereum/tarball/develop"]
+            name="pyethereum-requirements",
+            description="installing pyethereum requirements",
+            descriptionDone="install pyethereum requirements",
+            command=["pip", "install", "--upgrade", "--no-deps", "-r", "requirements.txt"],
+            workdir="pyethereum"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="pyethereum-dev-requirements",
+            description="installing pyethereum dev_requirements",
+            descriptionDone="install pyethereum dev_requirements",
+            command=["pip", "install", "--upgrade", "--no-deps", "-r", "dev_requirements.txt"],
+            workdir="pyethereum"
         ),
         Test(
             flunkOnFailure=False,
