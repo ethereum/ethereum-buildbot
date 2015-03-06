@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:37
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-06 10:04:01
+# @Last Modified time: 2015-03-06 12:00:19
 
 import factory
 reload(factory)
@@ -34,7 +34,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-database",
-            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_databaseVersion = \(.*\);/\\1/p" libethcore/Common.cpp'],
+            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_databaseBaseVersion = \(.*\);/\\1/p" libethcore/Common.cpp'],
             property = "database"
         ),
         SetPropertyFromCommand(

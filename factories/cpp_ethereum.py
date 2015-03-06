@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-06 10:03:38
+# @Last Modified time: 2015-03-06 12:00:01
 
 import factory
 reload(factory)
@@ -64,7 +64,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-database",
-            command = 'sed -ne "s/.*c_databaseVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
+            command = 'sed -ne "s/.*c_databaseBaseVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
             property = "database"
         ),
         SetPropertyFromCommand(
