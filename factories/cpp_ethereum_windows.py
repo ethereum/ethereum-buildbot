@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:37
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 17:05:55
+# @Last Modified time: 2015-03-06 10:04:01
 
 import factory
 reload(factory)
@@ -34,14 +34,14 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-database",
-            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_databaseVersion = \(.*\);/\\1/p" libethcore/CommonEth.cpp'],
+            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_databaseVersion = \(.*\);/\\1/p" libethcore/Common.cpp'],
             property = "database"
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
             name = "set-protocol",
-            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/CommonEth.cpp'],
+            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp'],
             property="protocol"
         ),
         SetPropertyFromCommand(

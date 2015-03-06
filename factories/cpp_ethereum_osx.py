@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:20
+# @Last Modified time: 2015-03-06 10:03:52
 
 import factory
 reload(factory)
@@ -86,14 +86,14 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-database",
-            command = 'sed -ne "s/.*c_databaseVersion = \(.*\);/\\1/p" libethcore/CommonEth.cpp',
+            command = 'sed -ne "s/.*c_databaseVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
             property = "database"
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
             name = "set-protocol",
-            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/CommonEth.cpp',
+            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
             property="protocol"
         ),
         SetPropertyFromCommand(
