@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-04 21:59:30
+# @Last Modified time: 2015-03-07 00:51:24
 
 from buildbot import locks
 
@@ -22,6 +22,7 @@ from factories import ethereumj
 from factories import pyethereum
 from factories import serpent
 from factories import debian
+from factories import debian_qt
 from factories import poc_servers
 from factories import integration
 
@@ -37,6 +38,7 @@ reload(ethereumj)
 reload(pyethereum)
 reload(serpent)
 reload(debian)
+reload(debian_qt)
 reload(poc_servers)
 reload(integration)
 
@@ -53,6 +55,7 @@ from factories.ethereumj import *
 from factories.pyethereum import *
 from factories.serpent import *
 from factories.debian import *
+from factories.debian_qt import *
 from factories.poc_servers import *
 from factories.integration import *
 
@@ -307,6 +310,15 @@ for distribution in ['trusty', 'utopic']:
                 repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
                 ppabranch="libjson-rpc-cpp",
                 branch="master",
+                architecture="amd64",
+                distribution=distribution),
+            locks=[package_lock.access('counting')]),
+        BuilderConfig(
+            name="qt5 %s" % distribution,
+            builddir="build-qt-%s" % distribution,
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            factory=backport_factory(
+                name="qt5",
                 architecture="amd64",
                 distribution=distribution),
             locks=[package_lock.access('counting')])

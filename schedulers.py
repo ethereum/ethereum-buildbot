@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-05 04:34:52
+# @Last Modified time: 2015-03-07 00:51:33
 
 ####### SCHEDULERS
 
@@ -529,6 +529,17 @@ for distribution in ['trusty', 'utopic']:
                     name="version",
                     label="Version:<br>",
                     default="0.4.2",
+                    required=True,
+                    size=10)
+            ]),
+        ForceScheduler(
+            name="force-qt5-%s" % distribution,
+            builderNames=["qt5 %s" % distribution],
+            properties=[
+                StringParameter(
+                    name="version",
+                    label="Version:<br>",
+                    default="5.4.0",
                     required=True,
                     size=10)
             ])
