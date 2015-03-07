@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-06 12:00:01
+# @Last Modified time: 2015-03-07 13:15:38
 
 import factory
 reload(factory)
@@ -85,6 +85,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
             haltOnFailure = True,
             logEnviron = False,
             command=cmake_cmd(["cmake", "."], evmjit=evmjit),
+            env={"PATH": "${QTDIR}/bin:${PATH}"}
         ),
         Compile(
             haltOnFailure = True,
