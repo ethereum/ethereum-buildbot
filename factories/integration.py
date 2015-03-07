@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-04 14:20:27
+# @Last Modified time: 2015-03-07 13:32:23
 
 import StringIO
 
@@ -130,6 +130,7 @@ def integration_factory():
             haltOnFailure = True,
             logEnviron = False,
             command=["cmake", ".", "-DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++"],
+            env={"PATH": "${QTDIR}/bin:${PATH}"}
         ),
         Compile(
             haltOnFailure = True,
