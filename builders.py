@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-07 00:51:24
+# @Last Modified time: 2015-03-08 05:56:23
 
 from buildbot import locks
 
@@ -310,6 +310,18 @@ for distribution in ['trusty', 'utopic']:
                 repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
                 ppabranch="libjson-rpc-cpp",
                 branch="master",
+                architecture="amd64",
+                distribution=distribution),
+            locks=[package_lock.access('counting')]),
+        BuilderConfig(
+            name="qtwebengine %s-%s" % ("amd64", distribution),
+            builddir="build-qtwebengine-%s-%s" % ("amd64", distribution),
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            factory=deb_factory(
+                name="qtwebengine-opensource-src",
+                repourl="https://github.com/qtproject/qtwebengine.git",
+                ppabranch="qt5webengine",
+                branch="5.4.0",
                 architecture="amd64",
                 distribution=distribution),
             locks=[package_lock.access('counting')]),

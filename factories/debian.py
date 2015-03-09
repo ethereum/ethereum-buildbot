@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-25 06:39:38
+# @Last Modified time: 2015-03-09 13:42:50
 
 import factory
 reload(factory)
@@ -73,6 +73,26 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                 workdir=Interpolate("%(prop:workdir)s")
             )
         ]: factory.addStep(step)
+    # Get qtwebengine-opensource-src tarball
+    elif name == 'qtwebengine-opensource-src':
+        for step in [
+            ShellCommand(
+                logEnviron = False,
+                name="source-tarball",
+                description="getting source tarball",
+                descriptionDone="get source tarball",
+                command=Interpolate("wget -c https://download.qt.io/official_releases/qt/5.4/%(kw:version)s/submodules/qtwebengine-opensource-src-%(kw:version)s.tar.xz -O ../%(kw:name)s_%(prop:version)s%(prop:snapshot)s.orig.tar.xz", name=name, version=branch)
+            ),
+            # clean up the Git checkout for debuild
+            ShellCommand(
+                logEnviron = False,
+                name = "clean-build",
+                command="rm -rf build && mkdir build",
+                description="cleaning build",
+                descriptionDone="clean build",
+                workdir=Interpolate("%(prop:workdir)s")
+            )
+        ]: factory.addStep(step)
     # Just create the source tarball for others
     else:
         factory.addStep(ShellCommand(
@@ -119,29 +139,36 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         #     mastersrc="pbuilderrc",
         #     slavedest="~/.pbuilderrc"
         # ))
+        qt_ppa = "http://ppa.launchpad.net/ethereum/ethereum-qt/ubuntu"
 
         # Set othermirror for pbuilder
         if name == 'go-ethereum':
-            # if branch == 'master':
-            #     otherppa = "http://ppa.launchpad.net/ubuntu-sdk-team/ppa/ubuntu"
-            # else:
-            otherppa = "http://ppa.launchpad.net/beineri/opt-qt541-trusty/ubuntu"
 
             factory.addStep(ShellCommand(
                 logEnviron = False,
                 name="pbuilder-opts",
                 description="setting pbuilderrc",
                 descriptionDone="set pbuilderrc",
-                command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (otherppa, distribution, otherppa, distribution),
+                command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
+                        qt_ppa, distribution,
+                        qt_ppa, distribution),
             ))
         elif name == 'ethereum':
+            main_ppa = "http://ppa.launchpad.net/ethereum/ethereum/ubuntu"
+            dev_ppa = "http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu"
             if branch == 'develop':
                 factory.addStep(ShellCommand(
                     logEnviron = False,
                     name="pbuilder-opts",
                     description="setting pbuilderrc",
                     descriptionDone="set pbuilderrc",
-                    command="echo 'OTHERMIRROR=\"deb [trusted=yes] http://ppa.launchpad.net/ethereum/ethereum/ubuntu %s main|deb-src [trusted=yes] http://ppa.launchpad.net/ethereum/ethereum/ubuntu %s main|deb [trusted=yes] http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu %s main|deb-src [trusted=yes] http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu %s main\"' > ~/.pbuilderrc" % (distribution, distribution, distribution, distribution),
+                    command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
+                            main_ppa, distribution,
+                            main_ppa, distribution,
+                            dev_ppa, distribution,
+                            dev_ppa, distribution,
+                            qt_ppa, distribution,
+                            qt_ppa, distribution),
                 ))
             else:
                 factory.addStep(ShellCommand(
@@ -149,7 +176,9 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                     name="pbuilder-opts",
                     description="setting pbuilderrc",
                     descriptionDone="set pbuilderrc",
-                    command="echo 'OTHERMIRROR=\"deb [trusted=yes] http://ppa.launchpad.net/ethereum/ethereum/ubuntu %s main|deb-src [trusted=yes] http://ppa.launchpad.net/ethereum/ethereum/ubuntu %s main\"' > ~/.pbuilderrc" % (distribution, distribution),
+                    command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
+                            main_ppa, distribution,
+                            main_ppa, distribution),
                 ))
 
         for step in [
@@ -168,6 +197,13 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         # DebLintian(
         #     fileloc=Interpolate("%(prop:deb-changes)s")
         # ),
+        # Prepare .changes file for Launchpad
+        ShellCommand(
+            name='prepare-changes',
+            description='preparing changes',
+            descriptionDone='prepare changes',
+            command=Interpolate('sed -i -e s/UNRELEASED/%(kw:dist)s/ -e s/urgency=medium/urgency=low/ ../*.changes', dist=distribution)
+        ),
 
         # Gather artefacts
         ShellCommand(
@@ -176,7 +212,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name="move-packages",
             description='moving packages',
             descriptionDone='move packages',
-            command="mkdir result; mv %s ../*.changes ../*.dsc ../*.gz result/" % ("*.deb *.changes" if name in ['ethereum', 'go-ethereum'] else ""),
+            command="mkdir result; mv %s ../*.changes ../*.dsc ../*.gz ../*.xz result/" % ("*.deb *.changes" if name in ['ethereum', 'go-ethereum'] else ""),
         ),
 
         # Upload result folder
@@ -222,15 +258,10 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
     # Use ethereum-dev ppa for snapshots, only dput one source pkg
     if architecture == 'amd64':
         for step in [
-            # Prepare .changes file for Launchpad
-            MasterShellCommand(
-                name='prepare-changes',
-                description='preparing changes',
-                descriptionDone='prepare changes',
-                command=['sed', '-i', '-e', Interpolate('s/UNRELEASED/%(kw:dist)s/', dist=distribution), '-e', 's/urgency=medium/urgency=low/', Interpolate('changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(prop:version)s%(prop:snapshot)s-0ubuntu1_source.changes', dist=distribution, arch=architecture, name=name)]
-            ),
             # debsign
             MasterShellCommand(
+                haltOnFailure=False,
+                flunkOnFailure=False,
                 name='debsign',
                 description='debsigning',
                 descriptionDone='debsign',

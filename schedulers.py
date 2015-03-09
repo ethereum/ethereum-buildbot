@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-07 00:51:33
+# @Last Modified time: 2015-03-08 05:57:12
 
 ####### SCHEDULERS
 
@@ -529,6 +529,27 @@ for distribution in ['trusty', 'utopic']:
                     name="version",
                     label="Version:<br>",
                     default="0.4.2",
+                    required=True,
+                    size=10)
+            ]),
+        ForceScheduler(
+            name="force-qtwebengine-%s-%s" % ("amd64", distribution),
+            builderNames=["qtwebengine %s-%s" % ("amd64", distribution)],
+            repository=FixedParameter(name="repository", default=""),
+            project=FixedParameter(name="project", default=""),
+            branch=StringParameter(name="branch", default="5.4.0"),
+            revision=
+                StringParameter(
+                    name="revision",
+                    label="Revision:<br>",
+                    default="b292fd17bfc1f422242e7e546a732b7a67384c47",
+                    required=True,
+                    size=40),
+            properties=[
+                StringParameter(
+                    name="version",
+                    label="Version:<br>",
+                    default="5.4.0",
                     required=True,
                     size=10)
             ]),
