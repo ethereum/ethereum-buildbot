@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 17:45:26
+# @Last Modified time: 2015-03-10 02:29:54
 
 import factory
 reload(factory)
@@ -111,16 +111,23 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             haltOnFailure = True,
             logEnviron = False,
             command = "make -j $(sysctl -n hw.ncpu)"
-        ),
-        ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "make-install",
-            description = 'running make install',
-            descriptionDone= 'make install',
-            command = ['make', 'install'],
-            workdir = 'build/alethzero'
-        ),
+        )
+    ]: factory.addStep(step)
+
+    if not headless:
+        for step in [
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name = "make-install",
+                description = 'running make install',
+                descriptionDone= 'make install',
+                command = ['make', 'install'],
+                workdir = 'build/alethzero'
+            )
+        ]: factory.addStep(step)
+
+    for step in [
         Test(
             haltOnFailure = True,
             warnOnFailure = True,
