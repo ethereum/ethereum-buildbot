@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 17:44:56
+# @Last Modified time: 2015-03-10 03:48:37
 
 import factory
 reload(factory)
@@ -123,8 +123,8 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
         )
     ]: factory.addStep(step)
 
-    # Trigger check and deb builders after strict tests
-    if not evmjit and headless:
+    # Trigger check
+    if not evmjit and not headless:
         for step in [
             Trigger(
                 schedulerNames=["cpp-ethereum-%s-check" % branch],
@@ -136,6 +136,8 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                 })
         ]: factory.addStep(step)
 
+    # Trigger deb builders
+    if not evmjit and headless:
         if branch is not 'master':
             for step in [
                 Trigger(

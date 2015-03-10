@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-10 02:29:54
+# @Last Modified time: 2015-03-10 03:50:49
 
 import factory
 reload(factory)
@@ -141,7 +141,8 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
         ),
     ]: factory.addStep(step)
 
-    if not evmjit and headless:
+    # Trigger check
+    if not evmjit and not headless:
         for step in [
             Trigger(
                 schedulerNames=["cpp-ethereum-%s-osx-check" % branch],
@@ -154,6 +155,8 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             )
         ]: factory.addStep(step)
 
+    # Trigger deb builders
+    if not evmjit and headless:
         if not isPullRequest:
             for step in [
                 Trigger(
@@ -167,6 +170,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                 )
             ]: factory.addStep(step)
 
+    # Run all tests, warnings let the build pass, failures marks the build with warnings
     for step in [
         ShellCommand(
             flunkOnFailure = False,
@@ -182,6 +186,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
         )
     ]: factory.addStep(step)
 
+    # Package AlethZero.app
     if not isPullRequest and not headless:
         for step in [
             ShellCommand(
