@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-10 00:40:51
+# @Last Modified time: 2015-03-10 05:36:23
 
 import factory
 reload(factory)
@@ -211,7 +211,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name="move-packages",
             description='moving packages',
             descriptionDone='move packages',
-            command="mkdir result; mv %s../*.changes ../*.dsc ../*.gz %sresult/" % ("*.deb *.changes " if name in ['ethereum', 'cpp-ethereum'] else "", "../*.xz " if name is 'qtwebengine-opensource-src' else ""),
+            command="mkdir result; mv %s../*.changes ../*.dsc ../*.gz %sresult/" % ("*.deb *.changes " if name in ['ethereum', 'cpp-ethereum'] else "", "../*.xz " if name == 'qtwebengine-opensource-src' else ""),
         ),
 
         # Upload result folder
