@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:55:14
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-04 14:19:10
+# @Last Modified time: 2015-03-10 17:40:20
 
 import factory
 reload(factory)
@@ -26,7 +26,7 @@ def cpp_ethereum_server_factory(branch='master'):
         Configure(
             haltOnFailure = True,
             logEnviron = False,
-            command=["cmake", ".", "-DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++"]
+            command=["cmake", ".", "-DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++", "-DHEADLESS=1"]
         ),
         Compile(
             haltOnFailure = True,
