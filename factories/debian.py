@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 13:42:50
+# @Last Modified time: 2015-03-10 00:22:23
 
 import factory
 reload(factory)
@@ -44,7 +44,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
     ]: factory.addStep(step)
 
     # Run 'go get' for go-ethereum
-    if name == 'go-ethereum':
+    if name == 'ethereum':
         for step in [
             ShellCommand(
                 haltOnFailure = True,
@@ -133,7 +133,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
     ]: factory.addStep(step)
 
     # Source only packages for dependencies, build local deb packages otherwise
-    if name in ['ethereum', 'go-ethereum']:
+    if name in ['ethereum', 'cpp-ethereum']:
         # Add pbuilderrc with ccache config
         # factory.addStep(FileDownload(
         #     mastersrc="pbuilderrc",
@@ -142,8 +142,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         qt_ppa = "http://ppa.launchpad.net/ethereum/ethereum-qt/ubuntu"
 
         # Set othermirror for pbuilder
-        if name == 'go-ethereum':
-
+        if name == 'ethereum':
             factory.addStep(ShellCommand(
                 logEnviron = False,
                 name="pbuilder-opts",
@@ -153,7 +152,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                         qt_ppa, distribution,
                         qt_ppa, distribution),
             ))
-        elif name == 'ethereum':
+        elif name == 'cpp-ethereum':
             main_ppa = "http://ppa.launchpad.net/ethereum/ethereum/ubuntu"
             dev_ppa = "http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu"
             if branch == 'develop':
@@ -212,7 +211,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name="move-packages",
             description='moving packages',
             descriptionDone='move packages',
-            command="mkdir result; mv %s ../*.changes ../*.dsc ../*.gz ../*.xz result/" % ("*.deb *.changes" if name in ['ethereum', 'go-ethereum'] else ""),
+            command="mkdir result; mv %s ../*.changes ../*.dsc ../*.gz ../*.xz result/" % ("*.deb *.changes" if name in ['ethereum', 'cpp-ethereum'] else ""),
         ),
 
         # Upload result folder
