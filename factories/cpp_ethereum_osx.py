@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-06 12:00:11
+# @Last Modified time: 2015-03-09 17:45:26
 
 import factory
 reload(factory)
@@ -13,7 +13,9 @@ import cpp_ethereum
 reload(cpp_ethereum)
 from cpp_ethereum import *
 
-def cmake_osx_cmd(cmd=[], ccache=True, evmjit=False):
+def cmake_osx_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
+    if headless:
+        cmd.append("-DHEADLESS=1")
     if evmjit:
         for opt in [
             "-DLLVM_DIR=/usr/local/opt/llvm/share/llvm/cmake",
@@ -55,7 +57,7 @@ def osx_cpp_check_factory(branch='develop'):
     return factory
 
 # C++
-def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False):
+def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headless=True):
     factory = BuildFactory()
 
     for step in [
@@ -78,10 +80,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False):
             codebase='tests',
             retry=(5, 3),
             workdir='tests'
-        )
-    ]: factory.addStep(step)
-
-    for step in [
+        ),
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -106,7 +105,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False):
         Configure(
             haltOnFailure = True,
             logEnviron = False,
-            command = cmake_osx_cmd(['cmake', '.'], evmjit=evmjit)
+            command = cmake_osx_cmd(['cmake', '.'], evmjit=evmjit, headless=headless)
         ),
         Compile(
             haltOnFailure = True,
@@ -135,7 +134,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False):
         ),
     ]: factory.addStep(step)
 
-    if not evmjit:
+    if not evmjit and headless:
         for step in [
             Trigger(
                 schedulerNames=["cpp-ethereum-%s-osx-check" % branch],
@@ -176,7 +175,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False):
         )
     ]: factory.addStep(step)
 
-    if not isPullRequest:
+    if not isPullRequest and not headless:
         for step in [
             ShellCommand(
                 haltOnFailure = True,

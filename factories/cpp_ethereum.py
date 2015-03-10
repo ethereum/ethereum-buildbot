@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-07 13:15:38
+# @Last Modified time: 2015-03-09 17:44:56
 
 import factory
 reload(factory)
@@ -27,7 +27,9 @@ def testeth_cmd(cmd=[], evmjit=False):
         cmd.append("--jit")
     return cmd
 
-def cmake_cmd(cmd=[], ccache=True, evmjit=False):
+def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
+    if headless:
+        cmd.append("-DHEADLESS=1")
     if evmjit:
         cmd.append("-DLLVM_DIR=/usr/share/llvm-3.5/cmake")
         cmd.append("-DEVMJIT=1")
@@ -36,7 +38,7 @@ def cmake_cmd(cmd=[], ccache=True, evmjit=False):
     return cmd
 
 
-def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
+def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True):
     factory = BuildFactory()
 
     for step in [
@@ -84,7 +86,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
         Configure(
             haltOnFailure = True,
             logEnviron = False,
-            command=cmake_cmd(["cmake", "."], evmjit=evmjit),
+            command=cmake_cmd(["cmake", "."], evmjit=evmjit, headless=headless),
             env={"PATH": "${QTDIR}/bin:${PATH}"}
         ),
         Compile(
@@ -122,7 +124,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
     ]: factory.addStep(step)
 
     # Trigger check and deb builders after strict tests
-    if not evmjit:
+    if not evmjit and headless:
         for step in [
             Trigger(
                 schedulerNames=["cpp-ethereum-%s-check" % branch],
@@ -175,7 +177,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False):
     ]: factory.addStep(step)
 
     # Trigger PoC server buildslave and a test node
-    if deb and not evmjit:
+    if deb and not evmjit and headless:
         for step in [
             Trigger(
                 schedulerNames=["cpp-ethereum-%s-server" % branch],

@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-08 05:57:12
+# @Last Modified time: 2015-03-09 18:12:26
 
 ####### SCHEDULERS
 
@@ -140,8 +140,10 @@ for branch in ['master', 'develop']:
             treeStableTimer=60,
             builderNames=[
                 "Linux C++ %s branch" % branch,
+                "Linux C++ GUI %s branch" % branch,
                 "Linux C++ %s evmjit" % branch,
                 "OSX C++ %s branch" % branch,
+                "OSX C++ GUI %s branch" % branch,
                 "OSX C++ %s evmjit" % branch,
                 "Windows C++ %s branch" % branch]),
         SingleBranchScheduler(
@@ -151,7 +153,9 @@ for branch in ['master', 'develop']:
             treeStableTimer=60,
             builderNames=[
                 "Linux Go %s branch" % branch,
-                "OSX Go %s branch" % branch]),
+                "Linux Go GUI %s branch" % branch,
+                "OSX Go %s branch" % branch,
+                "OSX Go GUI %s branch" % branch]),
         SingleBranchScheduler(
             name="pyethereum-%s-git" % branch,
             change_filter=filter.ChangeFilter(project='pyethereum', branch=branch),
@@ -172,11 +176,15 @@ for branch in ['master', 'develop']:
         # Brew triggerables
         Triggerable(
             name="cpp-ethereum-%s-brew" % branch,
-            builderNames=["OSX C++ %s brew" % branch],
+            builderNames=[
+                "OSX C++ %s brew" % branch,
+                "OSX C++ GUI %s brew" % branch],
             codebases=all_cpp_ethereum_codebases),
         Triggerable(
             name="go-ethereum-%s-brew" % branch,
-            builderNames=["OSX Go %s brew" % branch],
+            builderNames=[
+                "OSX Go %s brew" % branch,
+                "OSX Go GUI %s brew" % branch],
             codebases=all_go_ethereum_codebases),
 
         # Extra triggerable checks
@@ -327,6 +335,10 @@ for branch in ['master', 'develop']:
             builderNames=["Linux C++ %s branch" % branch],
             codebases=["cpp-ethereum", "tests"]),
         ForceScheduler(
+            name="force-cpp-ethereum-gui-%s" % branch,
+            builderNames=["Linux C++ GUI %s branch" % branch],
+            codebases=["cpp-ethereum", "tests"]),
+        ForceScheduler(
             name="force-cpp-ethereum-%s-evmjit" % branch,
             builderNames=["Linux C++ %s evmjit" % branch],
             codebases=["cpp-ethereum", "tests"]),
@@ -335,8 +347,16 @@ for branch in ['master', 'develop']:
             builderNames=["Linux Go %s branch" % branch],
             codebases=["go-ethereum"]),
         ForceScheduler(
+            name="force-go-ethereum-gui-%s" % branch,
+            builderNames=["Linux Go GUI %s branch" % branch],
+            codebases=["go-ethereum"]),
+        ForceScheduler(
             name="force-cpp-ethereum-%s-osx" % branch,
             builderNames=["OSX C++ %s branch" % branch],
+            codebases=["cpp-ethereum", "tests"]),
+        ForceScheduler(
+            name="force-cpp-ethereum-gui-%s-osx" % branch,
+            builderNames=["OSX C++ GUI %s branch" % branch],
             codebases=["cpp-ethereum", "tests"]),
         ForceScheduler(
             name="force-cpp-ethereum-%s-osx-evmjit" % branch,
@@ -347,12 +367,24 @@ for branch in ['master', 'develop']:
             builderNames=["OSX Go %s branch" % branch],
             codebases=["go-ethereum", "go-build"]),
         ForceScheduler(
+            name="force-go-ethereum-gui-%s-osx" % branch,
+            builderNames=["OSX Go GUI %s branch" % branch],
+            codebases=["go-ethereum", "go-build"]),
+        ForceScheduler(
             name="force-cpp-ethereum-%s-brew" % branch,
             builderNames=["OSX C++ %s brew" % branch],
             codebases=["homebrew-ethereum", "cpp-ethereum", "tests"]),
         ForceScheduler(
+            name="force-cpp-ethereum-gui-%s-brew" % branch,
+            builderNames=["OSX C++ GUI %s brew" % branch],
+            codebases=["homebrew-ethereum", "cpp-ethereum", "tests"]),
+        ForceScheduler(
             name="force-go-ethereum-%s-brew" % branch,
             builderNames=["OSX Go %s brew" % branch],
+            codebases=["homebrew-ethereum", "go-ethereum"]),
+        ForceScheduler(
+            name="force-go-ethereum-gui-%s-brew" % branch,
+            builderNames=["OSX Go GUI %s brew" % branch],
             codebases=["homebrew-ethereum", "go-ethereum"]),
         ForceScheduler(
             name="force-cpp-ethereum-%s-win" % branch,

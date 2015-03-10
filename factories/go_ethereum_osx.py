@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:02:55
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:48
+# @Last Modified time: 2015-03-09 17:49:56
 
 import factory
 reload(factory)
@@ -14,7 +14,7 @@ reload(go_ethereum)
 from go_ethereum import get_short_revision_go, _go_cmds
 
 
-def osx_go_factory(branch='develop', isPullRequest=False):
+def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
     factory = BuildFactory()
 
     env = {
@@ -93,19 +93,23 @@ def osx_go_factory(branch='develop', isPullRequest=False):
             descriptionDone="install ethereum",
             command="go install -v github.com/ethereum/go-ethereum/cmd/ethereum",
             env=env
-        ),
-        ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name="install-mist",
-            description="installing mist",
-            descriptionDone="install mist",
-            command="go install -v github.com/ethereum/go-ethereum/cmd/mist",
-            env=env
         )
     ]: factory.addStep(step)
 
-    if isPullRequest == False:
+    if not headless:
+        for step in [
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name="install-mist",
+                description="installing mist",
+                descriptionDone="install mist",
+                command="go install -v github.com/ethereum/go-ethereum/cmd/mist",
+                env=env
+            )
+        ]: factory.addStep(step)
+
+    if not isPullRequest and headless:
         for step in [
             Trigger(
                 schedulerNames=["go-ethereum-%s-brew" % branch],
@@ -115,7 +119,11 @@ def osx_go_factory(branch='develop', isPullRequest=False):
                     "protocol": Interpolate("%(prop:protocol)s"),
                     "version": Interpolate("%(prop:version)s")
                 }
-            ),
+            )
+        ]: factory.addStep(step)
+
+    if not isPullRequest and not headless:
+        for step in [
             ShellCommand(
                 haltOnFailure = True,
                 logEnviron = False,

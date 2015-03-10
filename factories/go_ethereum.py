@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-04 14:18:47
+# @Last Modified time: 2015-03-09 17:48:13
 
 import factory
 reload(factory)
@@ -26,7 +26,7 @@ def _go_cmds(branch='master'):
     return " && ".join(cmds)
 
 
-def go_ethereum_factory(branch='master', deb=False):
+def go_ethereum_factory(branch='master', deb=False, headless=True):
     factory = BuildFactory()
     for step in [
         Git(
@@ -84,16 +84,23 @@ def go_ethereum_factory(branch='master', deb=False):
             descriptionDone="install ethereum",
             command="go install -v github.com/ethereum/go-ethereum/cmd/ethereum",
             env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
-        ),
-        ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name="install-mist",
-            description="installing mist",
-            descriptionDone="install mist",
-            command="go install -v github.com/ethereum/go-ethereum/cmd/mist",
-            env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
-        ),
+        )
+    ]: factory.addStep(step)
+
+    if not headless:
+        for step in [
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name="install-mist",
+                description="installing mist",
+                descriptionDone="install mist",
+                command="go install -v github.com/ethereum/go-ethereum/cmd/mist",
+                env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
+            )
+        ]: factory.addStep(step)
+
+    for step in [
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -102,10 +109,10 @@ def go_ethereum_factory(branch='master', deb=False):
             descriptionDone="go test",
             command="go test github.com/ethereum/go-ethereum/...",
             decodeRC={0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
-        ),
+        )
     ]: factory.addStep(step)
 
-    if deb:
+    if deb and headless:
         for architecture in ['i386', 'amd64']:
             for distribution in ['trusty', 'utopic']:
                 for step in [
@@ -118,36 +125,37 @@ def go_ethereum_factory(branch='master', deb=False):
                     )
                 ]: factory.addStep(step)
 
-    for step in [
-        FileDownload(
-            haltOnFailure = True,
-            descriptionDone="download init script",
-            mastersrc="eth-go-supervisord.conf",
-            slavedest="eth-go-supervisord.conf"
-        ),
-        ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name="stop",
-            description="stopping",
-            descriptionDone="stop",
-            command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof ethereum` && sleep 5",
-            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
-        ),
-        ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name="start",
-            description="starting",
-            descriptionDone="start",
-            command="supervisord -c eth-go-supervisord.conf && sleep 15",
-            logfiles={
-                "ethereum.log": "ethereum.log",
-                "ethereum.err": "ethereum.err",
-                "supervisord.log": "eth-go-supervisord.log"
-            },
-            lazylogfiles=True
-        )
-    ]: factory.addStep(step)
+    if headless:
+        for step in [
+            FileDownload(
+                haltOnFailure = True,
+                descriptionDone="download init script",
+                mastersrc="eth-go-supervisord.conf",
+                slavedest="eth-go-supervisord.conf"
+            ),
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name="stop",
+                description="stopping",
+                descriptionDone="stop",
+                command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof ethereum` && sleep 5",
+                decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
+            ),
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name="start",
+                description="starting",
+                descriptionDone="start",
+                command="supervisord -c eth-go-supervisord.conf && sleep 15",
+                logfiles={
+                    "ethereum.log": "ethereum.log",
+                    "ethereum.err": "ethereum.err",
+                    "supervisord.log": "eth-go-supervisord.log"
+                },
+                lazylogfiles=True
+            )
+        ]: factory.addStep(step)
 
     return factory

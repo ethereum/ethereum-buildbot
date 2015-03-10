@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:10:52
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-26 15:48:49
+# @Last Modified time: 2015-03-09 18:05:11
 
 import re
 import time
@@ -67,7 +67,9 @@ def no_warnings(self):
 #
 # OSX factories
 #
-def brew_install_cmd(cmd=[], branch='master'):
+def brew_install_cmd(cmd=[], branch='master', headless=True):
+    if not headless:
+        cmd.append('--with-gui')
     if branch == 'develop':
         cmd.append('--devel')
     return cmd

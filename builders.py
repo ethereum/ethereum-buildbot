@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-08 05:56:23
+# @Last Modified time: 2015-03-09 18:16:37
 
 from buildbot import locks
 
@@ -147,6 +147,17 @@ for branch in ['master', 'develop']:
             factory=cpp_ethereum_factory(branch=branch, deb=True),
             locks=[build_lock.access('counting')]),
         BuilderConfig(
+            name="Linux C++ GUI %s branch" % branch,
+            builddir="build-cpp-ethereum-gui-%s" % branch,
+            slavenames=[
+                "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
+                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop"),
+                "slave-cpp-one%s" % ("" if branch == 'master' else "-develop"),
+                "slave-cpp-two%s" % ("" if branch == 'master' else "-develop")
+            ],
+            factory=cpp_ethereum_factory(branch=branch, deb=True, headless=False),
+            locks=[build_lock.access('counting')]),
+        BuilderConfig(
             name="Linux C++ %s server" % branch,
             builddir="build-cpp-ethereum-%s-server" % branch,
             slavenames=["poc-server-%s" % branch],
@@ -175,10 +186,27 @@ for branch in ['master', 'develop']:
             factory=go_ethereum_factory(branch=branch, deb=True),
             locks=[go_lock.access('counting')]),
         BuilderConfig(
+            name="Linux Go GUI %s branch" % branch,
+            builddir="build-go-ethereum-gui-%s" % branch,
+            slavenames=[
+                "slave-go-one%s" % ("" if branch == 'master' else "-develop"),
+                "slave-go-two%s" % ("" if branch == 'master' else "-develop"),
+                "slave-go-three%s" % ("" if branch == 'master' else "-develop"),
+                "slave-go-four%s" % ("" if branch == 'master' else "-develop"
+            )],
+            factory=go_ethereum_factory(branch=branch, deb=True, headless=False),
+            locks=[go_lock.access('counting')]),
+        BuilderConfig(
             name="OSX C++ %s branch" % branch,
             builddir="build-cpp-osx-%s" % branch,
             slavenames=["osx"],
             factory=osx_cpp_factory(branch=branch),
+            locks=[osx_lock.access('counting')]),
+        BuilderConfig(
+            name="OSX C++ GUI %s branch" % branch,
+            builddir="build-cpp-gui-osx-%s" % branch,
+            slavenames=["osx"],
+            factory=osx_cpp_factory(branch=branch, headless=False),
             locks=[osx_lock.access('counting')]),
         BuilderConfig(
             name="OSX C++ %s evmjit" % branch,
@@ -193,16 +221,34 @@ for branch in ['master', 'develop']:
             factory=osx_go_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
         BuilderConfig(
+            name="OSX Go GUI %s branch" % branch,
+            builddir="build-go-gui-osx-%s" % branch,
+            slavenames=["osx"],
+            factory=osx_go_factory(branch=branch, headless=False),
+            locks=[osx_lock.access('counting')]),
+        BuilderConfig(
             name="OSX C++ %s brew" % branch,
             builddir="build-cpp-osx-%s-brew" % branch,
             slavenames=["osx"],
             factory=brew_cpp_factory(branch=branch),
             locks=[brew_lock.access('counting')]),
         BuilderConfig(
+            name="OSX C++ GUI %s brew" % branch,
+            builddir="build-cpp-gui-osx-%s-brew" % branch,
+            slavenames=["osx"],
+            factory=brew_cpp_factory(branch=branch, headless=False),
+            locks=[brew_lock.access('counting')]),
+        BuilderConfig(
             name="OSX Go %s brew" % branch,
             builddir="build-go-ethereum-%s-brew" % branch,
             slavenames=["osx"],
             factory=brew_go_factory(branch=branch),
+            locks=[brew_lock.access('counting')]),
+        BuilderConfig(
+            name="OSX Go GUI %s brew" % branch,
+            builddir="build-go-ethereum-gui-%s-brew" % branch,
+            slavenames=["osx"],
+            factory=brew_go_factory(branch=branch, headless=False),
             locks=[brew_lock.access('counting')]),
         BuilderConfig(
             name="Windows C++ %s branch" % branch,
@@ -355,7 +401,7 @@ for builder in [
             "slave-cpp-three-pr",
             "slave-cpp-four-pr"
         ],
-        factory=cpp_ethereum_factory(branch='develop'),
+        factory=cpp_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
         name="Linux C++ evmjit pull requests",
@@ -366,7 +412,7 @@ for builder in [
             "slave-cpp-three-pr",
             "slave-cpp-four-pr"
         ],
-        factory=cpp_ethereum_factory(branch='develop', evmjit=True),
+        factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
         name="Linux Go pull requests",
@@ -403,19 +449,19 @@ for builder in [
         name="OSX C++ pull requests",
         builddir="build-cpp-ethereum-osx-pr",
         slavenames=["osx"],
-        factory=osx_cpp_factory(branch='develop', isPullRequest=True),
+        factory=osx_cpp_factory(branch='develop', isPullRequest=True, headless=False),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX C++ evmjit pull requests",
         builddir="build-cpp-ethereum-osx-evmjit-pr",
         slavenames=["osx"],
-        factory=osx_cpp_factory(branch=branch, isPullRequest=True, evmjit=True),
+        factory=osx_cpp_factory(branch=branch, isPullRequest=True, evmjit=True, headless=False),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX Go pull requests",
         builddir="build-go-ethereum-osx-pr",
         slavenames=["osx"],
-        factory=osx_go_factory(branch='develop', isPullRequest=True),
+        factory=osx_go_factory(branch='develop', isPullRequest=True, headless=False),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX PyEthereum PRs",
