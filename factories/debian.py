@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-10 05:36:23
+# @Last Modified time: 2015-03-10 05:48:41
 
 import factory
 reload(factory)
@@ -271,7 +271,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                 name='dput',
                 description='dputting',
                 descriptionDone='dput',
-                command=['dput', 'ppa:ethereum/ethereum%s' % ("-dev" if branch=='develop' or (name == 'libjson-rpc-cpp' and jsonrpc_for_develop) else ""), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(prop:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name)]
+                command=['dput', 'ppa:ethereum/ethereum%s' % ("-dev" if branch=='develop' or (name == 'libjson-rpc-cpp' and jsonrpc_for_develop) else ("-qt" if name == 'qtwebengine-opensource-src' else "")), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(prop:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name)]
             )
         ]: factory.addStep(step)
 
