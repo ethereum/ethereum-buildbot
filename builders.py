@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 18:16:37
+# @Last Modified time: 2015-03-10 00:04:53
 
 from buildbot import locks
 
@@ -310,7 +310,7 @@ for branch in ['master', 'develop']:
                     builddir="build-cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
                     slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
                     factory=deb_factory(
-                        name="ethereum",
+                        name="cpp-ethereum",
                         repourl="https://github.com/ethereum/cpp-ethereum.git",
                         ppabranch="master",
                         branch=branch,
@@ -322,7 +322,7 @@ for branch in ['master', 'develop']:
                     builddir="build-go-ethereum-%s-%s-%s" % (branch, architecture, distribution),
                     slavenames=["slave-go-one-deb", "slave-go-two-deb"],
                     factory=deb_factory(
-                        name="go-ethereum",
+                        name="ethereum",
                         repourl="https://github.com/ethereum/go-ethereum.git",
                         ppabranch="go-ethereum%s" % ("-develop" if branch=='develop' else ""),
                         branch=branch,
