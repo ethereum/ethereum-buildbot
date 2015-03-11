@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-10 00:04:53
+# @Last Modified time: 2015-03-11 05:48:19
 
 from buildbot import locks
 
@@ -140,9 +140,7 @@ for branch in ['master', 'develop']:
             builddir="build-cpp-ethereum-%s-docker" % branch,
             slavenames=[
                 "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-one%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-two%s" % ("" if branch == 'master' else "-develop")
+                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
             ],
             factory=cpp_ethereum_factory(branch=branch, deb=True),
             locks=[build_lock.access('counting')]),
@@ -151,9 +149,7 @@ for branch in ['master', 'develop']:
             builddir="build-cpp-ethereum-gui-%s" % branch,
             slavenames=[
                 "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-one%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-two%s" % ("" if branch == 'master' else "-develop")
+                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
             ],
             factory=cpp_ethereum_factory(branch=branch, deb=True, headless=False),
             locks=[build_lock.access('counting')]),
@@ -168,9 +164,7 @@ for branch in ['master', 'develop']:
             builddir="build-cpp-ethereum-%s-evmjit" % branch,
             slavenames=[
                 "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-one%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-two%s" % ("" if branch == 'master' else "-develop")
+                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
             ],
             factory=cpp_ethereum_factory(branch=branch, deb=True, evmjit=True),
             locks=[build_lock.access('counting')]),
@@ -178,8 +172,6 @@ for branch in ['master', 'develop']:
             name="Linux Go %s branch" % branch,
             builddir="build-go-ethereum-%s-docker" % branch,
             slavenames=[
-                "slave-go-one%s" % ("" if branch == 'master' else "-develop"),
-                "slave-go-two%s" % ("" if branch == 'master' else "-develop"),
                 "slave-go-three%s" % ("" if branch == 'master' else "-develop"),
                 "slave-go-four%s" % ("" if branch == 'master' else "-develop"
             )],
@@ -189,8 +181,6 @@ for branch in ['master', 'develop']:
             name="Linux Go GUI %s branch" % branch,
             builddir="build-go-ethereum-gui-%s" % branch,
             slavenames=[
-                "slave-go-one%s" % ("" if branch == 'master' else "-develop"),
-                "slave-go-two%s" % ("" if branch == 'master' else "-develop"),
                 "slave-go-three%s" % ("" if branch == 'master' else "-develop"),
                 "slave-go-four%s" % ("" if branch == 'master' else "-develop"
             )],
