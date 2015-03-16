@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-12 14:14:07
+# @Last Modified time: 2015-03-16 06:24:48
 
 import factory
 reload(factory)
@@ -136,17 +136,17 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                 })
         ]: factory.addStep(step)
 
-        # if branch is not 'master':
-        #     for step in [
-        #         Trigger(
-        #             schedulerNames=["cpp-ethereum-integration"],
-        #             waitForFinish=False,
-        #             set_properties={
-        #                 "database": Interpolate("%(prop:database)s"),
-        #                 "protocol": Interpolate("%(prop:protocol)s"),
-        #                 "version": Interpolate("%(prop:version)s")
-        #             })
-        #     ]: factory.addStep(step)
+        if branch is not 'master':
+            for step in [
+                Trigger(
+                    schedulerNames=["cpp-ethereum-integration"],
+                    waitForFinish=False,
+                    set_properties={
+                        "database": Interpolate("%(prop:database)s"),
+                        "protocol": Interpolate("%(prop:protocol)s"),
+                        "version": Interpolate("%(prop:version)s")
+                    })
+            ]: factory.addStep(step)
 
     # Trigger deb builders
     if not evmjit and headless:
