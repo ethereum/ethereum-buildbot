@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-11 05:48:19
+# @Last Modified time: 2015-03-15 22:46:47
 
 from buildbot import locks
 
@@ -413,7 +413,7 @@ for builder in [
             "slave-go-three-pr",
             "slave-go-four-pr"
         ],
-        factory=go_ethereum_factory(branch='develop'),
+        factory=go_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
         name="Linux PyEthereum PRs",
