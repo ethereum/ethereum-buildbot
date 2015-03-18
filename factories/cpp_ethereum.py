@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-18 12:36:07
+# @Last Modified time: 2015-03-18 12:40:01
 
 import factory
 reload(factory)
@@ -175,7 +175,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
             env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
             workdir="build/test",
             decodeRC={0:SUCCESS, 1:WARNINGS, 201:WARNINGS},
-            maxTime=600
+            maxTime=300
         )
     ]: factory.addStep(step)
 
