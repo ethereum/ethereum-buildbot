@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-10 03:50:49
+# @Last Modified time: 2015-03-18 12:33:10
 
 import factory
 reload(factory)
@@ -182,7 +182,8 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             command=testeth_cmd(["./testeth"], evmjit=evmjit),
             env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
             workdir="build/test",
-            decodeRC={0:SUCCESS, 1:WARNINGS, 201:WARNINGS}
+            decodeRC={0:SUCCESS, 1:WARNINGS, 201:WARNINGS},
+            maxTime=3600
         )
     ]: factory.addStep(step)
 
