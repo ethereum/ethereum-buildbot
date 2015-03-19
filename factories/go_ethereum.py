@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 17:48:13
+# @Last Modified time: 2015-03-19 10:08:03
 
 import factory
 reload(factory)
@@ -57,7 +57,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-version",
-            command = 'sed -ne "s/.*Version.*= \\"\(.*\)\\"/\\1/p" cmd/ethereum/main.go',
+            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/ethereum/main.go',
             property = "version"
         ),
         ShellCommand(

@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:02:55
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 17:49:56
+# @Last Modified time: 2015-03-19 10:08:50
 
 import factory
 reload(factory)
@@ -64,7 +64,7 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name = "update-version",
-            command = 'sed -ne "s/.*Version.*= \\"\(.*\)\\"/\\1/p" cmd/ethereum/main.go',
+            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/ethereum/main.go',
             property = "version"
         ),
         ShellCommand(
