@@ -3,28 +3,16 @@
 # @Author: caktux
 # @Date:   2015-03-06 16:34:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-19 21:21:07
+# @Last Modified time: 2015-03-19 21:56:52
 
 import factory
 reload(factory)
 from factory import *
 
-def backport_factory(name=None, distribution='trusty', architecture='amd64'):
+def backport_factory(name=None, distribution='trusty', architecture='amd64', packages=[]):
     factory = BuildFactory()
 
-    for package in [
-        "harfbuzz",
-        "qtbase-opensource-src",
-        "qtxmlpatterns-opensource-src",
-        "qtdeclarative-opensource-src",
-        "qtscript-opensource-src",
-        "qttools-opensource-src",
-        "qtlocation-opensource-src",
-        "qtquick1-opensource-src",
-        "qtquickcontrols-opensource-src",
-        "qtwebkit-opensource-src"
-    ]:
-
+    for package in packages:
         for step in [
             # Create backport
             ShellCommand(
