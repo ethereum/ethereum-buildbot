@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-19 21:57:25
+# @Last Modified time: 2015-03-19 23:00:03
 
 ####### SCHEDULERS
 
@@ -587,22 +587,6 @@ for distribution in ['trusty', 'utopic']:
             ])
     ]: schedulers.append(scheduler)
 
-    packages = [
-        "harfbuzz",
-        "qtbase-opensource-src",
-        "qtxmlpatterns-opensource-src",
-        "qtdeclarative-opensource-src",
-        "qtscript-opensource-src",
-        "qttools-opensource-src",
-        "qtlocation-opensource-src",
-        "qtquick1-opensource-src",
-        "qtquickcontrols-opensource-src",
-        "qtwebkit-opensource-src"
-    ]
-
-    if distribution == 'trusty':
-        packages.append("libinput")
-
     for scheduler in [
         ForceScheduler(
             name="force-qt5-%s" % distribution,
@@ -613,11 +597,6 @@ for distribution in ['trusty', 'utopic']:
                     label="Version:<br>",
                     default="5.4.1",
                     required=True,
-                    size=10),
-                ChoiceStringParameter(
-                    name="packages",
-                    choices=packages,
-                    default=packages,
-                    multiple=True)
+                    size=10)
             ])
     ]: schedulers.append(scheduler)
