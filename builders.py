@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-15 22:46:47
+# @Last Modified time: 2015-03-19 21:25:06
 
 from buildbot import locks
 
@@ -357,7 +357,7 @@ for distribution in ['trusty', 'utopic']:
                 name="qtwebengine-opensource-src",
                 repourl="https://github.com/qtproject/qtwebengine.git",
                 ppabranch="qt5webengine",
-                branch="5.4.0",
+                branch="5.4.1",
                 architecture="amd64",
                 distribution=distribution),
             locks=[package_lock.access('counting')]),

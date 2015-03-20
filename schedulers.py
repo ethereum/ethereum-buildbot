@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-09 18:12:26
+# @Last Modified time: 2015-03-19 21:28:08
 
 ####### SCHEDULERS
 
@@ -569,19 +569,19 @@ for distribution in ['trusty', 'utopic']:
             builderNames=["qtwebengine %s-%s" % ("amd64", distribution)],
             repository=FixedParameter(name="repository", default=""),
             project=FixedParameter(name="project", default=""),
-            branch=StringParameter(name="branch", default="5.4.0"),
+            branch=StringParameter(name="branch", default="5.4.1"),
             revision=
                 StringParameter(
                     name="revision",
                     label="Revision:<br>",
-                    default="b292fd17bfc1f422242e7e546a732b7a67384c47",
+                    default="72ff0b7d9600db642e2d2e95c78c70454bbdb5e7",
                     required=True,
                     size=40),
             properties=[
                 StringParameter(
                     name="version",
                     label="Version:<br>",
-                    default="5.4.0",
+                    default="5.4.1",
                     required=True,
                     size=10)
             ]),
@@ -592,7 +592,7 @@ for distribution in ['trusty', 'utopic']:
                 StringParameter(
                     name="version",
                     label="Version:<br>",
-                    default="5.4.0",
+                    default="5.4.1",
                     required=True,
                     size=10)
             ])
