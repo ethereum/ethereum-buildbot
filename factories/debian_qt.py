@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-03-06 16:34:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-07 23:25:38
+# @Last Modified time: 2015-03-19 21:21:07
 
 import factory
 reload(factory)
@@ -92,7 +92,7 @@ def backport_factory(name=None, distribution='trusty', architecture='amd64'):
             name='debsign',
             description='debsigning',
             descriptionDone='debsign',
-            command=['debsign', Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes", dist=distribution, arch=architecture, name=name)]
+            command=Interpolate("debsign changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes", dist=distribution, arch=architecture, name=name)
         ),
         # dput
         MasterShellCommand(
