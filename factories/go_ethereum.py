@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-19 10:08:03
+# @Last Modified time: 2015-03-20 16:58:02
 
 import factory
 reload(factory)
@@ -108,7 +108,8 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
             description="go testing",
             descriptionDone="go test",
             command="go test github.com/ethereum/go-ethereum/...",
-            decodeRC={0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
+            decodeRC={0:SUCCESS, 1:WARNINGS, 2:WARNINGS},
+            env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
         )
     ]: factory.addStep(step)
 
