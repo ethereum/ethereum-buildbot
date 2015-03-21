@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-20 16:58:02
+# @Last Modified time: 2015-03-21 06:36:22
 
 import factory
 reload(factory)
@@ -102,7 +102,9 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
 
     for step in [
         ShellCommand(
-            haltOnFailure = True,
+            flunkOnFailure=False,
+            warnOnFailure=True,
+            warnOnWarnings=True,
             logEnviron = False,
             name="go-test",
             description="go testing",
