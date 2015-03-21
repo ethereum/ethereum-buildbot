@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-03-06 16:34:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-20 00:54:15
+# @Last Modified time: 2015-03-21 05:01:58
 
 import factory
 reload(factory)
@@ -19,6 +19,7 @@ def backport_factory(name=None, distribution='trusty', architecture='amd64'):
         "qtxmlpatterns-opensource-src",
         "qtdeclarative-opensource-src",
         "qtscript-opensource-src",
+        "qtwebsockets-opensource-src",
         "qtwebkit-opensource-src",
         "qttools-opensource-src",
         "qtquick1-opensource-src",
