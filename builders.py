@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-19 21:25:06
+# @Last Modified time: 2015-03-23 01:43:08
 
 from buildbot import locks
 
@@ -302,7 +302,7 @@ for branch in ['master', 'develop']:
                     factory=deb_factory(
                         name="cpp-ethereum",
                         repourl="https://github.com/ethereum/cpp-ethereum.git",
-                        ppabranch="master",
+                        ppabranch=branch,
                         branch=branch,
                         architecture=architecture,
                         distribution=distribution),
