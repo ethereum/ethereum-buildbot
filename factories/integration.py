@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-07 13:32:23
+# @Last Modified time: 2015-03-24 06:39:03
 
 import StringIO
 
@@ -242,7 +242,8 @@ def integration_factory():
             description="deploying",
             descriptionDone="deploy",
             command=["pyepm", "contracts/EtherEx.yaml"],
-            workdir="integration"
+            workdir="integration",
+            maxTime=600
         ),
         ShellCommand(
             haltOnFailure = True,
