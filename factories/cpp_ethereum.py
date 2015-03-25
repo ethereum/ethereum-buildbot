@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-22 23:30:51
+# @Last Modified time: 2015-03-25 09:52:47
 
 import factory
 reload(factory)
@@ -28,6 +28,7 @@ def testeth_cmd(cmd=[], evmjit=False):
     return cmd
 
 def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
+    cmd.append("-DFATDB=1")
     if headless:
         cmd.append("-DHEADLESS=1")
     if evmjit:

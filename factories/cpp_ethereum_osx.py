@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-22 23:31:58
+# @Last Modified time: 2015-03-25 09:53:23
 
 import factory
 reload(factory)
@@ -14,6 +14,7 @@ reload(cpp_ethereum)
 from cpp_ethereum import *
 
 def cmake_osx_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
+    cmd.append("-DFATDB=1")
     if headless:
         cmd.append("-DHEADLESS=1")
     if evmjit:
