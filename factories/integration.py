@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-25 03:57:52
+# @Last Modified time: 2015-03-25 08:01:09
 
 import StringIO
 
@@ -110,7 +110,7 @@ def integration_factory():
             haltOnFailure = True,
             logEnviron = False,
             repourl='https://github.com/ethereum/ethereum.js.git',
-            branch='master',
+            branch='develop',
             mode='incremental',
             codebase='ethereumjs',
             retry=(5, 3),
