@@ -1,6 +1,6 @@
 -
   transact:
     integration:
-      to: address
+      to: "address"
       value: 100000000000000000000
       wait: True
