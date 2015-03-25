@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-25 08:01:09
+# @Last Modified time: 2015-03-25 12:24:34
 
 import StringIO
 
@@ -262,21 +262,54 @@ def integration_factory():
             command="sed -ne 's/.*result\":\"\(.*\)\"}/\\1/p' address.json",
             property="address"
         ),
+        FileDownload(
+            haltOnFailure = True,
+            descriptionDone="download transfer definitions",
+            mastersrc="integration-transfer.yaml",
+            slavedest="integration-transfer.yaml"
+        ),
+        ShellCommand(
+            name='prepare-transfer',
+            description='preparing transfer',
+            descriptionDone='prepare transfer',
+            command=Interpolate('sed -i -e s/address/%(prop:address)s/ integration-transfer.yaml')
+        ),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
             name="fill-address",
             description="filling address",
             descriptionDone="fill address",
-            command=Interpolate("curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_transact\",\"params\":[{\"to\": \"%(prop:address)s\", \"gas\": \"500\", \"value\": \"100000000000000000000\"}],\"id\":72}' http://localhost:8080")
+            command=["pyepm", "integration-transfer.yaml"]
         ),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="stop-mining",
-            description="stopping mining",
-            descriptionDone="stop mining",
-            command="sleep 20 && curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_setMining\",\"params\":[false],\"id\":1}' http://localhost:8080"
+            name="stop-eth",
+            description="stopping",
+            descriptionDone="stop",
+            command="kill `ps aux | grep 'eth-supervisord-integration.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
+        ),
+        FileDownload(
+            haltOnFailure = True,
+            descriptionDone="download init script",
+            mastersrc="eth-supervisord-integration-test.conf",
+            slavedest="eth-supervisord-integration-test.conf"
+        ),
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name="start-eth-test",
+            description="starting eth",
+            descriptionDone="start eth",
+            command="supervisord -c eth-supervisord-integration-test.conf && sleep 5",
+            logfiles={
+                "eth.log": "eth.log",
+                "eth.err": "eth.err",
+                "supervisord.log": "eth-supervisord.log"
+            },
+            lazylogfiles=True
         ),
         ShellCommand(
             haltOnFailure = True,
