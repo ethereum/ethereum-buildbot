@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-26 00:33:38
+# @Last Modified time: 2015-03-26 05:38:27
 
 import StringIO
 
@@ -236,7 +236,6 @@ def integration_factory():
             lazylogfiles=True
         ),
         ShellCommand(
-            haltOnFailure = True,
             logEnviron = False,
             name="pyepm-deploy",
             description="deploying",
@@ -248,13 +247,21 @@ def integration_factory():
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
+            name="stop-eth",
+            description="stopping",
+            descriptionDone="stop",
+            command="kill `ps aux | grep 'eth-supervisord-integration.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS},
+            doStepIf=warnings
+        ),
+        ShellCommand(
+            logEnviron = False,
             name="get-address",
             description="getting address",
             descriptionDone="get address",
             command="curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_coinbase\",\"params\":null,\"id\":2}' http://localhost:8080 > address.json"
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
             logEnviron = False,
             name="parse-address",
             description="parsing address",
@@ -269,13 +276,13 @@ def integration_factory():
             slavedest="integration-transfer.yaml"
         ),
         ShellCommand(
+            logEnviron = False,
             name='prepare-transfer',
             description='preparing transfer',
             descriptionDone='prepare transfer',
             command=Interpolate('sed -i -e s/address/%(prop:address)s/ integration-transfer.yaml')
         ),
         ShellCommand(
-            haltOnFailure = True,
             logEnviron = False,
             name="fill-address",
             description="filling address",
