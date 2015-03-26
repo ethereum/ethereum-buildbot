@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-25 12:24:34
+# @Last Modified time: 2015-03-26 00:33:38
 
 import StringIO
 
@@ -334,7 +334,7 @@ def integration_factory():
             name="stop-eth",
             description="stopping",
             descriptionDone="stop",
-            command="kill `ps aux | grep 'eth-supervisord-integration.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
+            command="kill `ps aux | grep 'eth-supervisord-integration-test.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
             decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
         ),
         FileDownload(
