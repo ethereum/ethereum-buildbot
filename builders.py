@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-23 01:43:08
+# @Last Modified time: 2015-03-26 03:31:13
 
 from buildbot import locks
 
@@ -277,9 +277,7 @@ for branch in ['master', 'develop']:
             builddir="build-cpp-ethereum-%s-check" % branch,
             slavenames=[
                 "slave-cpp-one",
-                "slave-cpp-two",
-                "slave-cpp-three",
-                "slave-cpp-four"
+                "slave-cpp-two"
             ],
             factory=cpp_check_factory(branch=branch),
             locks=[build_lock.access('counting')]),
@@ -387,9 +385,7 @@ for builder in [
         builddir="build-cpp-ethereum-pr",
         slavenames=[
             "slave-cpp-one-pr",
-            "slave-cpp-two-pr",
-            "slave-cpp-three-pr",
-            "slave-cpp-four-pr"
+            "slave-cpp-two-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
@@ -398,9 +394,7 @@ for builder in [
         builddir="build-cpp-ethereum-evmjit-pr",
         slavenames=[
             "slave-cpp-one-pr",
-            "slave-cpp-two-pr",
-            "slave-cpp-three-pr",
-            "slave-cpp-four-pr"
+            "slave-cpp-two-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
         locks=[build_lock.access('counting')]),
@@ -409,9 +403,7 @@ for builder in [
         builddir="build-go-ethereum-pr",
         slavenames=[
             "slave-go-one-pr",
-            "slave-go-two-pr",
-            "slave-go-three-pr",
-            "slave-go-four-pr"
+            "slave-go-two-pr"
         ],
         factory=go_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
