@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:02:55
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-21 06:37:12
+# @Last Modified time: 2015-03-27 06:51:00
 
 import factory
 reload(factory)
@@ -64,7 +64,7 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name = "update-version",
-            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/ethereum/main.go',
+            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
             property = "version"
         ),
         ShellCommand(
@@ -88,10 +88,10 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="install-ethereum",
-            description="installing ethereum",
-            descriptionDone="install ethereum",
-            command="go install -v github.com/ethereum/go-ethereum/cmd/ethereum",
+            name="install-geth",
+            description="installing geth",
+            descriptionDone="install geth",
+            command="go install -v github.com/ethereum/go-ethereum/cmd/geth",
             env=env
         )
     ]: factory.addStep(step)

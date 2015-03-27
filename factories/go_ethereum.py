@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-21 06:36:22
+# @Last Modified time: 2015-03-27 06:49:25
 
 import factory
 reload(factory)
@@ -57,7 +57,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-version",
-            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/ethereum/main.go',
+            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
             property = "version"
         ),
         ShellCommand(
@@ -79,10 +79,10 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="install-ethereum",
-            description="installing ethereum",
-            descriptionDone="install ethereum",
-            command="go install -v github.com/ethereum/go-ethereum/cmd/ethereum",
+            name="install-geth",
+            description="installing geth",
+            descriptionDone="install geth",
+            command="go install -v github.com/ethereum/go-ethereum/cmd/geth",
             env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
         )
     ]: factory.addStep(step)
@@ -142,7 +142,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
                 name="stop",
                 description="stopping",
                 descriptionDone="stop",
-                command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof ethereum` && sleep 5",
+                command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof geth` && sleep 5",
                 decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
             ),
             ShellCommand(
@@ -153,8 +153,8 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
                 descriptionDone="start",
                 command="supervisord -c eth-go-supervisord.conf && sleep 15",
                 logfiles={
-                    "ethereum.log": "ethereum.log",
-                    "ethereum.err": "ethereum.err",
+                    "geth.log": "geth.log",
+                    "geth.err": "geth.err",
                     "supervisord.log": "eth-go-supervisord.log"
                 },
                 lazylogfiles=True
