@@ -24,6 +24,8 @@
     {"name": "slave-cpp-four-pr", "password": "secret"},
     {"name": "slave-cpp-one-integration", "password": "secret"},
     {"name": "slave-cpp-two-integration", "password": "secret"},
+    {"name": "slave-cpp-three-integration", "password": "secret"},
+    {"name": "slave-cpp-four-integration", "password": "secret"},
     {"name": "slave-go-one", "password": "secret"},
     {"name": "slave-go-one-develop", "password": "secret"},
     {"name": "slave-go-two", "password": "secret"},
