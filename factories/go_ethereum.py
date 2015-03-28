@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 14:33:52
+# @Last Modified time: 2015-03-28 15:44:41
 
 import factory
 reload(factory)
@@ -133,8 +133,8 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
             FileDownload(
                 haltOnFailure = True,
                 descriptionDone="download init script",
-                mastersrc="eth-go-supervisord.conf",
-                slavedest="eth-go-supervisord.conf"
+                mastersrc="geth-supervisord.conf",
+                slavedest="geth-supervisord.conf"
             ),
             ShellCommand(
                 haltOnFailure = True,
@@ -142,7 +142,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
                 name="stop",
                 description="stopping",
                 descriptionDone="stop",
-                command="kill `ps aux | grep 'supervisord -c eth-go-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof geth` && sleep 5",
+                command="kill `ps aux | grep 'supervisord -c geth-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof geth` && sleep 5",
                 decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
             ),
             ShellCommand(
@@ -151,11 +151,11 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
                 name="start",
                 description="starting",
                 descriptionDone="start",
-                command="supervisord -c eth-go-supervisord.conf && sleep 15",
+                command="supervisord -c geth-supervisord.conf && sleep 15",
                 logfiles={
                     "geth.log": "geth.log",
                     "geth.err": "geth.err",
-                    "supervisord.log": "eth-go-supervisord.log"
+                    "supervisord.log": "geth-supervisord.log"
                 },
                 lazylogfiles=True
             )
