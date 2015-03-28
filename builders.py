@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-26 03:31:13
+# @Last Modified time: 2015-03-28 16:55:36
 
 from buildbot import locks
 
@@ -471,8 +471,8 @@ for builder in [
       name="Linux C++ integration",
       builddir="build-cpp-ethereum-integration",
       slavenames=[
-          "slave-cpp-one-integration",
-          "slave-cpp-two-integration"
+          "slave-cpp-three-integration",
+          "slave-cpp-four-integration"
       ],
       factory=integration_factory(),
       locks=[build_lock.access('counting')])
