@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:15
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-05 04:42:02
+# @Last Modified time: 2015-03-28 21:24:34
 
 import factory
 reload(factory)
@@ -77,13 +77,13 @@ def pyethereum_factory(branch='master'):
             descriptionDone="update test submodule",
             command="git submodule init && git submodule update --recursive"
         ),
-        Test(
-            flunkOnFailure = False,
-            logEnviron = False,
+        ShellCommand(
+            flunkOnFailure=False,
+            logEnviron=False,
             description="testing",
             descriptionDone="py.test",
-            name="test-py.test",
-            command=["py.test", "-vvrs"],
+            name="py.test",
+            command=["py.test"]
         )
     ]: factory.addStep(step)
 

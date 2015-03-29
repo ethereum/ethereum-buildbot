@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:30
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-05 05:33:30
+# @Last Modified time: 2015-03-28 21:24:27
 
 import factory
 reload(factory)
@@ -83,14 +83,13 @@ def serpent_factory(branch='develop'):
             command="git submodule init && git submodule update --recursive",
             workdir="pyethereum"
         ),
-        Test(
+        ShellCommand(
             flunkOnFailure=False,
-            warnOnFailure=True,
             logEnviron=False,
-            description="py.testing",
+            description="testing",
             descriptionDone="py.test",
             name="py.test",
-            command=["py.test", "-vvrs"],
+            command=["py.test"],
             workdir="pyethereum"
         )
     ]: factory.addStep(step)
