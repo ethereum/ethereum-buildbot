@@ -50,6 +50,7 @@
     {"name": "slave-java-one-pr", "password": "secret"},
     {"name": "slave-java-two", "password": "secret"},
     {"name": "slave-java-two-pr", "password": "secret"},
+    {"name": "latentslave", "password": "secret"},
     {"name": "winslave", "password": "secret"},
     {"name": "osx", "password": "secret"}
 ]

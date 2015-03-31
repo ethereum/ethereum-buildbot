@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 16:55:36
+# @Last Modified time: 2015-03-31 12:04:26
 
 from buildbot import locks
 
@@ -81,6 +81,7 @@ go_lock = locks.SlaveLock("go_builds", maxCount = 1)
 osx_lock = locks.SlaveLock("osx_builds", maxCount = 2)
 brew_lock = locks.SlaveLock("brew_builds", maxCount = 1)
 win_lock = locks.SlaveLock("win_builds", maxCount = 2)
+latent_lock = locks.SlaveLock("latent_builds", maxCount = 16)
 
 #
 # Builders
@@ -296,7 +297,7 @@ for branch in ['master', 'develop']:
                 BuilderConfig(
                     name="Linux C++ %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+                    slavenames=["latentslave"],
                     factory=deb_factory(
                         name="cpp-ethereum",
                         repourl="https://github.com/ethereum/cpp-ethereum.git",
@@ -308,7 +309,7 @@ for branch in ['master', 'develop']:
                 BuilderConfig(
                     name="Linux Go %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-go-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["slave-go-one-deb", "slave-go-two-deb"],
+                    slavenames=["latentslave"],
                     factory=deb_factory(
                         name="ethereum",
                         repourl="https://github.com/ethereum/go-ethereum.git",
@@ -326,7 +327,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="libcryptopp %s-%s" % ("amd64", distribution),
             builddir="build-libcryptopp-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            slavenames=["latentslave"],
             factory=deb_factory(
                 name="libcryptopp",
                 repourl="https://github.com/mmoss/cryptopp.git",
@@ -338,7 +339,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="libjson-rpc-cpp %s-%s" % ("amd64", distribution),
             builddir="build-libjson-rpc-cpp-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            slavenames=["latentslave"],
             factory=deb_factory(
                 name="libjson-rpc-cpp",
                 repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
@@ -350,7 +351,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="qtwebengine %s-%s" % ("amd64", distribution),
             builddir="build-qtwebengine-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            slavenames=["latentslave"],
             factory=deb_factory(
                 name="qtwebengine-opensource-src",
                 repourl="https://github.com/qtproject/qtwebengine.git",
@@ -362,7 +363,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="qt5 %s" % distribution,
             builddir="build-qt-%s" % distribution,
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            slavenames=["latentslave"],
             factory=backport_factory(
                 name="qt5",
                 architecture="amd64",
