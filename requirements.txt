@@ -3,3 +3,4 @@ service-identity
 simplejson
 txgithub
 txrequests
+boto

@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 12:30:33
+# @Last Modified time: 2015-03-31 12:33:25
 
 ####### BUILDSLAVES
 
@@ -24,12 +24,12 @@ for slave in json.load(open("slaves.json")):
         slaves.append(EC2LatentBuildSlave(
             slave['name'],
             slave['password'],
-            't2.medium',
-            ami='ami-30d3e458'))
-            # region='us-east-1',
-            # placement='b',
-            # spot_instance=True,
-            # max_spot_price=0.01,
-            # price_multiplier=1.15))
+            'm3.medium',
+            ami='ami-30d3e458',
+            region='us-east-1',
+            placement='b',
+            spot_instance=True,
+            max_spot_price=0.01,
+            price_multiplier=1.15))
     else:
         slaves.append(BuildSlave(slave['name'], slave['password']))
