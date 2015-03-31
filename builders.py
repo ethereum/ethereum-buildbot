@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 13:00:43
+# @Last Modified time: 2015-03-31 13:06:42
 
 from buildbot import locks
 
@@ -309,7 +309,7 @@ for branch in ['master', 'develop']:
                 BuilderConfig(
                     name="Linux Go %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-go-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["slave-cpp-three-deb", "slave-cpp-four-deb"] if architecture == 'amd64' else ["latentslave"],
+                    slavenames=["slave-go-three-deb", "slave-go-four-deb"] if architecture == 'amd64' else ["latentslave"],
                     factory=deb_factory(
                         name="ethereum",
                         repourl="https://github.com/ethereum/go-ethereum.git",
