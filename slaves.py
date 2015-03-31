@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 16:45:44
+# @Last Modified time: 2015-03-31 16:51:13
 
 ####### BUILDSLAVES
 
@@ -29,7 +29,7 @@ for slave in json.load(open("slaves.json")):
             region='us-east-1',
             placement='b',
             spot_instance=True,
-            max_spot_price=0.01,
+            max_spot_price=0.02,
             price_multiplier=1.15))
     else:
         slaves.append(BuildSlave(slave['name'], slave['password']))
