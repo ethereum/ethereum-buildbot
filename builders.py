@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 13:06:42
+# @Last Modified time: 2015-03-31 15:45:12
 
 from buildbot import locks
 
@@ -70,18 +70,29 @@ builders = []
 
 self_lock = locks.SlaveLock("self_update", maxCount = 1)
 build_lock = locks.SlaveLock("slave_builds", maxCount = 2)
-package_lock = locks.SlaveLock("slave_packaging",
-                                maxCount = 4,
-                                maxCountForSlave = {
-                                    'slave-cpp-one-deb': 2,
-                                    'slave-cpp-two-deb': 2,
-                                    'slave-go-one-deb': 2,
-                                    'slave-go-two-deb': 2 })
+# package_lock = locks.SlaveLock("slave_packaging",
+#                                 maxCount = 4,
+#                                 maxCountForSlave = {
+#                                     'slave-cpp-one-deb': 2,
+#                                     'slave-cpp-two-deb': 2,
+#                                     'slave-go-one-deb': 2,
+#                                     'slave-go-two-deb': 2 })
 go_lock = locks.SlaveLock("go_builds", maxCount = 1)
 osx_lock = locks.SlaveLock("osx_builds", maxCount = 2)
 brew_lock = locks.SlaveLock("brew_builds", maxCount = 1)
 win_lock = locks.SlaveLock("win_builds", maxCount = 2)
-latent_lock = locks.SlaveLock("latent_builds", maxCount = 16)
+
+# Latent slaves for builders
+max_latents = 20
+latentslaves = []
+maxperslave = {}
+for n in range(1, max_latents + 1):
+    name = "latentslave%s" % n
+    latentslaves.append(name)
+    maxperslave[name] = 1 # One build per latent buildslave
+latent_lock = locks.SlaveLock("latent_builds",
+                               maxCount=max_latents,
+                               maxCountForSlave=maxperslave)
 
 #
 # Builders
@@ -297,7 +308,7 @@ for branch in ['master', 'develop']:
                 BuilderConfig(
                     name="Linux C++ %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["slave-cpp-three-deb", "slave-cpp-four-deb"] if architecture == 'amd64' else ["latentslave"],
+                    slavenames=latentslaves,
                     factory=deb_factory(
                         name="cpp-ethereum",
                         repourl="https://github.com/ethereum/cpp-ethereum.git",
@@ -305,11 +316,11 @@ for branch in ['master', 'develop']:
                         branch=branch,
                         architecture=architecture,
                         distribution=distribution),
-                    locks=[package_lock.access('counting')]),
+                    locks=[latent_lock.access('counting')]),
                 BuilderConfig(
                     name="Linux Go %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-go-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["slave-go-three-deb", "slave-go-four-deb"] if architecture == 'amd64' else ["latentslave"],
+                    slavenames=latentslaves,
                     factory=deb_factory(
                         name="ethereum",
                         repourl="https://github.com/ethereum/go-ethereum.git",
@@ -317,7 +328,7 @@ for branch in ['master', 'develop']:
                         branch=branch,
                         architecture=architecture,
                         distribution=distribution),
-                    locks=[package_lock.access('counting')])
+                    locks=[latent_lock.access('counting')])
             ]: builders.append(builder)
 
 # deps deb packaging
@@ -327,7 +338,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="libcryptopp %s-%s" % ("amd64", distribution),
             builddir="build-libcryptopp-%s-%s" % ("amd64", distribution),
-            slavenames=["latentslave"],
+            slavenames=latentslaves,
             factory=deb_factory(
                 name="libcryptopp",
                 repourl="https://github.com/mmoss/cryptopp.git",
@@ -335,11 +346,11 @@ for distribution in ['trusty', 'utopic']:
                 branch="master",
                 architecture="amd64",
                 distribution=distribution),
-            locks=[package_lock.access('counting')]),
+            locks=[latent_lock.access('counting')]),
         BuilderConfig(
             name="libjson-rpc-cpp %s-%s" % ("amd64", distribution),
             builddir="build-libjson-rpc-cpp-%s-%s" % ("amd64", distribution),
-            slavenames=["latentslave"],
+            slavenames=latentslaves,
             factory=deb_factory(
                 name="libjson-rpc-cpp",
                 repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
@@ -347,11 +358,11 @@ for distribution in ['trusty', 'utopic']:
                 branch="master",
                 architecture="amd64",
                 distribution=distribution),
-            locks=[package_lock.access('counting')]),
+            locks=[latent_lock.access('counting')]),
         BuilderConfig(
             name="qtwebengine %s-%s" % ("amd64", distribution),
             builddir="build-qtwebengine-%s-%s" % ("amd64", distribution),
-            slavenames=["latentslave"],
+            slavenames=latentslaves,
             factory=deb_factory(
                 name="qtwebengine-opensource-src",
                 repourl="https://github.com/qtproject/qtwebengine.git",
@@ -359,16 +370,16 @@ for distribution in ['trusty', 'utopic']:
                 branch="5.4.1",
                 architecture="amd64",
                 distribution=distribution),
-            locks=[package_lock.access('counting')]),
+            locks=[latent_lock.access('counting')]),
         BuilderConfig(
             name="qt5 %s" % distribution,
             builddir="build-qt-%s" % distribution,
-            slavenames=["latentslave"],
+            slavenames=latentslaves,
             factory=backport_factory(
                 name="qt5",
                 architecture="amd64",
                 distribution=distribution),
-            locks=[package_lock.access('counting')])
+            locks=[latent_lock.access('counting')])
     ]: builders.append(builder)
 
 for builder in [

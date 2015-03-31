@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 12:33:25
+# @Last Modified time: 2015-03-31 16:45:44
 
 ####### BUILDSLAVES
 
@@ -24,7 +24,7 @@ for slave in json.load(open("slaves.json")):
         slaves.append(EC2LatentBuildSlave(
             slave['name'],
             slave['password'],
-            'm3.medium',
+            'c3.large',
             ami='ami-30d3e458',
             region='us-east-1',
             placement='b',
