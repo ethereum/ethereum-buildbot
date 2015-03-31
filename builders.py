@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 12:04:26
+# @Last Modified time: 2015-03-31 13:00:43
 
 from buildbot import locks
 
@@ -297,7 +297,7 @@ for branch in ['master', 'develop']:
                 BuilderConfig(
                     name="Linux C++ %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["latentslave"],
+                    slavenames=["slave-cpp-three-deb", "slave-cpp-four-deb"] if architecture == 'amd64' else ["latentslave"],
                     factory=deb_factory(
                         name="cpp-ethereum",
                         repourl="https://github.com/ethereum/cpp-ethereum.git",
@@ -309,7 +309,7 @@ for branch in ['master', 'develop']:
                 BuilderConfig(
                     name="Linux Go %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-go-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=["latentslave"],
+                    slavenames=["slave-cpp-three-deb", "slave-cpp-four-deb"] if architecture == 'amd64' else ["latentslave"],
                     factory=deb_factory(
                         name="ethereum",
                         repourl="https://github.com/ethereum/go-ethereum.git",
