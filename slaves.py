@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:42
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 17:28:14
+# @Last Modified time: 2015-04-01 06:30:53
 
 ####### BUILDSLAVES
 
@@ -25,10 +25,10 @@ for slave in json.load(open("slaves.json")):
             slave['name'],
             slave['password'],
             'c3.large',
-            ami='ami-d8b88fb0',
+            ami='ami-2e2a1c46',
             region='us-east-1',
             placement='b',
-            user_data = '{"SLAVENAME": "%s"}' % slave['name'],
+            user_data='{"SLAVENAME": "%s"}' % slave['name'],
             spot_instance=True,
             max_spot_price=0.02,
             price_multiplier=1.15))
