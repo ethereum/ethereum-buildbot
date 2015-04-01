@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-24 00:38:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 17:39:04
+# @Last Modified time: 2015-04-01 09:16:29
 
 import StringIO
 
@@ -218,7 +218,7 @@ def integration_factory():
         FileDownload(
             haltOnFailure = True,
             descriptionDone="download init script",
-            mastersrc="eth-supervisord-integration.conf",
+            mastersrc="startup/eth-supervisord-integration.conf",
             slavedest="eth-supervisord-integration.conf"
         ),
         ShellCommand(
@@ -296,7 +296,7 @@ def integration_factory():
         FileDownload(
             haltOnFailure = True,
             descriptionDone="download init script",
-            mastersrc="eth-supervisord-integration-test.conf",
+            mastersrc="startup/eth-supervisord-integration-test.conf",
             slavedest="eth-supervisord-integration-test.conf"
         ),
         ShellCommand(
@@ -343,7 +343,7 @@ def integration_factory():
         FileDownload(
             haltOnFailure = True,
             descriptionDone="download init script",
-            mastersrc="eth-supervisord-integration-user.conf",
+            mastersrc="startup/eth-supervisord-integration-user.conf",
             slavedest="eth-supervisord-integration-user.conf"
         ),
         ShellCommand(

@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:55:14
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-27 03:32:33
+# @Last Modified time: 2015-04-01 09:15:32
 
 import factory
 reload(factory)
@@ -52,7 +52,7 @@ def cpp_ethereum_server_factory(branch='master'):
         FileDownload(
             haltOnFailure = True,
             descriptionDone="download init script",
-            mastersrc="eth-supervisord-%s.conf" % branch,
+            mastersrc="startup/eth-supervisord-%s.conf" % branch,
             slavedest="eth-supervisord-%s.conf" % branch
         ),
         ShellCommand(

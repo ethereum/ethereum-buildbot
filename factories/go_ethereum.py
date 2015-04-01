@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 15:44:41
+# @Last Modified time: 2015-04-01 09:17:26
 
 import factory
 reload(factory)
@@ -133,7 +133,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
             FileDownload(
                 haltOnFailure = True,
                 descriptionDone="download init script",
-                mastersrc="geth-supervisord.conf",
+                mastersrc="startup/geth-supervisord.conf",
                 slavedest="geth-supervisord.conf"
             ),
             ShellCommand(
