@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:18
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-02-23 16:57:37
+# @Last Modified time: 2015-04-02 09:35:39
 
 import factory
 reload(factory)
@@ -25,6 +25,8 @@ def ethereumj_factory(branch='master'):
         ),
         ShellCommand(
             logEnviron=False,
+            flunkOnFailure=False,
+            warnOnFailure=True,
             name="build",
             command=["./gradlew", "build", "--debug"],
             description="building",
@@ -32,6 +34,8 @@ def ethereumj_factory(branch='master'):
         ),
         ShellCommand(
             logEnviron=False,
+            flunkOnFailure=False,
+            warnOnFailure=True,
             name="install",
             command=["./gradlew", "install", "--debug"],
             description="installing",
