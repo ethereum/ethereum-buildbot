@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 15:47:46
+# @Last Modified time: 2015-04-04 15:53:54
 
 import factory
 reload(factory)
@@ -157,7 +157,9 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                 name="pbuilder-opts",
                 description="setting pbuilderrc",
                 descriptionDone="set pbuilderrc",
-                command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
+                command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
+                        main_ppa, distribution,
+                        main_ppa, distribution,
                         qt_ppa, distribution,
                         qt_ppa, distribution),
             ))
