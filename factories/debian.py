@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 15:53:54
+# @Last Modified time: 2015-04-04 16:06:02
 
 import factory
 reload(factory)
@@ -148,6 +148,8 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         #     mastersrc="pbuilderrc",
         #     slavedest="~/.pbuilderrc"
         # ))
+        main_ppa = "http://ppa.launchpad.net/ethereum/ethereum/ubuntu"
+        dev_ppa = "http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu"
         qt_ppa = "http://ppa.launchpad.net/ethereum/ethereum-qt/ubuntu"
 
         # Set othermirror for pbuilder
@@ -164,8 +166,6 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                         qt_ppa, distribution),
             ))
         elif name == 'cpp-ethereum':
-            main_ppa = "http://ppa.launchpad.net/ethereum/ethereum/ubuntu"
-            dev_ppa = "http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu"
             if branch == 'develop':
                 factory.addStep(ShellCommand(
                     logEnviron = False,
