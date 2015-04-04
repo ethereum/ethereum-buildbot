@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-23 00:04:55
+# @Last Modified time: 2015-04-04 15:29:44
 
 import factory
 reload(factory)
@@ -17,6 +17,15 @@ from go_ethereum import _go_cmds
 def jsonrpc_for_develop(props):
     if props.has_key('version'):
         return int(props['version'][2:3]) > 3
+    return None
+
+@properties.renderer
+def deb_version(props):
+    if props.has_key('version'):
+        if ":" in props['version']:
+            return props['version'][2:]
+        else:
+            return props['version']
     return None
 
 def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distribution='trusty', architecture='i386'):
@@ -100,7 +109,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name="source-tarball",
             description="creating source tarball",
             descriptionDone="create source tarball",
-            command=Interpolate("tar --exclude .git -czf ../%(kw:name)s_%(prop:version)s%(prop:snapshot)s.orig.tar.gz .", name=name)
+            command=Interpolate("tar --exclude .git -czf ../%(kw:name)s_%(kw:version)s%(prop:snapshot)s.orig.tar.gz .", name=name, version=deb_version)
         ))
 
     for step in [
