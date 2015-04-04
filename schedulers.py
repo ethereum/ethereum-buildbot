@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 13:38:52
+# @Last Modified time: 2015-04-04 15:09:05
 
 ####### SCHEDULERS
 
@@ -602,7 +602,7 @@ for distribution in ['trusty', 'utopic']:
                 StringParameter(
                     name="version",
                     label="Version:<br>",
-                    default="1.4.2",
+                    default="2:1.4.2",
                     required=True,
                     size=10)
             ])
