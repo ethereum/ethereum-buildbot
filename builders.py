@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-31 15:45:12
+# @Last Modified time: 2015-04-04 13:37:27
 
 from buildbot import locks
 
@@ -377,6 +377,18 @@ for distribution in ['trusty', 'utopic']:
             slavenames=latentslaves,
             factory=backport_factory(
                 name="qt5",
+                architecture="amd64",
+                distribution=distribution),
+            locks=[latent_lock.access('counting')]),
+        BuilderConfig(
+            name="golang %s-%s" % ("amd64", distribution),
+            builddir="build-golang-%s-%s" % ("amd64", distribution),
+            slavenames=latentslaves,
+            factory=deb_factory(
+                name="golang",
+                repourl="https://github.com/golang/go.git",
+                ppabranch="golang",
+                branch="release-branch.go1.4",
                 architecture="amd64",
                 distribution=distribution),
             locks=[latent_lock.access('counting')])

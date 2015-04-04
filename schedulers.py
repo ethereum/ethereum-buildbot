@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-19 23:00:03
+# @Last Modified time: 2015-04-04 13:38:52
 
 ####### SCHEDULERS
 
@@ -582,6 +582,27 @@ for distribution in ['trusty', 'utopic']:
                     name="version",
                     label="Version:<br>",
                     default="5.4.1",
+                    required=True,
+                    size=10)
+            ]),
+        ForceScheduler(
+            name="force-golang-%s-%s" % ("amd64", distribution),
+            builderNames=["golang %s-%s" % ("amd64", distribution)],
+            repository=FixedParameter(name="repository", default=""),
+            project=FixedParameter(name="project", default=""),
+            branch=StringParameter(name="branch", default="release-branch.go1.4"),
+            revision=
+                StringParameter(
+                    name="revision",
+                    label="Revision:<br>",
+                    default="883bc6ed0ea815293fe6309d66f967ea60630e87",
+                    required=True,
+                    size=40),
+            properties=[
+                StringParameter(
+                    name="version",
+                    label="Version:<br>",
+                    default="1.4.2",
                     required=True,
                     size=10)
             ])
