@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:56:36
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 15:29:44
+# @Last Modified time: 2015-04-04 15:47:46
 
 import factory
 reload(factory)
@@ -275,14 +275,14 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                 name='debsign',
                 description='debsigning',
                 descriptionDone='debsign',
-                command=['debsign', Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(prop:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name)]
+                command=['debsign', Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(kw:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name, version=deb_version)]
             ),
             # dput
             MasterShellCommand(
                 name='dput',
                 description='dputting',
                 descriptionDone='dput',
-                command=['dput', 'ppa:ethereum/ethereum%s' % ("-dev" if branch=='develop' or (name == 'libjson-rpc-cpp' and jsonrpc_for_develop) else ("-qt" if name == 'qtwebengine-opensource-src' else "")), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(prop:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name)]
+                command=['dput', 'ppa:ethereum/ethereum%s' % ("-dev" if branch=='develop' or (name == 'libjson-rpc-cpp' and jsonrpc_for_develop) else ("-qt" if name == 'qtwebengine-opensource-src' else "")), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(kw:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name, version=deb_version)]
             )
         ]: factory.addStep(step)
 
