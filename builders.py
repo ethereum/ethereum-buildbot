@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 13:37:27
+# @Last Modified time: 2015-04-04 15:43:29
 
 from buildbot import locks
 
@@ -338,7 +338,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="libcryptopp %s-%s" % ("amd64", distribution),
             builddir="build-libcryptopp-%s-%s" % ("amd64", distribution),
-            slavenames=latentslaves,
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
             factory=deb_factory(
                 name="libcryptopp",
                 repourl="https://github.com/mmoss/cryptopp.git",
@@ -350,7 +350,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="libjson-rpc-cpp %s-%s" % ("amd64", distribution),
             builddir="build-libjson-rpc-cpp-%s-%s" % ("amd64", distribution),
-            slavenames=latentslaves,
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
             factory=deb_factory(
                 name="libjson-rpc-cpp",
                 repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
@@ -362,7 +362,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="qtwebengine %s-%s" % ("amd64", distribution),
             builddir="build-qtwebengine-%s-%s" % ("amd64", distribution),
-            slavenames=latentslaves,
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
             factory=deb_factory(
                 name="qtwebengine-opensource-src",
                 repourl="https://github.com/qtproject/qtwebengine.git",
@@ -374,7 +374,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="qt5 %s" % distribution,
             builddir="build-qt-%s" % distribution,
-            slavenames=latentslaves,
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
             factory=backport_factory(
                 name="qt5",
                 architecture="amd64",
@@ -383,7 +383,7 @@ for distribution in ['trusty', 'utopic']:
         BuilderConfig(
             name="golang %s-%s" % ("amd64", distribution),
             builddir="build-golang-%s-%s" % ("amd64", distribution),
-            slavenames=latentslaves,
+            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
             factory=deb_factory(
                 name="golang",
                 repourl="https://github.com/golang/go.git",
