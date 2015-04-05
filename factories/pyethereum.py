@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:15
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 21:24:34
+# @Last Modified time: 2015-04-05 05:06:23
 
 import factory
 reload(factory)
@@ -22,6 +22,13 @@ def pyethereum_factory(branch='master'):
             method = 'copy',
             codebase='pyethereum',
             retry=(5, 3)
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-version",
+            command='sed -ne "s/.*version=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" setup.py',
+            property="version"
         ),
         ShellCommand(
             haltOnFailure = True,
@@ -46,13 +53,6 @@ def pyethereum_factory(branch='master'):
             description="installing",
             descriptionDone="install",
             command=["pip", "install", "-e", "."]
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name="pyeth-version",
-            command=["pyeth", "-v"],
-            property="version"
         ),
         ShellCommand(
             haltOnFailure = True,
