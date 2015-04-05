@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 15:09:05
+# @Last Modified time: 2015-04-05 05:27:09
 
 ####### SCHEDULERS
 
@@ -69,6 +69,13 @@ pyethereum_codebases={
         'revision': None
     }
 }
+pyethapp_codebases={
+    'pyethapp': {
+        'repository': 'https://github.com/ethereum/pyethapp.git',
+        'branch': None,
+        'revision': None
+    }
+}
 serpent_codebases={
     'serpent': {
         'repository': 'https://github.com/ethereum/serpent.git',
@@ -107,6 +114,7 @@ all_go_ethereum_codebases.update(brew_codebases)
 all_ethereumj_codebases=ethereumj_codebases.copy()
 
 all_pyethereum_codebases=pyethereum_codebases.copy()
+all_pyethapp_codebases=pyethapp_codebases.copy()
 
 all_serpent_codebases=serpent_codebases.copy()
 all_serpent_codebases.update(pyethereum_codebases)
@@ -217,6 +225,14 @@ for branch in ['master', 'develop']:
 
 for scheduler in [
     SingleBranchScheduler(
+        name="pyethapp-git",
+        change_filter=filter.ChangeFilter(project='pyethapp', branch='master'),
+        codebases=all_pyethapp_codebases,
+        treeStableTimer=60,
+        builderNames=[
+            "Linux PyEthApp",
+            "OSX PyEthApp"]),
+    SingleBranchScheduler(
         name="ethereumj-git",
         change_filter=filter.ChangeFilter(project='ethereumj', branch='master'),
         codebases=all_ethereumj_codebases,
@@ -267,6 +283,15 @@ for scheduler in [
         builderNames=[
             "Linux PyEthereum PRs",
             "OSX PyEthereum PRs"
+        ]),
+    AnyBranchScheduler(
+        name="pyethapp-pr-git",
+        change_filter=filter.ChangeFilter(project='pyethapp', category='pull-request'),
+        codebases=all_pyethapp_codebases,
+        treeStableTimer=60,
+        builderNames=[
+            "Linux PyEthApp PRs",
+            "OSX PyEthApp PRs"
         ]),
     AnyBranchScheduler(
         name="serpent-pr-git",

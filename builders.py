@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 15:43:29
+# @Last Modified time: 2015-04-05 05:19:06
 
 from buildbot import locks
 
@@ -20,6 +20,7 @@ from factories import go_ethereum_osx
 from factories import go_ethereum_brew
 from factories import ethereumj
 from factories import pyethereum
+from factories import pyethapp
 from factories import serpent
 from factories import debian
 from factories import debian_qt
@@ -36,6 +37,7 @@ reload(go_ethereum_osx)
 reload(go_ethereum_brew)
 reload(ethereumj)
 reload(pyethereum)
+reload(pyethapp)
 reload(serpent)
 reload(debian)
 reload(debian_qt)
@@ -53,6 +55,7 @@ from factories.go_ethereum_osx import *
 from factories.go_ethereum_brew import *
 from factories.ethereumj import *
 from factories.pyethereum import *
+from factories.pyethapp import *
 from factories.serpent import *
 from factories.debian import *
 from factories.debian_qt import *
@@ -396,6 +399,19 @@ for distribution in ['trusty', 'utopic']:
 
 for builder in [
     BuilderConfig(
+        name="Linux PyEthApp",
+        builddir="build-pyethapp",
+        slavenames=["slave-python-one", "slave-python-two"],
+        factory=pyethapp_factory(branch='master'),
+        locks=[build_lock.access('counting')]),
+    BuilderConfig(
+        name="OSX PyEthApp",
+        builddir="build-pyethapp-osx",
+        slavenames=["osx"],
+        factory=pyethapp_factory(branch='master'),
+        locks=[osx_lock.access('counting')]),
+
+    BuilderConfig(
         name="Linux EthereumJ",
         builddir="build-ethereumj-docker",
         slavenames=["slave-java-one", "slave-java-two"],
@@ -438,6 +454,12 @@ for builder in [
         factory=pyethereum_factory(branch='develop'),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
+        name="Linux PyEthApp PRs",
+        builddir="build-pyethapp-pr",
+        slavenames=["slave-python-one-pr", "slave-python-two-pr"],
+        factory=pyethapp_factory(branch='master'),
+        locks=[build_lock.access('counting')]),
+    BuilderConfig(
         name="Linux Serpent PRs",
         builddir="build-serpent-pr",
         slavenames=["slave-python-one-pr", "slave-python-two-pr"],
@@ -474,6 +496,12 @@ for builder in [
         builddir="build-pyethereum-osx-pr",
         slavenames=["osx"],
         factory=pyethereum_factory(branch='develop'),
+        locks=[osx_lock.access('counting')]),
+    BuilderConfig(
+        name="OSX PyEthApp PRs",
+        builddir="build-pyethapp-osx-pr",
+        slavenames=["osx"],
+        factory=pyethereum_factory(branch='master'),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX Serpent PRs",

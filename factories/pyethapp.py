@@ -3,24 +3,23 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:15
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 05:22:09
+# @Last Modified time: 2015-04-05 05:11:52
 
 import factory
 reload(factory)
 from factory import *
 
-# Python
-def pyethereum_factory(branch='master'):
+def pyethapp_factory(branch='master'):
     factory = BuildFactory()
     for step in [
         Git(
             haltOnFailure = True,
             logEnviron = False,
-            repourl='https://github.com/ethereum/pyethereum.git',
+            repourl='https://github.com/ethereum/pyethapp.git',
             branch=branch,
             mode='full',
             method = 'copy',
-            codebase='pyethereum',
+            codebase='pyethapp',
             retry=(5, 3)
         ),
         SetPropertyFromCommand(
@@ -55,19 +54,12 @@ def pyethereum_factory(branch='master'):
             command=["pip", "install", "-e", "."]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name="test-submodule",
-            descriptionDone="update test submodule",
-            command="git submodule init && git submodule update --recursive"
-        ),
-        ShellCommand(
             flunkOnFailure=False,
             logEnviron=False,
-            description="testing",
-            descriptionDone="py.test",
-            name="py.test",
-            command=["py.test"]
+            description="running",
+            descriptionDone="run",
+            name="pyethapp",
+            command=["pyethapp", "-v"]
         )
     ]: factory.addStep(step)
 
