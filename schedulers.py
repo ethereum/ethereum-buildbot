@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 05:27:09
+# @Last Modified time: 2015-04-05 05:37:27
 
 ####### SCHEDULERS
 
@@ -435,6 +435,14 @@ for branch in ['master', 'develop']:
 
 for scheduler in [
     ForceScheduler(
+        name="force-pyethapp",
+        builderNames=["Linux PyEthApp"],
+        codebases=["pyethapp"]),
+    ForceScheduler(
+        name="force-pyethapp-osx",
+        builderNames=["OSX PyEthApp"],
+        codebases=["pyethapp"]),
+    ForceScheduler(
         name="force-ethereumj",
         builderNames=["Linux EthereumJ"],
         codebases=["ethereumj"]),
@@ -457,6 +465,10 @@ for scheduler in [
         name="force-pyethereum-pr",
         builderNames=["Linux PyEthereum PRs"],
         codebases=["pyethereum"]),
+    ForceScheduler(
+        name="force-pyethapp-pr",
+        builderNames=["Linux PyEthApp PRs"],
+        codebases=["pyethapp"]),
     ForceScheduler(
         name="force-serpent-pr",
         builderNames=["Linux Serpent PRs"],
@@ -483,6 +495,10 @@ for scheduler in [
         name="force-pyethereum-osx-pr",
         builderNames=["OSX PyEthereum PRs"],
         codebases=["pyethereum"]),
+    ForceScheduler(
+        name="force-pyethapp-osx-pr",
+        builderNames=["OSX PyEthApp PRs"],
+        codebases=["pyethapp"]),
     ForceScheduler(
         name="force-serpent-osx-pr",
         builderNames=["OSX Serpent PRs"],
