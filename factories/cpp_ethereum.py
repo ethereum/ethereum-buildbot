@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:04
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-01 09:14:44
+# @Last Modified time: 2015-04-05 23:10:42
 
 import factory
 reload(factory)
@@ -29,8 +29,9 @@ def testeth_cmd(cmd=[], evmjit=False):
 
 def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
     cmd.append("-DFATDB=1")
+    cmd.append("-DBUNDLE=default")
     if headless:
-        cmd.append("-DHEADLESS=1")
+        cmd.append("-DGUI=0")
     if evmjit:
         cmd.append("-DLLVM_DIR=/usr/share/llvm-3.5/cmake")
         cmd.append("-DEVMJIT=1")

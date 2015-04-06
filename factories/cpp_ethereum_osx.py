@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:28
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 14:34:03
+# @Last Modified time: 2015-04-05 23:12:26
 
 import factory
 reload(factory)
@@ -15,8 +15,9 @@ from cpp_ethereum import *
 
 def cmake_osx_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
     cmd.append("-DFATDB=1")
+    cmd.append("-DBUNDLE=default")
     if headless:
-        cmd.append("-DHEADLESS=1")
+        cmd.append("-DGUI=0")
     if evmjit:
         for opt in [
             "-DLLVM_DIR=/usr/local/opt/llvm/share/llvm/cmake",
