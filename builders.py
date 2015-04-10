@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 05:19:06
+# @Last Modified time: 2015-04-10 12:45:22
 
 from buildbot import locks
 
@@ -501,7 +501,7 @@ for builder in [
         name="OSX PyEthApp PRs",
         builddir="build-pyethapp-osx-pr",
         slavenames=["osx"],
-        factory=pyethereum_factory(branch='master'),
+        factory=pyethapp_factory(branch='master'),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX Serpent PRs",
