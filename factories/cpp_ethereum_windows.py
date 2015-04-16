@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:37
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-22 23:32:47
+# @Last Modified time: 2015-04-15 22:59:41
 
 import factory
 reload(factory)
@@ -51,20 +51,29 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'grep "Version" ./libdevcore/Common.cpp | sed "s/.*\"\(.*\)\".*/\1/"'],
             property = "version"
         ),
-        Configure(
+        ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            command=["cmake", "."],
+            name = "dependencies",
+            description = 'dependencies',
+            descriptionDone= 'dependencies',
+            command = ['getstuff.bat'],
             workdir="build/extdep"
         ),
-        MsBuild12(
-            haltOnFailure = True,
-            logEnviron = False,
-            projectfile="project.sln",
-            config="release",
-            platform="Win32",
-            workdir="build/extdep"
-        ),
+        # Configure(
+        #     haltOnFailure = True,
+        #     logEnviron = False,
+        #     command=["cmake", "."],
+        #     workdir="build/extdep"
+        # ),
+        # MsBuild12(
+        #     haltOnFailure = True,
+        #     logEnviron = False,
+        #     projectfile="project.sln",
+        #     config="release",
+        #     platform="Win32",
+        #     workdir="build/extdep"
+        # ),
         Configure(
             haltOnFailure = True,
             logEnviron = False,
