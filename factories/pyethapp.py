@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:15
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 05:46:11
+# @Last Modified time: 2015-04-21 05:27:58
 
 import factory
 reload(factory)
@@ -58,7 +58,7 @@ def pyethapp_factory(branch='master'):
             description="running",
             descriptionDone="run",
             name="pyethapp",
-            command=["pyethapp", "-v"]
+            command=["pyethapp", "--help"]
         )
     ]: factory.addStep(step)
 
