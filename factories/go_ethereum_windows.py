@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 03:28:29
+# @Last Modified time: 2015-04-21 08:15:18
 
 import factory
 reload(factory)
@@ -25,7 +25,7 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
     factory = BuildFactory()
 
     env = {
-        "GOPATH": Interpolate("%(prop:workdir)s\\go:%(prop:workdir)s\\build\\Godeps\\_workspace"),
+        "GOPATH": Interpolate("%(prop:workdir)s\\go;%(prop:workdir)s\\build\\Godeps\\_workspace"),
         'PATH': [Interpolate("%(prop:workdir)s\\go\\bin"), "${PATH}"]
     }
 
