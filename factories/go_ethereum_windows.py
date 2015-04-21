@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 08:30:58
+# @Last Modified time: 2015-04-21 09:16:39
 
 import factory
 reload(factory)
@@ -26,6 +26,9 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
 
     env = {
         "GOPATH": Interpolate("%(prop:workdir)s\\go;%(prop:workdir)s\\build\\Godeps\\_workspace"),
+        "PKG_CONFIG_PATH": "C:\Qt\5.4\mingw491_32\lib\pkgconfig",
+        "CGO_CPPFLAGS": "-IC:\Qt\5.4\mingw491_32\include\QtCore",
+        "LD_LIBRARY_PATH": "C:\Qt\5.4\mingw491_32\lib",
         'PATH': [Interpolate("%(prop:workdir)s\\go\\bin"), "${PATH}"]
     }
 
