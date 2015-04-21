@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 03:09:19
+# @Last Modified time: 2015-04-21 03:17:41
 
 import factory
 reload(factory)
@@ -16,7 +16,7 @@ from go_ethereum import get_short_revision_go
 def _go_cmds_win(branch='master'):
     cmds = [
         "mkdir %GOPATH%\src\github.com\ethereum",
-        "xcopy . %GOPATH%\src\github.com\ethereum\go-ethereum",
+        "xcopy /C/T/E/H/Y . %GOPATH%\src\github.com\ethereum\go-ethereum",
         "rd /s /q %GOPATH%\pkg"
     ]
 
