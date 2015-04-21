@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 00:01:20
+# @Last Modified time: 2015-04-21 01:19:40
 
 import factory
 reload(factory)
@@ -15,9 +15,9 @@ from go_ethereum import get_short_revision_go
 
 def _go_cmds_win(branch='master'):
     cmds = [
-        "mkdir -p $GOPATH\src\github.com\ethereum",
+        "mkdir $GOPATH\src\github.com\ethereum",
         "cp -a . $GOPATH\src\github.com\ethereum\go-ethereum",
-        "rm -rf $GOPATH\pkg"
+        "rd /s /q $GOPATH\pkg"
     ]
 
     return " && ".join(cmds)
@@ -26,8 +26,8 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
     factory = BuildFactory()
 
     env = {
-        "GOPATH": Interpolate("%(prop:workdir)s/go:%(prop:workdir)s/build/Godeps/_workspace"),
-        'PATH': [Interpolate("%(prop:workdir)s/go/bin"), "${PATH}"]
+        "GOPATH": Interpolate("%(prop:workdir)s\\go:%(prop:workdir)s\\build\\Godeps\\_workspace"),
+        'PATH': [Interpolate("%(prop:workdir)s\\go\\bin"), "${PATH}"]
     }
 
     for step in [
@@ -76,7 +76,7 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name="go-cleanup",
-            command=Interpolate("rm -rf %(prop:workdir)s\\go"),
+            command=Interpolate("rd /s /q %(prop:workdir)s\\go"),
             description="cleaning up",
             descriptionDone="clean up",
             env={"GOPATH": Interpolate("%(prop:workdir)s\\go")}
