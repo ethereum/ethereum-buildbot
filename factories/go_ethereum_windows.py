@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 02:13:11
+# @Last Modified time: 2015-04-21 02:52:51
 
 import factory
 reload(factory)
@@ -30,6 +30,8 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
         'PATH': [Interpolate("%(prop:workdir)s\\go\\bin"), "${PATH}"]
     }
 
+    sed = '"C:\\Program Files (x86)\\GnuWin32\\bin\\sed.exe"'
+
     for step in [
         Git(
             haltOnFailure = True,
@@ -51,35 +53,34 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
             retry=(5, 3),
             workdir = 'go-build-%s' % branch
         ),
-        # SetPropertyFromCommand(
-        #     haltOnFailure = True,
-        #     logEnviron = False,
-        #     name = "set-database",
-        #     command = 'sed -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth\protocol.go',
-        #     property = "database"
-        # ),
-        # SetPropertyFromCommand(
-        #     haltOnFailure = True,
-        #     logEnviron = False,
-        #     name = "set-protocol",
-        #     command = 'sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p\protocol.go',
-        #     property="protocol"
-        # ),
-        # SetPropertyFromCommand(
-        #     haltOnFailure = True,
-        #     logEnviron = False,
-        #     name = "set-version",
-        #     command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd\geth\main.go',
-        #     property = "version"
-        # ),
+        SetPropertyFromCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name = "set-database",
+            command = '%s -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth\protocol.go' % sed,
+            property = "database"
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name = "set-protocol",
+            command = '%s -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p\protocol.go' % sed,
+            property="protocol"
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name = "set-version",
+            command = '%s -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd\geth\main.go' % sed,
+            property = "version"
+        ),
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
             name="go-cleanup",
-            command=Interpolate("rd /s /q %(prop:workdir)s\\go"),
+            command=Interpolate("rd /s /q %(prop:workdir)s\\go && mkdir %(prop:workdir)s\\go"),
             description="cleaning up",
-            descriptionDone="clean up",
-            env={"GOPATH": Interpolate("%(prop:workdir)s\\go")}
+            descriptionDone="clean up"
         ),
         ShellCommand(
             haltOnFailure = True,
