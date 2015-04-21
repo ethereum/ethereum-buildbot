@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:02:55
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 14:33:34
+# @Last Modified time: 2015-04-21 03:02:05
 
 import factory
 reload(factory)
@@ -57,7 +57,7 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name = "update-p2p",
-            command = 'sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/protocol.go',
+            command = 'sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
             property = "p2p"
         ),
         SetPropertyFromCommand(

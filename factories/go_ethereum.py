@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 14:50:08
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-01 09:17:26
+# @Last Modified time: 2015-04-21 03:02:13
 
 import factory
 reload(factory)
@@ -50,7 +50,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-p2p",
-            command = 'sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/protocol.go',
+            command = 'sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
             property = "p2p"
         ),
         SetPropertyFromCommand(

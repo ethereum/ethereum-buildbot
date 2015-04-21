@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 02:52:51
+# @Last Modified time: 2015-04-21 03:01:28
 
 import factory
 reload(factory)
@@ -15,9 +15,9 @@ from go_ethereum import get_short_revision_go
 
 def _go_cmds_win(branch='master'):
     cmds = [
-        "mkdir $GOPATH\src\github.com\ethereum",
-        "copy . $GOPATH\src\github.com\ethereum\go-ethereum",
-        "rd /s /q $GOPATH\pkg"
+        "mkdir %GOPATH%\src\github.com\ethereum",
+        "copy . %GOPATH%\src\github.com\ethereum\go-ethereum",
+        "rd /s /q %GOPATH%\pkg"
     ]
 
     return " && ".join(cmds)
@@ -56,16 +56,16 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name = "set-database",
+            name = "set-protocol",
             command = '%s -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth\protocol.go' % sed,
-            property = "database"
+            property = "protocol"
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name = "set-protocol",
-            command = '%s -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p\protocol.go' % sed,
-            property="protocol"
+            name = "update-p2p",
+            command = '%s -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p\peer.go' % sed,
+            property="p2p"
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
