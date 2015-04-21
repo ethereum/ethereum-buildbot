@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 15:00:37
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-15 22:59:41
+# @Last Modified time: 2015-04-20 22:02:33
 
 import factory
 reload(factory)
@@ -60,20 +60,6 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             command = ['getstuff.bat'],
             workdir="build/extdep"
         ),
-        # Configure(
-        #     haltOnFailure = True,
-        #     logEnviron = False,
-        #     command=["cmake", "."],
-        #     workdir="build/extdep"
-        # ),
-        # MsBuild12(
-        #     haltOnFailure = True,
-        #     logEnviron = False,
-        #     projectfile="project.sln",
-        #     config="release",
-        #     platform="Win32",
-        #     workdir="build/extdep"
-        # ),
         Configure(
             haltOnFailure = True,
             logEnviron = False,

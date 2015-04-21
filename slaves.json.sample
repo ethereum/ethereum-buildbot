@@ -72,5 +72,6 @@
     {"name": "latentslave19", "password": "secret"},
     {"name": "latentslave20", "password": "secret"},
     {"name": "winslave", "password": "secret"},
+    {"name": "winslave-go", "password": "secret"},
     {"name": "osx", "password": "secret"}
 ]

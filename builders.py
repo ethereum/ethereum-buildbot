@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-10 12:45:22
+# @Last Modified time: 2015-04-21 00:22:29
 
 from buildbot import locks
 
@@ -14,10 +14,12 @@ from factories import self_update
 from factories import buildslaves
 from factories import cpp_ethereum
 from factories import cpp_ethereum_osx
+from factories import cpp_ethereum_brew
 from factories import cpp_ethereum_windows
 from factories import go_ethereum
 from factories import go_ethereum_osx
 from factories import go_ethereum_brew
+from factories import go_ethereum_windows
 from factories import ethereumj
 from factories import pyethereum
 from factories import pyethapp
@@ -31,10 +33,12 @@ reload(self_update)
 reload(buildslaves)
 reload(cpp_ethereum)
 reload(cpp_ethereum_osx)
+reload(cpp_ethereum_brew)
 reload(cpp_ethereum_windows)
 reload(go_ethereum)
 reload(go_ethereum_osx)
 reload(go_ethereum_brew)
+reload(go_ethereum_windows)
 reload(ethereumj)
 reload(pyethereum)
 reload(pyethapp)
@@ -53,6 +57,7 @@ from factories.cpp_ethereum_windows import *
 from factories.go_ethereum import *
 from factories.go_ethereum_osx import *
 from factories.go_ethereum_brew import *
+from factories.go_ethereum_windows import *
 from factories.ethereumj import *
 from factories.pyethereum import *
 from factories.pyethapp import *
@@ -84,6 +89,7 @@ go_lock = locks.SlaveLock("go_builds", maxCount = 1)
 osx_lock = locks.SlaveLock("osx_builds", maxCount = 2)
 brew_lock = locks.SlaveLock("brew_builds", maxCount = 1)
 win_lock = locks.SlaveLock("win_builds", maxCount = 2)
+win_lock_go = locks.SlaveLock("win_go_builds", maxCount = 1)
 
 # Latent slaves for builders
 max_latents = 20
@@ -261,6 +267,18 @@ for branch in ['master', 'develop']:
             slavenames=["winslave"],
             factory=win_cpp_factory(branch=branch),
             locks=[win_lock.access('counting')]),
+        BuilderConfig(
+            name="Windows Go %s branch" % branch,
+            builddir="build-go-win-%s" % branch,
+            slavenames=["winslave-go"],
+            factory=windows_go_factory(branch=branch),
+            locks=[win_lock_go.access('counting')]),
+        BuilderConfig(
+            name="Windows Go GUI %s branch" % branch,
+            builddir="build-go-gui-win-%s" % branch,
+            slavenames=["winslave-go"],
+            factory=windows_go_factory(branch=branch, headless=False),
+            locks=[win_lock_go.access('counting')]),
         BuilderConfig(
             name="Linux PyEthereum %s" % branch,
             builddir="build-pyethereum-%s" % branch,
@@ -517,6 +535,12 @@ for builder in [
         slavenames=["winslave"],
         factory=win_cpp_factory(branch='develop', isPullRequest=True),
         locks=[win_lock.access('counting')]),
+    BuilderConfig(
+        name="Windows Go pull requests",
+        builddir="build-go-ethereum-win-pr",
+        slavenames=["winslave-go"],
+        factory=windows_go_factory(branch='develop', isPullRequest=True, headless=False),
+        locks=[win_lock_go.access('counting')]),
 
     # Integration
     BuilderConfig(

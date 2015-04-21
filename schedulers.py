@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 05:37:27
+# @Last Modified time: 2015-04-21 00:19:03
 
 ####### SCHEDULERS
 
@@ -163,7 +163,9 @@ for branch in ['master', 'develop']:
                 "Linux Go %s branch" % branch,
                 "Linux Go GUI %s branch" % branch,
                 "OSX Go %s branch" % branch,
-                "OSX Go GUI %s branch" % branch]),
+                "OSX Go GUI %s branch" % branch,
+                "Windows Go %s branch" % branch,
+                "Windows Go GUI %s branch" % branch]),
         SingleBranchScheduler(
             name="pyethereum-%s-git" % branch,
             change_filter=filter.ChangeFilter(project='pyethereum', branch=branch),
@@ -273,7 +275,8 @@ for scheduler in [
         treeStableTimer=60,
         builderNames=[
             "Linux Go pull requests",
-            "OSX Go pull requests"
+            "OSX Go pull requests",
+            "Windows Go pull requests"
         ]),
     AnyBranchScheduler(
         name="pyethereum-pr-git",
@@ -355,6 +358,7 @@ for buildslave in ["one", "two"]:
 
 for branch in ['master', 'develop']:
     for scheduler in [
+        # Linux C++/Go
         ForceScheduler(
             name="force-cpp-ethereum-%s" % branch,
             builderNames=["Linux C++ %s branch" % branch],
@@ -375,6 +379,8 @@ for branch in ['master', 'develop']:
             name="force-go-ethereum-gui-%s" % branch,
             builderNames=["Linux Go GUI %s branch" % branch],
             codebases=["go-ethereum"]),
+
+        # OSX C++/Go
         ForceScheduler(
             name="force-cpp-ethereum-%s-osx" % branch,
             builderNames=["OSX C++ %s branch" % branch],
@@ -411,10 +417,22 @@ for branch in ['master', 'develop']:
             name="force-go-ethereum-gui-%s-brew" % branch,
             builderNames=["OSX Go GUI %s brew" % branch],
             codebases=["homebrew-ethereum", "go-ethereum"]),
+
+        # Windows C++/Go
         ForceScheduler(
             name="force-cpp-ethereum-%s-win" % branch,
             builderNames=["Windows C++ %s branch" % branch],
             codebases=["cpp-ethereum", "tests"]),
+        ForceScheduler(
+            name="force-go-ethereum-%s-win" % branch,
+            builderNames=["Windows Go %s branch" % branch],
+            codebases=["go-ethereum", "go-build"]),
+        ForceScheduler(
+            name="force-go-ethereum-gui-%s-win" % branch,
+            builderNames=["Windows Go GUI %s branch" % branch],
+            codebases=["go-ethereum", "go-build"]),
+
+        # Other schedulers
         ForceScheduler(
             name="force-pyethereum-%s" % branch,
             builderNames=["Linux PyEthereum %s" % branch],
@@ -509,6 +527,10 @@ for scheduler in [
         name="force-cpp-ethereum-win-pr",
         builderNames=["Windows C++ pull requests"],
         codebases=["cpp-ethereum", "tests"]),
+    ForceScheduler(
+        name="force-go-ethereum-win-pr",
+        builderNames=["Windows Go pull requests"],
+        codebases=["go-ethereum"]),
 
     # Integration
     ForceScheduler(
