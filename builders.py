@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:45
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 00:22:29
+# @Last Modified time: 2015-04-22 05:45:38
 
 from buildbot import locks
 
@@ -539,7 +539,7 @@ for builder in [
         name="Windows Go pull requests",
         builddir="build-go-ethereum-win-pr",
         slavenames=["winslave-go"],
-        factory=windows_go_factory(branch='develop', isPullRequest=True, headless=False),
+        factory=windows_go_factory(branch='develop', isPullRequest=True, headless=True),
         locks=[win_lock_go.access('counting')]),
 
     # Integration

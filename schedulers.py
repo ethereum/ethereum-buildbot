@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-02-23 13:42:34
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 00:19:03
+# @Last Modified time: 2015-04-22 05:43:54
 
 ####### SCHEDULERS
 
@@ -165,7 +165,8 @@ for branch in ['master', 'develop']:
                 "OSX Go %s branch" % branch,
                 "OSX Go GUI %s branch" % branch,
                 "Windows Go %s branch" % branch,
-                "Windows Go GUI %s branch" % branch]),
+                # "Windows Go GUI %s branch" % branch
+            ]),
         SingleBranchScheduler(
             name="pyethereum-%s-git" % branch,
             change_filter=filter.ChangeFilter(project='pyethereum', branch=branch),
