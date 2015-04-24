@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-24 01:44:53
+# @Last Modified time: 2015-04-24 03:00:29
 
 import factory
 reload(factory)
@@ -140,8 +140,7 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
                 name = "pack",
                 description = 'pack',
                 descriptionDone= 'packed',
-                command = ['7z', 'a', 'geth.7z', '%GOPATH%\\bin\\geth.exe'],
-                env={"GOPATH": Interpolate("%(prop:workdir)s\go")}
+                command = ['7z', 'a', 'geth.7z', Interpolate('%(prop:workdir)s\\go\\bin\\geth.exe')]
             ),
             SetProperty(
                 description="setting filename",
