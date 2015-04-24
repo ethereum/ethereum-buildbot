@@ -3,7 +3,7 @@
 # @Author: caktux
 # @Date:   2015-04-20 22:03:29
 # @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 09:16:39
+# @Last Modified time: 2015-04-24 01:44:53
 
 import factory
 reload(factory)
@@ -131,6 +131,46 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
             maxTime=900
         )
     ]: factory.addStep(step)
+
+    if not isPullRequest:
+        for step in [
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name = "pack",
+                description = 'pack',
+                descriptionDone= 'packed',
+                command = ['7z', 'a', 'geth.7z', '%GOPATH%\\bin\\geth.exe'],
+                env={"GOPATH": Interpolate("%(prop:workdir)s\go")}
+            ),
+            SetProperty(
+                description="setting filename",
+                descriptionDone="set filename",
+                name="set-filename",
+                property="filename",
+                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(prop:database)s-%(kw:short_revision)s.7z", time_string=get_time_string, short_revision=get_short_revision_go)
+            ),
+            FileUpload(
+                haltOnFailure = True,
+                name = 'upload',
+                slavesrc="geth.7z",
+                masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
+                url = Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
+            ),
+            MasterShellCommand(
+                name = "clean-latest-link",
+                description = 'cleaning latest link',
+                descriptionDone= 'clean latest link',
+                command = ['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.7z")]
+            ),
+            MasterShellCommand(
+                haltOnFailure = True,
+                name = "link-latest",
+                description = 'linking latest',
+                descriptionDone= 'link latest',
+                command = ['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.7z")]
+            )
+        ]: factory.addStep(step)
 
     if not isPullRequest and not headless:
         for step in [
