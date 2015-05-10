@@ -646,7 +646,7 @@ for distribution in distributions:
                 StringParameter(
                     name="version",
                     label="Version:<br>",
-                    default="5.4.1",
+                    default="v5.4.1",
                     required=True,
                     size=10)
             ]),
