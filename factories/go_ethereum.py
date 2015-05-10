@@ -9,6 +9,8 @@ import factory
 reload(factory)
 from factory import *
 
+distributions = ['trusty', 'utopic', 'vivid']
+
 @properties.renderer
 def get_short_revision_go(props):
     if props.has_key('got_revision'):
@@ -117,7 +119,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
 
     if deb and headless:
         for architecture in ['i386', 'amd64']:
-            for distribution in ['trusty', 'utopic']:
+            for distribution in distributions:
                 for step in [
                     Trigger(
                         schedulerNames=["go-ethereum-%s-%s-%s" % (branch, architecture, distribution)],

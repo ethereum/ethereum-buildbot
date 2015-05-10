@@ -15,6 +15,7 @@ from buildbot.schedulers.timed import Nightly
 from buildbot.schedulers.triggerable import Triggerable
 from buildbot.changes import filter
 
+distributions = ['trusty', 'utopic', 'vivid']
 schedulers = []
 
 self_codebases={
@@ -216,7 +217,7 @@ for branch in ['master', 'develop']:
     ]: schedulers.append(scheduler)
 
     for architecture in ['i386', 'amd64']:
-        for distribution in ['trusty', 'utopic']:
+        for distribution in distributions:
             for scheduler in [
                 Triggerable(
                     name="cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
@@ -576,7 +577,7 @@ for buildslave in ["one", "two"]:
     ]: schedulers.append(scheduler)
 
 # for architecture in ['i386', 'amd64']:
-for distribution in ['trusty', 'utopic']:
+for distribution in distributions:
     for scheduler in [
         # Triggerable(
         #     name="libcryptopp-%s-%s" % (architecture, distribution),
@@ -672,16 +673,17 @@ for distribution in ['trusty', 'utopic']:
             ])
     ]: schedulers.append(scheduler)
 
-    for scheduler in [
-        ForceScheduler(
-            name="force-qt5-%s" % distribution,
-            builderNames=["qt5 %s" % distribution],
-            properties=[
-                StringParameter(
-                    name="version",
-                    label="Version:<br>",
-                    default="5.4.1",
-                    required=True,
-                    size=10)
-            ])
-    ]: schedulers.append(scheduler)
+    if distribution in ['trusty', 'utopic']:
+        for scheduler in [
+            ForceScheduler(
+                name="force-qt5-%s" % distribution,
+                builderNames=["qt5 %s" % distribution],
+                properties=[
+                    StringParameter(
+                        name="version",
+                        label="Version:<br>",
+                        default="5.4.1",
+                        required=True,
+                        size=10)
+                ])
+        ]: schedulers.append(scheduler)

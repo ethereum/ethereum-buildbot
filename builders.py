@@ -74,6 +74,7 @@ from factories.integration import *
 # what steps, and which slaves can execute them.  Note that any particular build will
 # only take place on one slave.
 
+distributions = ['trusty', 'utopic', 'vivid']
 builders = []
 
 self_lock = locks.SlaveLock("self_update", maxCount = 1)
@@ -324,7 +325,7 @@ for branch in ['master', 'develop']:
 
     # deb packaging
     for architecture in ['i386', 'amd64']:
-        for distribution in ['trusty', 'utopic']:
+        for distribution in distributions:
             for builder in [
                 BuilderConfig(
                     name="Linux C++ %s deb %s-%s" % (branch, architecture, distribution),
@@ -354,7 +355,7 @@ for branch in ['master', 'develop']:
 
 # deps deb packaging
 # for architecture in ['i386', 'amd64']:
-for distribution in ['trusty', 'utopic']:
+for distribution in distributions:
     for builder in [
         BuilderConfig(
             name="libcryptopp %s-%s" % ("amd64", distribution),
@@ -393,15 +394,6 @@ for distribution in ['trusty', 'utopic']:
                 distribution=distribution),
             locks=[latent_lock.access('counting')]),
         BuilderConfig(
-            name="qt5 %s" % distribution,
-            builddir="build-qt-%s" % distribution,
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-            factory=backport_factory(
-                name="qt5",
-                architecture="amd64",
-                distribution=distribution),
-            locks=[latent_lock.access('counting')]),
-        BuilderConfig(
             name="golang %s-%s" % ("amd64", distribution),
             builddir="build-golang-%s-%s" % ("amd64", distribution),
             slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
@@ -414,6 +406,19 @@ for distribution in ['trusty', 'utopic']:
                 distribution=distribution),
             locks=[latent_lock.access('counting')])
     ]: builders.append(builder)
+
+    if distribution in ['trusty', 'utopic']:
+        for builder in [
+            BuilderConfig(
+                name="qt5 %s" % distribution,
+                builddir="build-qt-%s" % distribution,
+                slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+                factory=backport_factory(
+                    name="qt5",
+                    architecture="amd64",
+                    distribution=distribution),
+                locks=[latent_lock.access('counting')])
+        ]: builders.append(builder)
 
 for builder in [
     BuilderConfig(

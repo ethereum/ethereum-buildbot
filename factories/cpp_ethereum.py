@@ -9,6 +9,8 @@ import factory
 reload(factory)
 from factory import *
 
+distributions = ['trusty', 'utopic', 'vivid']
+
 @properties.renderer
 def get_cpp_revision(props):
     if props.has_key('got_revision'):
@@ -154,7 +156,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
     if not evmjit and headless:
         if deb:
             for architecture in ['i386', 'amd64']:
-                for distribution in ['trusty', 'utopic']:
+                for distribution in distributions:
                     for step in [
                         Trigger(
                             schedulerNames=["cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution)],
