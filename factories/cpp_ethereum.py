@@ -30,7 +30,6 @@ def testeth_cmd(cmd=[], evmjit=False):
     return cmd
 
 def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
-    cmd.append("-DETHASHCL=1")
     cmd.append("-DFATDB=1")
     cmd.append("-DBUNDLE=default")
     if headless:
