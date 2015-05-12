@@ -32,55 +32,55 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
     factory = BuildFactory()
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/go-ethereum.git',
             branch=branch,
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='go-ethereum',
             retry=(5, 3)
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "set-protocol",
-            command = 'sed -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth/protocol.go',
-            property = "protocol"
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-protocol",
+            command='sed -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth/protocol.go',
+            property="protocol"
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "set-p2p",
-            command = 'sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
-            property = "p2p"
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-p2p",
+            command='sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
+            property="p2p"
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "set-version",
-            command = 'sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
-            property = "version"
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-version",
+            command='sed -ne "s/.*Version.*=.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
+            property="version"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="go-cleanup",
             command="rm -rf $GOPATH",
             description="cleaning up",
             descriptionDone="clean up"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "move-src",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="move-src",
             command=_go_cmds(branch=branch),
             description="moving src",
             descriptionDone="move src"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="install-geth",
             description="installing geth",
             descriptionDone="install geth",
@@ -92,8 +92,8 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
     if not headless:
         for step in [
             ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
+                haltOnFailure=True,
+                logEnviron=False,
                 name="install-mist",
                 description="installing mist",
                 descriptionDone="install mist",
@@ -104,14 +104,11 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
 
     for step in [
         ShellCommand(
-            flunkOnFailure=False,
-            warnOnFailure=True,
-            logEnviron = False,
+            haltOnFailure=True,
             name="go-test",
             description="go testing",
             descriptionDone="go test",
             command="go test github.com/ethereum/go-ethereum/...",
-            decodeRC={0:SUCCESS, -1:WARNINGS, 1:WARNINGS, 2:WARNINGS},
             env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")},
             maxTime=900
         )
@@ -133,14 +130,14 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
     if headless:
         for step in [
             FileDownload(
-                haltOnFailure = True,
+                haltOnFailure=True,
                 descriptionDone="download init script",
                 mastersrc="startup/geth-supervisord.conf",
                 slavedest="geth-supervisord.conf"
             ),
             ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
+                haltOnFailure=True,
+                logEnviron=False,
                 name="stop",
                 description="stopping",
                 descriptionDone="stop",
@@ -148,8 +145,8 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
                 decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
             ),
             ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
+                haltOnFailure=True,
+                logEnviron=False,
                 name="start",
                 description="starting",
                 descriptionDone="start",
