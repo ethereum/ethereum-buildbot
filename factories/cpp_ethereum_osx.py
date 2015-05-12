@@ -112,7 +112,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
         Compile(
             haltOnFailure = True,
             logEnviron = False,
-            command = "make -j $(sysctl -n hw.ncpu)%s" % (" appdmg" if not isPullRequest and not headless else "")
+            command = "make -j $(sysctl -n hw.ncpu)"
         )
     ]: factory.addStep(step)
 
@@ -126,6 +126,15 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                 descriptionDone= 'make install',
                 command = ['make', 'install'],
                 workdir = 'build/alethzero'
+            ),
+            ShellCommand(
+                haltOnFailure = True,
+                logEnviron = False,
+                name = "make-install-mix",
+                description = 'running mix make install',
+                descriptionDone= 'make install mix',
+                command = ['make', 'install'],
+                workdir = 'build/mix'
             )
         ]: factory.addStep(step)
 
@@ -192,6 +201,11 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
     # Package AlethZero.app
     if not isPullRequest and not headless:
         for step in [
+            Compile(
+                haltOnFailure = True,
+                logEnviron = False,
+                command = "make -j $(sysctl -n hw.ncpu) appdmg"
+            ),
             SetPropertyFromCommand(
                 haltOnFailure = True,
                 logEnviron = False,
