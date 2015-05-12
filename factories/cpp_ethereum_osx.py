@@ -112,7 +112,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
         Compile(
             haltOnFailure = True,
             logEnviron = False,
-            command = "make -j $(sysctl -n hw.ncpu)"
+            command = "make -j $(sysctl -n hw.ncpu)%s" % (" appdmg" if not isPullRequest and not headless else "")
         )
     ]: factory.addStep(step)
 
@@ -192,19 +192,11 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
     # Package AlethZero.app
     if not isPullRequest and not headless:
         for step in [
-            ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "pack",
-                description = 'pack AlethZero.app',
-                descriptionDone= 'packed AlethZero.app',
-                command = ['tar', '-jcvf', 'alethzero/AlethZero.tar.bz2', 'alethzero/AlethZero.app']
-            ),
             SetPropertyFromCommand(
                 haltOnFailure = True,
                 logEnviron = False,
                 name = "set-sha1sum",
-                command = Interpolate('sha1sum alethzero/AlethZero.tar.bz2 | grep -o -w "\w\{40\}"'),
+                command = Interpolate('sha1sum Ethereum.dmg | grep -o -w "\w\{40\}"'),
                 property = 'sha1sum'
             ),
             SetProperty(
@@ -212,12 +204,12 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("AlethZero-OSX-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(prop:database)s-%(kw:short_revision)s.tar.bz2", time_string=get_time_string, short_revision=get_short_revision)
+                value=Interpolate("AlethZero-OSX-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(prop:database)s-%(kw:short_revision)s.dmg", time_string=get_time_string, short_revision=get_short_revision)
             ),
             FileUpload(
                 haltOnFailure = True,
                 name = 'upload-alethzero',
-                slavesrc="alethzero/AlethZero.tar.bz2",
+                slavesrc="Ethereum.dmg",
                 masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
                 url = Interpolate("builds/%(prop:buildername)s/%(prop:filename)s")
             ),
@@ -225,14 +217,14 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                 name = "clean-latest-link",
                 description = 'cleaning latest link',
                 descriptionDone= 'clean latest link',
-                command = ['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-OSX-latest.tar.bz2")]
+                command = ['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-OSX-latest.dmg")]
             ),
             MasterShellCommand(
                 haltOnFailure = True,
                 name = "link-latest",
                 description = 'linking latest',
                 descriptionDone= 'link latest',
-                command = ['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-OSX-latest.tar.bz2")]
+                command = ['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-OSX-latest.dmg")]
             )
         ]: factory.addStep(step)
 
