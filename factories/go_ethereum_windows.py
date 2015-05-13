@@ -127,7 +127,7 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
             descriptionDone="go test",
             command="go test github.com\ethereum\go-ethereum\...",
             decodeRC={0:SUCCESS, -1:WARNINGS, 1:WARNINGS, 2:WARNINGS},
-            env={"GOPATH": Interpolate("%(prop:workdir)s\\go:%(prop:workdir)s\\build\\Godeps\\_workspace")},
+            env=env,
             maxTime=900
         )
     ]: factory.addStep(step)
