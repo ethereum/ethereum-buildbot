@@ -50,21 +50,21 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
             haltOnFailure=True,
             logEnviron=False,
             name="update-protocol",
-            command='sed -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth/protocol.go',
+            command='gsed -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth/protocol.go',
             property="protocol"
         ),
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,
             name="update-p2p",
-            command='sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
+            command='gsed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
             property="p2p"
         ),
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,
             name="update-version",
-            command='sed -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
+            command='gsed -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
             property="version"
         ),
         ShellCommand(
