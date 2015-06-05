@@ -71,6 +71,15 @@ def arm_go_factory(branch='develop', isPullRequest=False):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
+            name="go-get",
+            description="go getting",
+            descriptionDone="go get",
+            command="go get -d github.com/ethereum/go-ethereum/cmd/geth",
+            env=env
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            logEnviron=False,
             name="build-geth",
             description="building geth",
             descriptionDone="build geth",

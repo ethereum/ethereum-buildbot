@@ -490,7 +490,7 @@ for builder in [
             "slave-go-one-arm",
             "slave-go-two-arm"
         ],
-        factory=arm_go_factory(branch='develop'),
+        factory=arm_go_factory(branch='develop', isPullRequest=True),
         locks=[arm_lock.access('counting')]),
     BuilderConfig(
         name="Linux PyEthereum PRs",
