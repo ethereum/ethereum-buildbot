@@ -100,4 +100,50 @@ def arm_go_factory(branch='develop', isPullRequest=False):
     #     )
     # ]: factory.addStep(step)
 
+    if not isPullRequest:
+        for step in [
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="go-arm-bzip",
+                description='bzipping',
+                descriptionDone='bzip',
+                command=['bzip2', '-z', 'geth']
+            ),
+            SetPropertyFromCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="set-sha256sum",
+                command=Interpolate('sha256sum geth.bz2 | grep -o -w "\w\{64\}"'),
+                property='sha256sum'
+            ),
+            SetProperty(
+                description="setting filename",
+                descriptionDone="set filename",
+                name="set-filename",
+                property="filename",
+                value=Interpolate("geth-ARM-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.bz2", time_string=get_time_string, short_revision=get_short_revision_go)
+            ),
+            FileUpload(
+                haltOnFailure=True,
+                name='upload-geth',
+                slavesrc="geth.bz2",
+                masterdest=Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
+                url=Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
+            ),
+            MasterShellCommand(
+                name="clean-latest-link",
+                description='cleaning latest link',
+                descriptionDone= 'clean latest link',
+                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/geth-ARM-latest.bz2")]
+            ),
+            MasterShellCommand(
+                haltOnFailure=True,
+                name="link-latest",
+                description='linking latest',
+                descriptionDone='link latest',
+                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/geth-ARM-latest.bz2")]
+            )
+        ]: factory.addStep(step)
+
     return factory
