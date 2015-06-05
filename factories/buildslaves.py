@@ -23,6 +23,8 @@ def _buildslave_stop_cmd(props):
 #
 def buildslave_factory(lang="cpp", client="cpp-ethereum"):
     factory = BuildFactory()
+
+    # Build base image
     for step in [
         Git(
             haltOnFailure = True,
@@ -84,7 +86,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
         )
     ]: factory.addStep(step)
 
-    # Use when dependencies differ between master and develop
+    # Build develop buildslave
     if lang in ['cpp', 'go']:
         for step in [
             ShellCommand(
@@ -98,6 +100,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             )
         ]: factory.addStep(step)
 
+    # Build deb packaging buildslave
     if lang in ['cpp', 'go']:
         factory.addStep(
             ShellCommand(
@@ -109,6 +112,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 command=["docker", "build", "--no-cache", "-t", "cptobvious/buildslave-%s-deb" % lang, "%s-buildslave-deb" % client]
             ))
 
+    # Build integration buildslave
     if lang in ['cpp']:
         factory.addStep(
             ShellCommand(
@@ -120,6 +124,19 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 command=["docker", "build", "--no-cache", "-t", "cptobvious/buildslave-%s-integration" % lang, "%s-buildslave-integration" % client]
             ))
 
+    # Build ARM buildslave
+    if lang in ['go']:
+        factory.addStep(
+            ShellCommand(
+                warnOnFailure = True,
+                logEnviron = False,
+                name="buildslave-%s-arm" % lang,
+                description="building %s ARM buildslave" % lang,
+                descriptionDone="build %s ARM buildslave" % lang,
+                command=["docker", "build", "--no-cache", "-t", "cptobvious/buildslave-%s-arm" % lang, "%s-buildslave-arm" % client]
+            ))
+
+    # Build pull request buildslave
     for step in [
         ShellCommand(
             warnOnFailure = True,
@@ -128,7 +145,13 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             description="building %s pr buildslave" % lang,
             descriptionDone="build %s pr buildslave" % lang,
             command=["docker", "build", "--no-cache", "-t", "cptobvious/buildslave-%s-pr" % lang, "%s-buildslave-pr" % client]
-        ),
+        )
+    ]: factory.addStep(step)
+
+    #
+    # Stop containers and run new ones
+    #
+    for step in [
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -156,7 +179,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
         )
     ]: factory.addStep(step)
 
-    # Use when dependencies differ between master and develop
+    # Run develop buildslave
     if lang in ['cpp', 'go']:
         for step in [
             ShellCommand(
@@ -169,6 +192,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             )
         ]: factory.addStep(step)
 
+    # Run deb packaging buildslave
     if lang in ['cpp', 'go']:
         for step in [
             ShellCommand(
@@ -181,6 +205,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             )
         ]: factory.addStep(step)
 
+    # Run integration buildslave
     if lang in ['cpp']:
         for step in [
             ShellCommand(
@@ -190,6 +215,19 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 description="starting %s integration buildslave" % lang,
                 descriptionDone="start %s integration buildslave" % lang,
                 command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-integration" % lang]
+            )
+        ]: factory.addStep(step)
+
+    # Run ARM buildslave
+    if lang in ['go']:
+        for step in [
+            ShellCommand(
+                warnOnFailure = True,
+                logEnviron = False,
+                name="buildslave-%s-arm-run" % lang,
+                description="starting %s ARM buildslave" % lang,
+                descriptionDone="start %s ARM buildslave" % lang,
+                command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-arm" % lang]
             )
         ]: factory.addStep(step)
 

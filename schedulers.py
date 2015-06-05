@@ -163,6 +163,7 @@ for branch in ['master', 'develop']:
             builderNames=[
                 "Linux Go %s branch" % branch,
                 "Linux Go GUI %s branch" % branch,
+                "ARM Go %s branch" % branch,
                 "OSX Go %s branch" % branch,
                 "OSX Go GUI %s branch" % branch,
                 "Windows Go %s branch" % branch,
@@ -277,6 +278,7 @@ for scheduler in [
         treeStableTimer=60,
         builderNames=[
             "Linux Go pull requests",
+            "ARM Go pull requests",
             "OSX Go pull requests",
             "Windows Go pull requests"
         ]),
@@ -381,6 +383,10 @@ for branch in ['master', 'develop']:
             name="force-go-ethereum-gui-%s" % branch,
             builderNames=["Linux Go GUI %s branch" % branch],
             codebases=["go-ethereum"]),
+        ForceScheduler(
+            name="force-go-ethereum-arm-%s" % branch,
+            builderNames=["ARM Go %s branch" % branch],
+            codebases=["go-ethereum"]),
 
         # OSX C++/Go
         ForceScheduler(
@@ -480,6 +486,10 @@ for scheduler in [
     ForceScheduler(
         name="force-go-ethereum-pr",
         builderNames=["Linux Go pull requests"],
+        codebases=["go-ethereum"]),
+    ForceScheduler(
+        name="force-go-ethereum-arm-pr",
+        builderNames=["ARM Go pull requests"],
         codebases=["go-ethereum"]),
     ForceScheduler(
         name="force-pyethereum-pr",

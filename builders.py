@@ -17,6 +17,7 @@ from factories import cpp_ethereum_osx
 from factories import cpp_ethereum_brew
 from factories import cpp_ethereum_windows
 from factories import go_ethereum
+from factories import go_ethereum_arm
 from factories import go_ethereum_osx
 from factories import go_ethereum_brew
 from factories import go_ethereum_windows
@@ -36,6 +37,7 @@ reload(cpp_ethereum_osx)
 reload(cpp_ethereum_brew)
 reload(cpp_ethereum_windows)
 reload(go_ethereum)
+reload(go_ethereum_arm)
 reload(go_ethereum_osx)
 reload(go_ethereum_brew)
 reload(go_ethereum_windows)
@@ -55,6 +57,7 @@ from factories.cpp_ethereum_osx import *
 from factories.cpp_ethereum_brew import *
 from factories.cpp_ethereum_windows import *
 from factories.go_ethereum import *
+from factories.go_ethereum_arm import *
 from factories.go_ethereum_osx import *
 from factories.go_ethereum_brew import *
 from factories.go_ethereum_windows import *
@@ -87,6 +90,7 @@ build_lock = locks.SlaveLock("slave_builds", maxCount = 2)
 #                                     'slave-go-one-deb': 2,
 #                                     'slave-go-two-deb': 2 })
 go_lock = locks.SlaveLock("go_builds", maxCount = 1)
+arm_lock = locks.SlaveLock("arm_builds", maxCount = 1)
 osx_lock = locks.SlaveLock("osx_builds", maxCount = 2)
 brew_lock = locks.SlaveLock("brew_builds", maxCount = 1)
 win_lock = locks.SlaveLock("win_builds", maxCount = 2)
@@ -195,8 +199,8 @@ for branch in ['master', 'develop']:
             builddir="build-go-ethereum-%s-docker" % branch,
             slavenames=[
                 "slave-go-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-go-four%s" % ("" if branch == 'master' else "-develop"
-            )],
+                "slave-go-four%s" % ("" if branch == 'master' else "-develop")
+            ],
             factory=go_ethereum_factory(branch=branch, deb=True),
             locks=[go_lock.access('counting')]),
         BuilderConfig(
@@ -204,10 +208,19 @@ for branch in ['master', 'develop']:
             builddir="build-go-ethereum-gui-%s" % branch,
             slavenames=[
                 "slave-go-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-go-four%s" % ("" if branch == 'master' else "-develop"
-            )],
+                "slave-go-four%s" % ("" if branch == 'master' else "-develop")
+            ],
             factory=go_ethereum_factory(branch=branch, deb=True, headless=False),
             locks=[go_lock.access('counting')]),
+        BuilderConfig(
+            name="ARM Go %s branch" % branch,
+            builddir="build-go-ethereum-%s-arm" % branch,
+            slavenames=[
+                "slave-go-three-arm",
+                "slave-go-four-arm"
+            ],
+            factory=arm_go_factory(branch=branch),
+            locks=[arm_lock.access('counting')]),
         BuilderConfig(
             name="OSX C++ %s branch" % branch,
             builddir="build-cpp-osx-%s" % branch,
@@ -470,6 +483,15 @@ for builder in [
         ],
         factory=go_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
+    BuilderConfig(
+        name="ARM Go pull requests",
+        builddir="build-go-ethereum-arm-pr",
+        slavenames=[
+            "slave-go-one-arm",
+            "slave-go-two-arm"
+        ],
+        factory=arm_go_factory(branch='develop'),
+        locks=[arm_lock.access('counting')]),
     BuilderConfig(
         name="Linux PyEthereum PRs",
         builddir="build-pyethereum-pr",
