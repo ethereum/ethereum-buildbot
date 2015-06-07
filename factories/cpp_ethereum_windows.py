@@ -33,13 +33,6 @@ def win_cpp_factory(branch='master', isPullRequest=False):
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name = "set-database",
-            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_databaseBaseVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else "")],
-            property = "database"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
             name = "set-protocol",
             command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else "")],
             property="protocol"
@@ -89,7 +82,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("AlethZero-Win32-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(prop:database)s-%(kw:short_revision)s.7z", time_string=get_time_string, short_revision=get_short_revision)
+                value=Interpolate("AlethZero-Win32-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.7z", time_string=get_time_string, short_revision=get_short_revision)
             ),
             FileUpload(
                 haltOnFailure = True,

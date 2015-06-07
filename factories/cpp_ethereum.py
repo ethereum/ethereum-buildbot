@@ -69,13 +69,6 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name = "set-database",
-            command = 'sed -ne "s/.*c_databaseBaseVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else ""),
-            property = "database"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
             name = "set-protocol",
             command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else ""),
             property="protocol"
@@ -134,7 +127,6 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                 schedulerNames=["cpp-ethereum-%s-check" % branch],
                 waitForFinish=False,
                 set_properties={
-                    "database": Interpolate("%(prop:database)s"),
                     "protocol": Interpolate("%(prop:protocol)s"),
                     "version": Interpolate("%(prop:version)s")
                 })
@@ -190,7 +182,6 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                 schedulerNames=["cpp-ethereum-%s-server" % branch],
                 waitForFinish=False,
                 set_properties={
-                    "database": Interpolate("%(prop:database)s"),
                     "protocol": Interpolate("%(prop:protocol)s"),
                     "version": Interpolate("%(prop:version)s")
                 }

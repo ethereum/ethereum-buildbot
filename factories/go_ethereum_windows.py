@@ -147,7 +147,7 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(prop:database)s-%(kw:short_revision)s.7z", time_string=get_time_string, short_revision=get_short_revision_go)
+                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.7z", time_string=get_time_string, short_revision=get_short_revision_go)
             ),
             FileUpload(
                 haltOnFailure = True,
