@@ -97,10 +97,10 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
         ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name="install-geth",
-            description="installing geth",
-            descriptionDone="install geth",
-            command="go install -v github.com\ethereum\go-ethereum\cmd\geth",
+            name="build-geth",
+            description="building geth",
+            descriptionDone="build geth",
+            command="go build -v github.com\ethereum\go-ethereum\cmd\geth",
             env=env
         )
     ]: factory.addStep(step)
@@ -141,8 +141,7 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
                 name="zip",
                 description='zipping',
                 descriptionDone='zipped',
-                command="%s geth.zip geth.exe" % zip_,
-                workdir=Interpolate('%(prop:workdir)s\\go\\bin')
+                command="%s geth.zip geth.exe" % zip_
             ),
             SetProperty(
                 description="setting filename",
