@@ -139,7 +139,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             name="test-cpp-strict",
             description="strict testing",
             descriptionDone="strict test",
-            command=testeth_cmd(["./testeth", "-t", "devcrypto,jsonrpc,Solidity*,whisper"], evmjit=evmjit),
+            command=testeth_cmd(["./testeth", "-t", "devcrypto,jsonrpc,Solidity*"], evmjit=evmjit),
             env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
             workdir="build/test"
         ),
