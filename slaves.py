@@ -28,10 +28,10 @@ for slave in json.load(open("slaves.json")):
             max_builds=1,
             ami='ami-2e2a1c46',
             region='us-east-1',
-            placement='d',
+            placement='e',
             user_data='{"SLAVENAME": "%s"}' % slave['name'],
             spot_instance=True,
-            max_spot_price=0.02,
+            max_spot_price=0.025,
             price_multiplier=1.15))
     else:
         slaves.append(BuildSlave(slave['name'], slave['password']))
