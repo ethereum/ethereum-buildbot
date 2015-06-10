@@ -62,6 +62,15 @@ def arm_go_factory(branch='develop', isPullRequest=False):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
+            name="go-cleanup",
+            command=Interpolate("rm -rf %(prop:workdir)s/go"),
+            description="cleaning up",
+            descriptionDone="clean up",
+            env={"GOPATH": Interpolate("%(prop:workdir)s/go")}
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            logEnviron=False,
             name="move-src",
             command=_go_cmds(branch=branch),
             description="moving src",
