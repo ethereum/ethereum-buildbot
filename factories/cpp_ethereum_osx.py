@@ -20,7 +20,6 @@ def cmake_osx_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
         cmd.append("-DGUI=0")
     if evmjit:
         for opt in [
-            "-DLLVM_DIR=/usr/local/opt/llvm/share/llvm/cmake",
             "-DEVMJIT=1"
         ]: cmd.append(opt)
     elif ccache:
