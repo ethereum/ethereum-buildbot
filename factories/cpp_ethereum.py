@@ -35,6 +35,7 @@ def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
     if headless:
         cmd.append("-DGUI=0")
     if evmjit:
+        cmd.append("-DLLVM_DIR=/usr/share/llvm-3.5/cmake")
         cmd.append("-DEVMJIT=1")
     elif ccache:
         cmd.append("-DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++")
