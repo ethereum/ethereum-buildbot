@@ -228,23 +228,7 @@ def brew_go_factory(branch='develop', headless=True):
                 command = 'git pull --no-edit && git push',
                 workdir = 'brew',
                 decodeRC = {0:SUCCESS,1:WARNINGS,2:WARNINGS}
-            ),
-            ShellCommand(
-                haltOnFailure = False,
-                flunkOnFailure = False,
-                logEnviron = False,
-                name = "unload",
-                descriptionDone = 'unload',
-                command = ['launchctl', 'unload', '/usr/local/opt/ethereum/homebrew.mxcl.ethereum.plist'],
-            ),
-            ShellCommand(
-                haltOnFailure = False,
-                flunkOnFailure = False,
-                logEnviron = False,
-                name = "load",
-                descriptionDone = 'load',
-                command = ['launchctl', 'load', '/usr/local/opt/ethereum/homebrew.mxcl.ethereum.plist'],
-            ),
+            )
         ]: factory.addStep(step)
 
     return factory
