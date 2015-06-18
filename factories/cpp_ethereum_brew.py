@@ -281,22 +281,6 @@ def brew_cpp_factory(branch='develop', headless=True):
                 command = 'git pull --no-edit && git push',
                 workdir = 'brew',
                 decodeRC = {0:SUCCESS,1:WARNINGS,2:WARNINGS}
-            ),
-            ShellCommand(
-                haltOnFailure = False,
-                flunkOnFailure = False,
-                logEnviron = False,
-                name = "unload",
-                descriptionDone = 'unload',
-                command = ['launchctl', 'unload', '/usr/local/opt/cpp-ethereum/homebrew.mxcl.cpp-ethereum.plist'],
-            ),
-            ShellCommand(
-                haltOnFailure = False,
-                flunkOnFailure = False,
-                logEnviron = False,
-                name = "load",
-                descriptionDone = 'load',
-                command = ['launchctl', 'load', '/usr/local/opt/cpp-ethereum/homebrew.mxcl.cpp-ethereum.plist'],
-            ),
+            )
         ]: factory.addStep(step)
     return factory

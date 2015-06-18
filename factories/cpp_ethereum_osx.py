@@ -136,12 +136,13 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             haltOnFailure = True,
             warnOnFailure = True,
             logEnviron = False,
-            name="test-cpp-strict",
-            description="strict testing",
-            descriptionDone="strict test",
-            command=testeth_cmd(["./testeth", "-t", "devcrypto,jsonrpc,Solidity*"], evmjit=evmjit),
+            name="test-cpp",
+            description="testing",
+            descriptionDone="test",
+            command=testeth_cmd(["./testeth"], evmjit=evmjit),
             env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
-            workdir="build/test"
+            workdir="build/test",
+            maxTime=900
         ),
     ]: factory.addStep(step)
 
@@ -171,23 +172,6 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                     }
                 )
             ]: factory.addStep(step)
-
-    # Run all tests, warnings let the build pass, failures marks the build with warnings
-    for step in [
-        ShellCommand(
-            flunkOnFailure = False,
-            warnOnFailure = True,
-            logEnviron = False,
-            name="test-cpp",
-            description="testing",
-            descriptionDone="test",
-            command=testeth_cmd(["./testeth"], evmjit=evmjit),
-            env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
-            workdir="build/test",
-            decodeRC={0:SUCCESS, -1:WARNINGS, 1:WARNINGS, 201:WARNINGS},
-            maxTime=900
-        )
-    ]: factory.addStep(step)
 
     # Package AlethZero.app
     if not isPullRequest and not headless:

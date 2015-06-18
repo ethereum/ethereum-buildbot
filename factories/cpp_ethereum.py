@@ -110,12 +110,13 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
             haltOnFailure = True,
             warnOnFailure = True,
             logEnviron = False,
-            name="test-cpp-strict",
-            description="strict testing",
-            descriptionDone="strict test",
-            command=testeth_cmd(["./testeth", "-t", "devcrypto,jsonrpc,Solidity*"], evmjit=evmjit),
+            name="test-cpp",
+            description="testing",
+            descriptionDone="test",
+            command=testeth_cmd(["./testeth"], evmjit=evmjit),
             env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
-            workdir="build/test"
+            workdir="build/test",
+            maxTime=900
         )
     ]: factory.addStep(step)
 
@@ -157,23 +158,6 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                             })
                     ]: factory.addStep(step)
 
-    # Run all tests, warnings let the build pass, failures marks the build with warnings
-    for step in [
-        ShellCommand(
-            flunkOnFailure = False,
-            warnOnFailure = True,
-            logEnviron = False,
-            name="test-cpp",
-            description="testing",
-            descriptionDone="test",
-            command=testeth_cmd(["./testeth"], evmjit=evmjit),
-            env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
-            workdir="build/test",
-            decodeRC={0:SUCCESS, -1:WARNINGS, 1:WARNINGS, 201:WARNINGS},
-            maxTime=900
-        )
-    ]: factory.addStep(step)
-
     # Trigger PoC server buildslave and a test node
     if deb and not evmjit and headless:
         for step in [
@@ -199,20 +183,6 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                 descriptionDone="stop",
                 command="kill `ps aux | grep 'supervisord -c eth-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
                 decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
-            ),
-            ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name="start",
-                description="starting",
-                descriptionDone="start",
-                command="supervisord -c eth-supervisord.conf && sleep 15",
-                logfiles={
-                    "eth.log": "eth.log",
-                    "eth.err": "eth.err",
-                    "supervisord.log": "eth-supervisord.log"
-                },
-                lazylogfiles=True
             )
         ]: factory.addStep(step)
 
