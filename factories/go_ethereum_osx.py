@@ -109,19 +109,6 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
             )
         ]: factory.addStep(step)
 
-    if not isPullRequest and headless:
-        for step in [
-            Trigger(
-                schedulerNames=["go-ethereum-%s-brew" % branch],
-                waitForFinish=False,
-                set_properties={
-                    "p2p": Interpolate("%(prop:p2p)s"),
-                    "protocol": Interpolate("%(prop:protocol)s"),
-                    "version": Interpolate("%(prop:version)s")
-                }
-            )
-        ]: factory.addStep(step)
-
     for step in [
         ShellCommand(
             haltOnFailure=True,
@@ -134,6 +121,19 @@ def osx_go_factory(branch='develop', isPullRequest=False, headless=True):
             maxTime=900
         )
     ]: factory.addStep(step)
+
+    if not isPullRequest and headless:
+        for step in [
+            Trigger(
+                schedulerNames=["go-ethereum-%s-brew" % branch],
+                waitForFinish=False,
+                set_properties={
+                    "p2p": Interpolate("%(prop:p2p)s"),
+                    "protocol": Interpolate("%(prop:protocol)s"),
+                    "version": Interpolate("%(prop:version)s")
+                }
+            )
+        ]: factory.addStep(step)
 
     if not isPullRequest and not headless:
         for step in [

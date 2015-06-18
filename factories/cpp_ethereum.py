@@ -158,7 +158,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                             })
                     ]: factory.addStep(step)
 
-    # Trigger PoC server buildslave and a test node
+    # Trigger PoC server buildslave
     if deb and not evmjit and headless:
         for step in [
             Trigger(
@@ -168,21 +168,6 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
                     "protocol": Interpolate("%(prop:protocol)s"),
                     "version": Interpolate("%(prop:version)s")
                 }
-            ),
-            FileDownload(
-                haltOnFailure = True,
-                descriptionDone="download init script",
-                mastersrc="startup/eth-supervisord.conf",
-                slavedest="eth-supervisord.conf"
-            ),
-            ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name="stop",
-                description="stopping",
-                descriptionDone="stop",
-                command="kill `ps aux | grep 'supervisord -c eth-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
-                decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
             )
         ]: factory.addStep(step)
 

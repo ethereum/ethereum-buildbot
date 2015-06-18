@@ -127,37 +127,4 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
                     )
                 ]: factory.addStep(step)
 
-    if headless:
-        for step in [
-            FileDownload(
-                haltOnFailure=True,
-                descriptionDone="download init script",
-                mastersrc="startup/geth-supervisord.conf",
-                slavedest="geth-supervisord.conf"
-            ),
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
-                name="stop",
-                description="stopping",
-                descriptionDone="stop",
-                command="kill `ps aux | grep 'supervisord -c geth-supervisord.conf' | grep -v grep | awk '{print $2}'` && kill `pidof geth` && sleep 5",
-                decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS}
-            ),
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
-                name="start",
-                description="starting",
-                descriptionDone="start",
-                command="supervisord -c geth-supervisord.conf && sleep 15",
-                logfiles={
-                    "geth.log": "geth.log",
-                    "geth.err": "geth.err",
-                    "supervisord.log": "geth-supervisord.log"
-                },
-                lazylogfiles=True
-            )
-        ]: factory.addStep(step)
-
     return factory
