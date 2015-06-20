@@ -28,7 +28,7 @@ def _go_cmds(branch='master'):
     return " && ".join(cmds)
 
 
-def go_ethereum_factory(branch='master', deb=False, headless=True):
+def go_ethereum_factory(branch='master', deb=False):
     factory = BuildFactory()
     for step in [
         Git(
@@ -89,19 +89,6 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
         )
     ]: factory.addStep(step)
 
-    if not headless:
-        for step in [
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
-                name="install-mist",
-                description="installing mist",
-                descriptionDone="install mist",
-                command="go install -v github.com/ethereum/go-ethereum/cmd/mist",
-                env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
-            )
-        ]: factory.addStep(step)
-
     for step in [
         ShellCommand(
             haltOnFailure=True,
@@ -114,7 +101,7 @@ def go_ethereum_factory(branch='master', deb=False, headless=True):
         )
     ]: factory.addStep(step)
 
-    if deb and headless:
+    if deb:
         for architecture in ['i386', 'amd64']:
             for distribution in distributions:
                 for step in [

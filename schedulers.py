@@ -49,11 +49,6 @@ go_ethereum_codebases={
         'repository': 'https://github.com/ethereum/go-ethereum.git',
         'branch': None,
         'revision': None
-    },
-    'go-build': {
-        'repository': 'https://github.com/ethereum/go-build.git',
-        'branch': None,
-        'revision': None
     }
 }
 ethereumj_codebases={
@@ -130,6 +125,10 @@ all_integration_codebases=cpp_ethereum_codebases.copy()
 all_integration_codebases.update(ethereumjs_codebases)
 all_integration_codebases.update(integration_codebases)
 
+def other_branches(branch):
+    if branch not in ('master', 'develop'):
+        return True
+    return False
 
 for scheduler in [
     SingleBranchScheduler(
@@ -162,12 +161,9 @@ for branch in ['master', 'develop']:
             treeStableTimer=60,
             builderNames=[
                 "Linux Go %s branch" % branch,
-                "Linux Go GUI %s branch" % branch,
                 "ARM Go %s branch" % branch,
                 "OSX Go %s branch" % branch,
-                "OSX Go GUI %s branch" % branch,
-                "Windows Go %s branch" % branch,
-                # "Windows Go GUI %s branch" % branch
+                "Windows Go %s branch" % branch
             ]),
         SingleBranchScheduler(
             name="pyethereum-%s-git" % branch,
@@ -196,8 +192,8 @@ for branch in ['master', 'develop']:
         Triggerable(
             name="go-ethereum-%s-brew" % branch,
             builderNames=[
-                "OSX Go %s brew" % branch,
-                "OSX Go GUI %s brew" % branch],
+                "OSX Go %s brew" % branch
+            ],
             codebases=all_go_ethereum_codebases),
 
         # Extra triggerable checks
@@ -380,10 +376,6 @@ for branch in ['master', 'develop']:
             builderNames=["Linux Go %s branch" % branch],
             codebases=["go-ethereum"]),
         ForceScheduler(
-            name="force-go-ethereum-gui-%s" % branch,
-            builderNames=["Linux Go GUI %s branch" % branch],
-            codebases=["go-ethereum"]),
-        ForceScheduler(
             name="force-go-ethereum-arm-%s" % branch,
             builderNames=["ARM Go %s branch" % branch],
             codebases=["go-ethereum"]),
@@ -404,11 +396,7 @@ for branch in ['master', 'develop']:
         ForceScheduler(
             name="force-go-ethereum-%s-osx" % branch,
             builderNames=["OSX Go %s branch" % branch],
-            codebases=["go-ethereum", "go-build"]),
-        ForceScheduler(
-            name="force-go-ethereum-gui-%s-osx" % branch,
-            builderNames=["OSX Go GUI %s branch" % branch],
-            codebases=["go-ethereum", "go-build"]),
+            codebases=["go-ethereum"]),
         ForceScheduler(
             name="force-cpp-ethereum-%s-brew" % branch,
             builderNames=["OSX C++ %s brew" % branch],
@@ -421,10 +409,6 @@ for branch in ['master', 'develop']:
             name="force-go-ethereum-%s-brew" % branch,
             builderNames=["OSX Go %s brew" % branch],
             codebases=["homebrew-ethereum", "go-ethereum"]),
-        ForceScheduler(
-            name="force-go-ethereum-gui-%s-brew" % branch,
-            builderNames=["OSX Go GUI %s brew" % branch],
-            codebases=["homebrew-ethereum", "go-ethereum"]),
 
         # Windows C++/Go
         ForceScheduler(
@@ -434,11 +418,7 @@ for branch in ['master', 'develop']:
         ForceScheduler(
             name="force-go-ethereum-%s-win" % branch,
             builderNames=["Windows Go %s branch" % branch],
-            codebases=["go-ethereum", "go-build"]),
-        ForceScheduler(
-            name="force-go-ethereum-gui-%s-win" % branch,
-            builderNames=["Windows Go GUI %s branch" % branch],
-            codebases=["go-ethereum", "go-build"]),
+            codebases=["go-ethereum"]),
 
         # Other schedulers
         ForceScheduler(
@@ -520,7 +500,7 @@ for scheduler in [
     ForceScheduler(
         name="force-go-ethereum-osx-pr",
         builderNames=["OSX Go pull requests"],
-        codebases=["go-ethereum", "go-build"]),
+        codebases=["go-ethereum"]),
     ForceScheduler(
         name="force-pyethereum-osx-pr",
         builderNames=["OSX PyEthereum PRs"],

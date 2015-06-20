@@ -14,7 +14,7 @@ reload(go_ethereum)
 from go_ethereum import *
 
 
-def brew_go_factory(branch='develop', headless=True):
+def brew_go_factory(branch='develop'):
     factory = BuildFactory()
 
     for step in [
@@ -40,7 +40,7 @@ def brew_go_factory(branch='develop', headless=True):
         )
     ]: factory.addStep(step)
 
-    if branch == 'master' and headless:
+    if branch != 'master':
         factory.addStep(ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -49,7 +49,7 @@ def brew_go_factory(branch='develop', headless=True):
             command = Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s-%(prop:protocol)s\'/" ethereum.rb'),
             workdir = 'brew',
         ))
-    elif branch == 'develop' and headless:
+    else:
         factory.addStep(ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -76,56 +76,55 @@ def brew_go_factory(branch='develop', headless=True):
             name = "brew",
             description = 'running brew',
             descriptionDone = 'brew',
-            command = brew_install_cmd(cmd=['brew', 'install', 'ethereum.rb', '-v', '--build-bottle'], branch=branch, headless=headless),
+            command = brew_install_cmd(cmd=['brew', 'install', 'ethereum.rb', '-v', '--build-bottle'], branch=branch),
             workdir = 'brew'
         )
     ]: factory.addStep(step)
 
-    if headless:
-        for step in [
-            ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "bottle",
-                command = brew_install_cmd(cmd=["brew", "bottle", "ethereum.rb", "-v"], branch=branch, headless=headless),
-                description = "bottling",
-                descriptionDone = "bottle",
-                workdir = 'brew'
-            ),
-            SetPropertyFromCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "set-old-revision",
-                command = 'sed -ne "s/^%s    revision \(.*\)/\\1/p" ethereum.rb' % ("" if branch=='master' else "  "),
-                property = 'old_revision',
-                workdir = 'brew'
-            ),
-            SetProperty(
-                name="set-bottle",
-                description="setting bottle",
-                descriptionDone="set bottle",
-                property="bottle",
-                value=Interpolate("ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.tar.gz")
-            ),
-            SetPropertyFromCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "set-sha1sum",
-                command = Interpolate('sha1sum %(prop:bottle)s | grep -o -w "\w\{40\}"'),
-                property = 'sha1sum',
-                workdir = 'brew'
-            ),
-            FileUpload(
-                haltOnFailure = True,
-                name = 'upload-bottle',
-                slavesrc=Interpolate("%(prop:bottle)s"),
-                masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
-                url = Interpolate("/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
-                workdir = 'brew'
-            )
-        ]: factory.addStep(step)
+    for step in [
+        ShellCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name = "bottle",
+            command = brew_install_cmd(cmd=["brew", "bottle", "ethereum.rb", "-v"], branch=branch),
+            description = "bottling",
+            descriptionDone = "bottle",
+            workdir = 'brew'
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name = "set-old-revision",
+            command = 'sed -ne "s/^%s    revision \(.*\)/\\1/p" ethereum.rb' % ("" if branch=='master' else "  "),
+            property = 'old_revision',
+            workdir = 'brew'
+        ),
+        SetProperty(
+            name="set-bottle",
+            description="setting bottle",
+            descriptionDone="set bottle",
+            property="bottle",
+            value=Interpolate("ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.tar.gz")
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure = True,
+            logEnviron = False,
+            name = "set-sha1sum",
+            command = Interpolate('sha1sum %(prop:bottle)s | grep -o -w "\w\{40\}"'),
+            property = 'sha1sum',
+            workdir = 'brew'
+        ),
+        FileUpload(
+            haltOnFailure = True,
+            name = 'upload-bottle',
+            slavesrc=Interpolate("%(prop:bottle)s"),
+            masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
+            url = Interpolate("/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
+            workdir = 'brew'
+        )
+    ]: factory.addStep(step)
 
-    if branch == 'master' and headless:
+    if branch == 'master':
         for step in [
             ShellCommand(
                 haltOnFailure = True,
@@ -178,7 +177,7 @@ def brew_go_factory(branch='develop', headless=True):
             )
         ]: factory.addStep(step)
 
-    if branch=='develop' and headless:
+    else:
         for step in [
             ShellCommand(
                 haltOnFailure = True,

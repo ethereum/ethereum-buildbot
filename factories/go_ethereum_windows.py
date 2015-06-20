@@ -21,14 +21,11 @@ def _go_cmds_win(branch='master'):
 
     return " && ".join(cmds)
 
-def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
+def windows_go_factory(branch='develop', isPullRequest=False):
     factory = BuildFactory()
 
     env = {
         "GOPATH": Interpolate("%(prop:workdir)s\\go;%(prop:workdir)s\\build\\Godeps\\_workspace"),
-        "PKG_CONFIG_PATH": "C:\Qt\5.4\mingw491_32\lib\pkgconfig",
-        "CGO_CPPFLAGS": "-IC:\Qt\5.4\mingw491_32\include\QtCore",
-        "LD_LIBRARY_PATH": "C:\Qt\5.4\mingw491_32\lib",
         'PATH': [Interpolate("%(prop:workdir)s\\go\\bin"), "${PATH}"]
     }
 
@@ -45,16 +42,6 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
             method='copy',
             codebase='go-ethereum',
             retry=(5, 3)
-        ),
-        Git(
-            haltOnFailure = True,
-            logEnviron = False,
-            repourl = 'https://github.com/ethereum/go-build.git',
-            branch = 'master',
-            mode = 'incremental',
-            codebase = 'go-build',
-            retry=(5, 3),
-            workdir = 'go-build-%s' % branch
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
@@ -104,19 +91,6 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
             env=env
         )
     ]: factory.addStep(step)
-
-    if not headless:
-        for step in [
-            ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name="install-mist",
-                description="installing mist",
-                descriptionDone="install mist",
-                command="go install -v github.com\ethereum\go-ethereum\cmd\mist",
-                env=env
-            )
-        ]: factory.addStep(step)
 
     for step in [
         ShellCommand(
@@ -169,55 +143,6 @@ def windows_go_factory(branch='develop', isPullRequest=False, headless=True):
                 description = 'linking latest',
                 descriptionDone= 'link latest',
                 command = ['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.zip")]
-            )
-        ]: factory.addStep(step)
-
-    if not isPullRequest and not headless:
-        for step in [
-            ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "go-build",
-                description = 'go build',
-                descriptionDone = 'go build',
-                command = ['build.bat'],
-                workdir = 'go-build-%s\windows' % branch,
-                decodeRC = {0:SUCCESS,1:WARNINGS,2:WARNINGS},
-                env={"GOPATH": Interpolate("%(prop:workdir)s\\go")}
-            ),
-            SetPropertyFromCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "set-sha1sum",
-                command = Interpolate('sha1sum %(prop:workdir)s\\go\\pkg\\ethereum\\mist.exe | grep -o -w "\w\{40\}"'),
-                property = 'sha1sum'
-            ),
-            SetProperty(
-                description="setting filename",
-                descriptionDone="set filename",
-                name="set-filename",
-                property="filename",
-                value=Interpolate("Mist-Windows-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.exe", time_string=get_time_string, short_revision=get_short_revision_go)
-            ),
-            FileUpload(
-                haltOnFailure = True,
-                name = 'upload-mist',
-                slavesrc=Interpolate("%(prop:workdir)s\\go\\pkg\\ethereum\\mist.exe"),
-                masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
-                url = Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
-            ),
-            MasterShellCommand(
-                name = "clean-latest-link",
-                description = 'cleaning latest link',
-                descriptionDone= 'clean latest link',
-                command = ['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Mist-Windows-latest.exe")]
-            ),
-            MasterShellCommand(
-                haltOnFailure = True,
-                name = "link-latest",
-                description = 'linking latest',
-                descriptionDone= 'link latest',
-                command = ['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Mist-Windows-latest.exe")]
             )
         ]: factory.addStep(step)
 
