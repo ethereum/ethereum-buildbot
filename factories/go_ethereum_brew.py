@@ -40,7 +40,7 @@ def brew_go_factory(branch='develop'):
         )
     ]: factory.addStep(step)
 
-    if branch != 'master':
+    if branch == 'master':
         factory.addStep(ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -49,7 +49,7 @@ def brew_go_factory(branch='develop'):
             command = Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s-%(prop:protocol)s\'/" ethereum.rb'),
             workdir = 'brew',
         ))
-    else:
+    elif branch == 'develop':
         factory.addStep(ShellCommand(
             haltOnFailure = True,
             logEnviron = False,
@@ -177,7 +177,7 @@ def brew_go_factory(branch='develop'):
             )
         ]: factory.addStep(step)
 
-    else:
+    elif branch == 'develop':
         for step in [
             ShellCommand(
                 haltOnFailure = True,
