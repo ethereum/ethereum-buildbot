@@ -44,20 +44,6 @@ def go_ethereum_factory(branch='master', deb=False):
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="set-protocol",
-            command='sed -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth/protocol.go',
-            property="protocol"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="set-p2p",
-            command='sed -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p/peer.go',
-            property="p2p"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure=True,
-            logEnviron=False,
             name="set-version",
             command='sed -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
             property="version"

@@ -46,7 +46,7 @@ def brew_go_factory(branch='develop'):
             logEnviron = False,
             name = "update-version",
             descriptionDone = 'update go-ethereum version',
-            command = Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s-%(prop:protocol)s\'/" ethereum.rb'),
+            command = Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s\'/" ethereum.rb'),
             workdir = 'brew',
         ))
     elif branch == 'develop':
@@ -55,7 +55,7 @@ def brew_go_factory(branch='develop'):
             logEnviron = False,
             name = "update-version",
             descriptionDone = 'update go-ethereum version',
-            command = Interpolate('sed -i "" "s/^    version \'\(.*\)\'/    version \'%(prop:version)s-%(prop:protocol)s\'/" ethereum.rb'),
+            command = Interpolate('sed -i "" "s/^    version \'\(.*\)\'/    version \'%(prop:version)s\'/" ethereum.rb'),
             workdir = 'brew',
         ))
 
@@ -104,7 +104,7 @@ def brew_go_factory(branch='develop'):
             description="setting bottle",
             descriptionDone="set bottle",
             property="bottle",
-            value=Interpolate("ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.tar.gz")
+            value=Interpolate("ethereum-%(prop:version)s.yosemite.bottle.tar.gz")
         ),
         SetPropertyFromCommand(
             haltOnFailure = True,
@@ -118,8 +118,8 @@ def brew_go_factory(branch='develop'):
             haltOnFailure = True,
             name = 'upload-bottle',
             slavesrc=Interpolate("%(prop:bottle)s"),
-            masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
-            url = Interpolate("/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
+            masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
+            url = Interpolate("/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/ethereum-%(prop:version)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
             workdir = 'brew'
         )
     ]: factory.addStep(step)
@@ -162,7 +162,7 @@ def brew_go_factory(branch='develop'):
                 logEnviron = False,
                 name = "git-commit",
                 descriptionDone = 'git commit',
-                command = Interpolate('git commit -m "bump ethereum to %(prop:version)s-%(prop:protocol)s at ethereum/go-ethereum@%(kw:go_revision)s"', go_revision=get_short_revision_go),
+                command = Interpolate('git commit -m "bump ethereum to %(prop:version)s at ethereum/go-ethereum@%(kw:go_revision)s"', go_revision=get_short_revision_go),
                 workdir = 'brew',
                 decodeRC = {0:SUCCESS,1:SUCCESS,2:WARNINGS}
             ),
@@ -215,7 +215,7 @@ def brew_go_factory(branch='develop'):
                 logEnviron = False,
                 name = "git-commit",
                 descriptionDone = 'git commit',
-                command = Interpolate('git commit -m "bump ethereum to %(prop:version)s-%(prop:protocol)s at ethereum/go-ethereum@%(kw:go_revision)s"', go_revision=get_short_revision_go),
+                command = Interpolate('git commit -m "bump ethereum to %(prop:version)s at ethereum/go-ethereum@%(kw:go_revision)s"', go_revision=get_short_revision_go),
                 workdir = 'brew',
                 decodeRC = {0:SUCCESS,1:SUCCESS,2:WARNINGS}
             ),

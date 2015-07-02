@@ -46,20 +46,6 @@ def windows_go_factory(branch='develop', isPullRequest=False):
         SetPropertyFromCommand(
             haltOnFailure = True,
             logEnviron = False,
-            name = "set-protocol",
-            command = '%s -ne "s/.*ProtocolVersion    = \(.*\)/\\1/p" eth\protocol.go' % sed,
-            property = "protocol"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "update-p2p",
-            command = '%s -ne "s/.*baseProtocolVersion.*= \(.*\)/\\1/p" p2p\peer.go' % sed,
-            property="p2p"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
             name = "set-version",
             command = '%s -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd\geth\main.go' % sed,
             property = "version"
@@ -122,7 +108,7 @@ def windows_go_factory(branch='develop', isPullRequest=False):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.zip", time_string=get_time_string, short_revision=get_short_revision_go)
+                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(kw:short_revision)s.zip", time_string=get_time_string, short_revision=get_short_revision_go)
             ),
             FileUpload(
                 haltOnFailure = True,
