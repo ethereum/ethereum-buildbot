@@ -88,7 +88,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             haltOnFailure = True,
             logEnviron = False,
             name = "set-protocol",
-            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else ""),
+            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
             property="protocol"
         ),
         SetPropertyFromCommand(

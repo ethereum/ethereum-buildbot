@@ -34,7 +34,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             haltOnFailure = True,
             logEnviron = False,
             name = "set-protocol",
-            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else "")],
+            command = [r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp'],
             property="protocol"
         ),
         SetPropertyFromCommand(

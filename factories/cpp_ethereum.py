@@ -69,7 +69,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
             haltOnFailure = True,
             logEnviron = False,
             name = "set-protocol",
-            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common%s.cpp' % ("Eth" if branch == 'master' else ""),
+            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
             property="protocol"
         ),
         SetPropertyFromCommand(
