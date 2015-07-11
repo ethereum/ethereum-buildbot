@@ -22,7 +22,7 @@ def get_short_revision(props):
 
 def testeth_cmd(cmd=[], evmjit=False):
     if evmjit:
-        cmd.append("--jit")
+        cmd += ['--vm', 'jit']
     return cmd
 
 def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
@@ -110,7 +110,11 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
             description="testing",
             descriptionDone="test",
             command=testeth_cmd(["./testeth"], evmjit=evmjit),
-            env={'CTEST_OUTPUT_ON_FAILURE': '1', 'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests')},
+            env={
+                'CTEST_OUTPUT_ON_FAILURE': '1',
+                'ETHEREUM_TEST_PATH': Interpolate('%(prop:workdir)s/tests'),
+                'EVMJIT': '-cache=0'
+            },
             workdir="build/test",
             maxTime=900
         )
