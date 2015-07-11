@@ -45,7 +45,7 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name="set-snapshot",
             property="snapshot",
             value=Interpolate("+%(prop:buildnumber)s%(kw:snapshot)s%(kw:distribution)s",
-                              snapshot=(dev_snapshot if branch == 'develop' else ""),
+                              snapshot=(dev_snapshot if branch == 'develop' or testdeb else ""),
                               distribution=distribution)
         )
     ]: factory.addStep(step)
