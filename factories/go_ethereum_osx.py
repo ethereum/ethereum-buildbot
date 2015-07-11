@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 15:02:55
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 03:02:05
 
 import factory
 reload(factory)
@@ -11,7 +7,7 @@ from factory import *
 
 import go_ethereum
 reload(go_ethereum)
-from go_ethereum import get_short_revision_go, _go_cmds
+from go_ethereum import _go_cmds
 
 
 def osx_go_factory(branch='develop', isPullRequest=False):

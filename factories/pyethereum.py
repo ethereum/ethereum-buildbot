@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:50:15
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 05:22:09
 
 import factory
 reload(factory)
@@ -14,12 +10,12 @@ def pyethereum_factory(branch='master'):
     factory = BuildFactory()
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/pyethereum.git',
             branch=branch,
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='pyethereum',
             retry=(5, 3)
         ),
@@ -31,32 +27,32 @@ def pyethereum_factory(branch='master'):
             property="version"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="pip-requirements",
             description="installing requirements",
             descriptionDone="install requirements",
             command=["pip", "install", "-r", "requirements.txt"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="upgrade-requirements",
             description="upgrading test requirements",
             descriptionDone="upgrade test requirements",
             command=["pip", "install", "--upgrade", "--no-deps", "-r", "requirements.txt"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="pip-install",
             description="installing",
             descriptionDone="install",
             command=["pip", "install", "-e", "."]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="test-submodule",
             descriptionDone="update test submodule",
             command="git submodule init && git submodule update --recursive"

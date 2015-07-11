@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 13:42:34
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-22 05:43:54
 
-####### SCHEDULERS
+# ###### SCHEDULERS
 
 # Configure the Schedulers, which decide how to react to incoming changes.
 
@@ -18,21 +14,21 @@ from buildbot.changes import filter
 distributions = ['trusty', 'utopic', 'vivid']
 schedulers = []
 
-self_codebases={
+self_codebases = {
     'ethereum-buildbot': {
         'repository': 'https://github.com/ethereum/ethereum-buildbot.git',
         'branch': 'master',
         'revision': None
     }
 }
-dockers_codebases={
+dockers_codebases = {
     'ethereum-dockers': {
         'repository': 'https://github.com/ethereum/ethereum-dockers.git',
         'branch': 'master',
         'revision': None
     }
 }
-cpp_ethereum_codebases={
+cpp_ethereum_codebases = {
     'cpp-ethereum': {
         'repository': 'https://github.com/ethereum/cpp-ethereum.git',
         'branch': None,
@@ -44,56 +40,56 @@ cpp_ethereum_codebases={
         'revision': None
     }
 }
-go_ethereum_codebases={
+go_ethereum_codebases = {
     'go-ethereum': {
         'repository': 'https://github.com/ethereum/go-ethereum.git',
         'branch': None,
         'revision': None
     }
 }
-ethereumj_codebases={
+ethereumj_codebases = {
     'ethereumj': {
         'repository': 'https://github.com/ethereum/ethereumj.git',
         'branch': 'master',
         'revision': None
     }
 }
-pyethereum_codebases={
+pyethereum_codebases = {
     'pyethereum': {
         'repository': 'https://github.com/ethereum/pyethereum.git',
         'branch': None,
         'revision': None
     }
 }
-pyethapp_codebases={
+pyethapp_codebases = {
     'pyethapp': {
         'repository': 'https://github.com/ethereum/pyethapp.git',
         'branch': None,
         'revision': None
     }
 }
-serpent_codebases={
+serpent_codebases = {
     'serpent': {
         'repository': 'https://github.com/ethereum/serpent.git',
         'branch': None,
         'revision': None
     }
 }
-brew_codebases={
+brew_codebases = {
     'homebrew-ethereum': {
         'repository': 'https://github.com/ethereum/homebrew-ethereum.git',
         'branch': 'master',
         'revision': None
     }
 }
-ethereumjs_codebases={
+ethereumjs_codebases = {
     'ethereumjs': {
         'repository': 'https://github.com/ethereum/ethereum.js.git',
         'branch': 'master',
         'revision': None
     }
 }
-integration_codebases={
+integration_codebases = {
     'integration': {
         'repository': 'https://github.com/etherex/etherex.git',
         'branch': 'master',
@@ -101,27 +97,27 @@ integration_codebases={
     }
 }
 
-all_cpp_ethereum_codebases=cpp_ethereum_codebases.copy()
+all_cpp_ethereum_codebases = cpp_ethereum_codebases.copy()
 all_cpp_ethereum_codebases.update(brew_codebases)
 
-all_go_ethereum_codebases=go_ethereum_codebases.copy()
+all_go_ethereum_codebases = go_ethereum_codebases.copy()
 all_go_ethereum_codebases.update(brew_codebases)
 
-all_ethereumj_codebases=ethereumj_codebases.copy()
+all_ethereumj_codebases = ethereumj_codebases.copy()
 
-all_pyethereum_codebases=pyethereum_codebases.copy()
-all_pyethapp_codebases=pyethapp_codebases.copy()
+all_pyethereum_codebases = pyethereum_codebases.copy()
+all_pyethapp_codebases = pyethapp_codebases.copy()
 
-all_serpent_codebases=serpent_codebases.copy()
+all_serpent_codebases = serpent_codebases.copy()
 all_serpent_codebases.update(pyethereum_codebases)
 
-all_brew_cpp_codebases=cpp_ethereum_codebases.copy()
+all_brew_cpp_codebases = cpp_ethereum_codebases.copy()
 all_brew_cpp_codebases.update(brew_codebases)
 
-all_brew_go_codebases=go_ethereum_codebases.copy()
+all_brew_go_codebases = go_ethereum_codebases.copy()
 all_brew_go_codebases.update(brew_codebases)
 
-all_integration_codebases=cpp_ethereum_codebases.copy()
+all_integration_codebases = cpp_ethereum_codebases.copy()
 all_integration_codebases.update(ethereumjs_codebases)
 all_integration_codebases.update(integration_codebases)
 
@@ -528,7 +524,30 @@ for scheduler in [
     ForceScheduler(
         name="force-cpp-ethereum-integration",
         builderNames=["Linux C++ integration"],
-        codebases=["cpp-ethereum", "ethereumjs", "integration"])
+        codebases=["cpp-ethereum", "ethereumjs", "integration"]),
+
+    # deb tester
+    ForceScheduler(
+        name="force-cpp-ethereum-deb-tester",
+        builderNames=["Linux C++ deb tester"],
+        # codebases=["cpp-ethereum", "tests"],
+        repository=FixedParameter(name="repository", default=""),
+        project=FixedParameter(name="project", default=""),
+        branch=StringParameter(name="branch", default="develop"),
+        revision=StringParameter(
+            name="revision",
+            label="Revision:<br>",
+            default="4cfc62e199d0ecab3e3c452389690c589c9785e0",
+            required=True,
+            size=40),
+        properties=[
+            StringParameter(
+                name="version",
+                label="Version:<br>",
+                default="0.9.29",
+                required=True,
+                size=10)
+        ]),
 ]: schedulers.append(scheduler)
 
 for buildslave in ["one", "two", "three", "four"]:
@@ -582,13 +601,12 @@ for distribution in distributions:
             repository=FixedParameter(name="repository", default=""),
             project=FixedParameter(name="project", default=""),
             branch=FixedParameter(name="branch", default="master"),
-            revision=
-                StringParameter(
-                    name="revision",
-                    label="Revision:<br>",
-                    default="81fd1114fa64ee680ad642063aa29c3f62a44cdd",
-                    required=True,
-                    size=40),
+            revision=StringParameter(
+                name="revision",
+                label="Revision:<br>",
+                default="81fd1114fa64ee680ad642063aa29c3f62a44cdd",
+                required=True,
+                size=40),
             properties=[
                 StringParameter(
                     name="version",
@@ -604,13 +622,12 @@ for distribution in distributions:
             repository=FixedParameter(name="repository", default=""),
             project=FixedParameter(name="project", default=""),
             branch=FixedParameter(name="branch", default="master"),
-            revision=
-                StringParameter(
-                    name="revision",
-                    label="Revision:<br>",
-                    default="5dce039508d17ed1717eacf46be34d1a1eea1c87",
-                    required=True,
-                    size=40),
+            revision=StringParameter(
+                name="revision",
+                label="Revision:<br>",
+                default="5dce039508d17ed1717eacf46be34d1a1eea1c87",
+                required=True,
+                size=40),
             properties=[
                 StringParameter(
                     name="version",
@@ -625,13 +642,12 @@ for distribution in distributions:
             repository=FixedParameter(name="repository", default=""),
             project=FixedParameter(name="project", default=""),
             branch=StringParameter(name="branch", default="5.4.1"),
-            revision=
-                StringParameter(
-                    name="revision",
-                    label="Revision:<br>",
-                    default="72ff0b7d9600db642e2d2e95c78c70454bbdb5e7",
-                    required=True,
-                    size=40),
+            revision=StringParameter(
+                name="revision",
+                label="Revision:<br>",
+                default="72ff0b7d9600db642e2d2e95c78c70454bbdb5e7",
+                required=True,
+                size=40),
             properties=[
                 StringParameter(
                     name="version",
@@ -646,13 +662,12 @@ for distribution in distributions:
             repository=FixedParameter(name="repository", default=""),
             project=FixedParameter(name="project", default=""),
             branch=StringParameter(name="branch", default="release-branch.go1.4"),
-            revision=
-                StringParameter(
-                    name="revision",
-                    label="Revision:<br>",
-                    default="883bc6ed0ea815293fe6309d66f967ea60630e87",
-                    required=True,
-                    size=40),
+            revision=StringParameter(
+                name="revision",
+                label="Revision:<br>",
+                default="883bc6ed0ea815293fe6309d66f967ea60630e87",
+                required=True,
+                size=40),
             properties=[
                 StringParameter(
                     name="version",

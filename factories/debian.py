@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:56:36
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-04 16:06:02
 
 import factory
 reload(factory)
@@ -15,26 +11,26 @@ from go_ethereum import _go_cmds
 
 @properties.renderer
 def jsonrpc_for_develop(props):
-    if props.has_key('version'):
+    if 'version' in props:
         return int(props['version'][2:3]) > 3
     return None
 
 @properties.renderer
 def deb_version(props):
-    if props.has_key('version'):
+    if 'version' in props:
         if ":" in props['version']:
             return props['version'][2:]
         else:
             return props['version']
     return None
 
-def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distribution='trusty', architecture='i386'):
+def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distribution='trusty', architecture='i386', testdeb=False):
     factory = BuildFactory()
 
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl=repourl,
             branch=branch,
             mode='full',
@@ -48,7 +44,9 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             descriptionDone="set snapshot",
             name="set-snapshot",
             property="snapshot",
-            value=Interpolate("+%(prop:buildnumber)s%(kw:snapshot)s%(kw:distribution)s", snapshot=(dev_snapshot if branch=='develop' else ""), distribution=distribution)
+            value=Interpolate("+%(prop:buildnumber)s%(kw:snapshot)s%(kw:distribution)s",
+                              snapshot=(dev_snapshot if branch == 'develop' else ""),
+                              distribution=distribution)
         )
     ]: factory.addStep(step)
 
@@ -56,26 +54,27 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
     if name == 'ethereum':
         for step in [
             ShellCommand(
-                haltOnFailure = True,
-                logEnviron = False,
-                name = "move-src",
+                haltOnFailure=True,
+                logEnviron=False,
+                name="move-src",
                 command=_go_cmds(branch=branch),
                 description="moving src",
                 descriptionDone="move src",
                 env={"GOPATH": Interpolate("%(prop:workdir)s/go")}
             ),
             ShellCommand(
-                logEnviron = False,
+                logEnviron=False,
                 name="source-tarball",
                 description="creating source tarball",
                 descriptionDone="create source tarball",
-                command=Interpolate("tar --exclude .git --exclude pkg --exclude bin -czf ../%(kw:name)s_%(prop:version)s%(prop:snapshot)s.orig.tar.gz .", name=name),
+                command=Interpolate("tar --exclude .git --exclude pkg --exclude bin -czf "
+                                    "../%(kw:name)s_%(prop:version)s%(prop:snapshot)s.orig.tar.gz .", name=name),
                 workdir=Interpolate("%(prop:workdir)s/go")
             ),
             # clean up the Git checkout for debuild
             ShellCommand(
-                logEnviron = False,
-                name = "clean-build",
+                logEnviron=False,
+                name="clean-build",
                 command="rm -rf build && mkdir build",
                 description="cleaning build",
                 descriptionDone="clean build",
@@ -86,16 +85,20 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
     elif name == 'qtwebengine-opensource-src':
         for step in [
             ShellCommand(
-                logEnviron = False,
+                logEnviron=False,
                 name="source-tarball",
                 description="getting source tarball",
                 descriptionDone="get source tarball",
-                command=Interpolate("wget -c https://download.qt.io/official_releases/qt/5.4/%(kw:version)s/submodules/qtwebengine-opensource-src-%(kw:version)s.tar.xz -O ../%(kw:name)s_%(prop:version)s%(prop:snapshot)s.orig.tar.xz", name=name, version=branch)
+                command=Interpolate("wget -c https://download.qt.io/official_releases/qt/5.4/%(kw:version)s/submodules/"
+                                    "qtwebengine-opensource-src-%(kw:version)s.tar.xz "
+                                    "-O ../%(kw:name)s_%(prop:version)s%(prop:snapshot)s.orig.tar.xz",
+                                    name=name,
+                                    version=branch)
             ),
             # clean up the Git checkout for debuild
             ShellCommand(
-                logEnviron = False,
-                name = "clean-build",
+                logEnviron=False,
+                name="clean-build",
                 command="rm -rf build && mkdir build",
                 description="cleaning build",
                 descriptionDone="clean build",
@@ -105,35 +108,43 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
     # Just create the source tarball for others
     else:
         factory.addStep(ShellCommand(
-            logEnviron = False,
+            logEnviron=False,
             name="source-tarball",
             description="creating source tarball",
             descriptionDone="create source tarball",
-            command=Interpolate("tar --exclude .git -czf ../%(kw:name)s_%(kw:version)s%(prop:snapshot)s.orig.tar.gz .", name=name, version=deb_version)
+            command=Interpolate("tar --exclude .git -czf "
+                                "../%(kw:name)s_%(kw:version)s%(prop:snapshot)s.orig.tar.gz .",
+                                name=name,
+                                version=deb_version)
         ))
 
     for step in [
         # Get debian/ directory
         ShellCommand(
-            logEnviron = False,
+            logEnviron=False,
             name="get-debian",
             description="getting debian folder",
             descriptionDone="get debian folder",
-            command=Interpolate("wget https://github.com/ethereum/ethereum-ppa/archive/%(kw:ppabranch)s.tar.gz -O- | tar -zx --exclude package.sh --exclude README.md --strip-components=1", ppabranch=ppabranch)
+            command=Interpolate("wget https://github.com/ethereum/ethereum-ppa/archive/%(kw:ppabranch)s.tar.gz -O- |"
+                                " tar -zx --exclude package.sh --exclude README.md --strip-components=1",
+                                ppabranch=ppabranch)
         ),
 
         # Bump version
         ShellCommand(
-            logEnviron = False,
+            logEnviron=False,
             name="bump-debian",
             description="bumping %s deb version" % distribution,
             descriptionDone="bump %s deb version" % distribution,
-            command=Interpolate("EMAIL='caktux (Buildserver key) <caktux@gmail.com>' dch -v %(prop:version)s%(prop:snapshot)s-0ubuntu1 'git build of %(prop:got_revision)s'", dist=distribution)
+            command=Interpolate("EMAIL='caktux (Buildserver key) <caktux@gmail.com>' "
+                                "dch -v %(prop:version)s%(prop:snapshot)s-0ubuntu1 "
+                                "'git build of %(prop:got_revision)s'",
+                                dist=distribution)
         ),
 
         # Build a source package
         ShellCommand(
-            logEnviron = False,
+            logEnviron=False,
             name="source-package",
             description="debuilding %s" % distribution,
             descriptionDone="debuild %s" % distribution,
@@ -155,48 +166,44 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         # Set othermirror for pbuilder
         if name == 'ethereum':
             factory.addStep(ShellCommand(
-                logEnviron = False,
+                logEnviron=False,
                 name="pbuilder-opts",
                 description="setting pbuilderrc",
                 descriptionDone="set pbuilderrc",
-                command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
-                        main_ppa, distribution,
-                        main_ppa, distribution,
-                        qt_ppa, distribution,
-                        qt_ppa, distribution),
+                command="echo 'OTHERMIRROR=\""
+                        "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
+                        "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main\"' > ~/.pbuilderrc"
+                            .format(distribution, main_ppa, qt_ppa)
             ))
         elif name == 'cpp-ethereum':
             if branch == 'develop':
                 factory.addStep(ShellCommand(
-                    logEnviron = False,
+                    logEnviron=False,
                     name="pbuilder-opts",
                     description="setting pbuilderrc",
                     descriptionDone="set pbuilderrc",
-                    command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
-                            main_ppa, distribution,
-                            main_ppa, distribution,
-                            dev_ppa, distribution,
-                            dev_ppa, distribution,
-                            qt_ppa, distribution,
-                            qt_ppa, distribution),
+                    command="echo 'OTHERMIRROR=\""
+                            "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
+                            "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main|"
+                            "deb [trusted=yes] {3} {0} main|deb-src [trusted=yes] {3} {0} main\"' > ~/.pbuilderrc"
+                                .format(distribution, main_ppa, dev_ppa, qt_ppa)
                 ))
             else:
                 factory.addStep(ShellCommand(
-                    logEnviron = False,
+                    logEnviron=False,
                     name="pbuilder-opts",
                     description="setting pbuilderrc",
                     descriptionDone="set pbuilderrc",
-                    command="echo 'OTHERMIRROR=\"deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main|deb [trusted=yes] %s %s main|deb-src [trusted=yes] %s %s main\"' > ~/.pbuilderrc" % (
-                            main_ppa, distribution,
-                            main_ppa, distribution,
-                            qt_ppa, distribution,
-                            qt_ppa, distribution),
+                    command="echo 'OTHERMIRROR=\""
+                            "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
+                            "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main\"' > ~/.pbuilderrc"
+                                .format(distribution, main_ppa, qt_ppa)
                 ))
 
         for step in [
             # Package that thing already
             UbuCowbuilder(
-                logEnviron = False,
+                logEnviron=False,
                 architecture=architecture,
                 distribution=distribution,
                 basetgz="/var/cache/pbuilder/%s-%s-ethereum.cow" % (distribution, architecture),
@@ -214,17 +221,21 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name='prepare-changes',
             description='preparing changes',
             descriptionDone='prepare changes',
-            command=Interpolate('sed -i -e s/UNRELEASED/%(kw:dist)s/ -e s/urgency=medium/urgency=low/ ../*.changes', dist=distribution)
+            command=Interpolate("sed -i -e s/UNRELEASED/%(kw:dist)s/ "
+                                "-e s/urgency=medium/urgency=low/ ../*.changes",
+                                dist=distribution)
         ),
 
         # Gather artefacts
         ShellCommand(
             haltOnFailure=True,
-            logEnviron = False,
+            logEnviron=False,
             name="move-packages",
             description='moving packages',
             descriptionDone='move packages',
-            command="mkdir result; mv %s../*.changes ../*.dsc ../*.gz %sresult/" % ("*.deb *.changes " if name in ['ethereum', 'cpp-ethereum'] else "", "../*.xz " if name == 'qtwebengine-opensource-src' else ""),
+            command="mkdir result; mv %s../*.changes ../*.dsc ../*.gz %sresult/" %
+                    ("*.deb *.changes " if name in ['ethereum', 'cpp-ethereum'] else "",
+                        "../*.xz " if name == 'qtwebengine-opensource-src' else ""),
         ),
 
         # Upload result folder
@@ -255,7 +266,9 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name='mkdir-changes',
             description='mkdir',
             descriptionDone='mkdir',
-            command=['mkdir', '-p', Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s", dist=distribution, arch=architecture, name=name)]
+            command=['mkdir', '-p',
+                        Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s",
+                                    dist=distribution, arch=architecture, name=name)]
         ),
 
         # Link source changes
@@ -263,11 +276,22 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
             name='link-changes',
             description='linking changes',
             descriptionDone='link changes',
-            command=['ln', '-sf', Interpolate("../../../../public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s"), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s", dist=distribution, arch=architecture, name=name)]
+            command=['ln', '-sf',
+                        Interpolate("../../../../public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s"),
+                        Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s",
+                                    dist=distribution,
+                                    arch=architecture,
+                                    name=name)]
         )
     ]: factory.addStep(step)
 
     # Use ethereum-dev ppa for snapshots, only dput one source pkg
+    ppa_suffix = ""
+    if branch == 'develop' or (name == 'libjson-rpc-cpp' and jsonrpc_for_develop):
+        ppa_suffix = "-dev"
+    elif name == 'qtwebengine-opensource-src':
+        ppa_suffix = "-qt"
+
     if architecture == 'amd64':
         for step in [
             # debsign
@@ -277,14 +301,28 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
                 name='debsign',
                 description='debsigning',
                 descriptionDone='debsign',
-                command=['debsign', Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(kw:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name, version=deb_version)]
+                command=['debsign', Interpolate("changes/%(kw:dist)s/%(kw:arch)s/"
+                                                "%(kw:name)s/%(prop:buildnumber)s/"
+                                                "%(kw:name)s_%(kw:version)s%(prop:snapshot)s-"
+                                                "0ubuntu1_source.changes",
+                                                dist=distribution,
+                                                arch=architecture,
+                                                name=name,
+                                                version=deb_version)]
             ),
             # dput
             MasterShellCommand(
                 name='dput',
                 description='dputting',
                 descriptionDone='dput',
-                command=['dput', 'ppa:ethereum/ethereum%s' % ("-dev" if branch=='develop' or (name == 'libjson-rpc-cpp' and jsonrpc_for_develop) else ("-qt" if name == 'qtwebengine-opensource-src' else "")), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/%(kw:name)s_%(kw:version)s%(prop:snapshot)s-0ubuntu1_source.changes", dist=distribution, arch=architecture, name=name, version=deb_version)]
+                command=['dput', 'ppa:%s%s' % ("caktux/ppa" if testdeb else "ethereum/ethereum", ppa_suffix),
+                            Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/"
+                                        "%(prop:buildnumber)s/%(kw:name)s_%(kw:version)s%(prop:snapshot)s-"
+                                        "0ubuntu1_source.changes",
+                                        dist=distribution,
+                                        arch=architecture,
+                                        name=name,
+                                        version=deb_version)]
             )
         ]: factory.addStep(step)
 

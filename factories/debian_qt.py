@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-03-06 16:34:42
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-03-21 05:01:58
 
 import factory
 reload(factory)
@@ -35,7 +31,7 @@ def backport_factory(name=None, distribution='trusty', architecture='amd64'):
             # Create backport
             ShellCommand(
                 haltOnFailure=True,
-                logEnviron = False,
+                logEnviron=False,
                 name="backport-%s" % package,
                 description='backporting %s' % package,
                 descriptionDone='backport %s' % package,
@@ -89,7 +85,9 @@ def backport_factory(name=None, distribution='trusty', architecture='amd64'):
             name='link-changes',
             description='linking changes',
             descriptionDone='link changes',
-            command=['ln', '-sf', Interpolate("../../../../public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s"), Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s", dist=distribution, arch=architecture, name=name)]
+            command=['ln', '-sf', Interpolate("../../../../public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s"),
+                     Interpolate("changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s",
+                     dist=distribution, arch=architecture, name=name)]
         ),
         # debsign
         MasterShellCommand(
@@ -98,14 +96,16 @@ def backport_factory(name=None, distribution='trusty', architecture='amd64'):
             name='debsign',
             description='debsigning',
             descriptionDone='debsign',
-            command=Interpolate("debsign changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes", dist=distribution, arch=architecture, name=name)
+            command=Interpolate("debsign changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes",
+                                dist=distribution, arch=architecture, name=name)
         ),
         # dput
         MasterShellCommand(
             name='dput',
             description='dputting',
             descriptionDone='dput',
-            command=Interpolate("dput ppa:ethereum/ethereum-qt changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes", dist=distribution, arch=architecture, name=name)
+            command=Interpolate("dput ppa:ethereum/ethereum-qt changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes",
+                                dist=distribution, arch=architecture, name=name)
         )
     ]: factory.addStep(step)
 

@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 13:42:51
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-02-26 04:42:21
 
-####### STATUS TARGETS
+# ###### STATUS TARGETS
 
 # 'status' is a list of Status Targets. The results of each build will be
 # pushed to these targets. buildbot/status/*.py has a variety to choose from,
@@ -28,17 +24,17 @@ users = []
 for user in json.load(open("users.json")):
     users.append((user['username'], user['password']))
 
-authz_cfg=authz.Authz(
+authz_cfg = authz.Authz(
     # change any of these to True to enable; see the manual for more
     # options
     auth=auth.BasicAuth(users),
-    gracefulShutdown = False,
-    forceBuild = 'auth', # use this to test your slave once it is set up
-    forceAllBuilds = 'auth',
-    pingBuilder = 'auth',
-    stopBuild = 'auth',
-    stopAllBuilds = 'auth',
-    cancelPendingBuild = 'auth',
+    gracefulShutdown=False,
+    forceBuild='auth',  # use this to test your slave once it is set up
+    forceAllBuilds='auth',
+    pingBuilder='auth',
+    stopBuild='auth',
+    stopAllBuilds='auth',
+    cancelPendingBuild='auth',
 )
 
 
@@ -48,7 +44,7 @@ class WebStatus(html.WebStatus):
         self.putChild("buildstatusimage", BuildStatusImageResource())
 
 status.append(WebStatus(
-    http_port = "ssl:port=8443:privateKey=/etc/ssl/server.key:certKey=/etc/ssl/server.crt:extraCertChain=/etc/ssl/server.ca-bundle",
+    http_port=8010,  # "ssl:port=8443:privateKey=/etc/ssl/server.key:certKey=/etc/ssl/server.crt:extraCertChain=/etc/ssl/server.ca-bundle",
     authz=authz_cfg,
     change_hook_auth=["file:changehook.passwd"],
     change_hook_dialects={'github': {}},
@@ -58,14 +54,15 @@ status.append(WebStatus(
 # IRC bot
 ircbot = json.load(open("ircbot.json"))
 status.append(words.IRC(host=ircbot['server'],
-                             nick=ircbot['nickname'],
-                             password=ircbot['password'],
-                             channels=ircbot['channels'],
-                             notify_events={
-                                'successToException': 1,
-                                'successToFailure': 1,
-                                'failureToSuccess': 1,
-                                'exceptionToSuccess': 1}))
+                        nick=ircbot['nickname'],
+                        password=ircbot['password'],
+                        channels=ircbot['channels'],
+                        notify_events={
+                            'successToException': 1,
+                            'successToFailure': 1,
+                            'failureToSuccess': 1,
+                            'exceptionToSuccess': 1}
+                        ))
 
 
 # GitHub Status
@@ -75,7 +72,7 @@ for repo in tokens:
         token=tokens[repo]["token"],
         repoOwner=tokens[repo]["owner"],
         repoName=repo,
-        sha=Interpolate("%(src:"+repo+":revision)s"),
+        sha=Interpolate("%(src:" + repo + ":revision)s"),
         startDescription='DEV build started.',
         endDescription='DEV build done.')
     status.append(gs)

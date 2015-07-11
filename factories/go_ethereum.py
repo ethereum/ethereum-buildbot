@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:50:08
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 03:02:13
 
 import factory
 reload(factory)
@@ -13,7 +9,7 @@ distributions = ['trusty', 'utopic', 'vivid']
 
 @properties.renderer
 def get_short_revision_go(props):
-    if props.has_key('got_revision'):
+    if 'got_revision' in props:
         return props['got_revision']['go-ethereum'][:7]
     return None
 

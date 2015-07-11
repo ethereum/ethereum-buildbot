@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:50:15
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-21 05:27:58
 
 import factory
 reload(factory)

@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-24 00:38:34
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-01 09:16:29
 
 import StringIO
 
@@ -12,7 +8,7 @@ reload(factory)
 from factory import *
 
 from buildbot import locks
-integration_lock = locks.SlaveLock("integration", maxCount = 1)
+integration_lock = locks.SlaveLock("integration", maxCount=1)
 
 class XvfbNoseTest(ShellCommand):
 
@@ -28,22 +24,26 @@ class XvfbNoseTest(ShellCommand):
             reportdir = "/" + reportdir
         self.reportdir = reportdir
 
-        command = Interpolate('DISPLAY=:1 xvfb-run -s "-screen 0 1280x1200x8" nosetests -v --with-html --html-file=report%s/index.html --cover-tests --with-coverage ' % reportdir + cover_packages + ' --cover-min-percentage=' + str(min_coverage) + ' --cover-erase --cover-html --cover-html-dir=report%s/coverage' % reportdir + test_paths)
+        command = Interpolate('DISPLAY=:1 xvfb-run -s "-screen 0 1280x1200x8" nosetests -v'
+                              '--with-html --html-file=report%s/index.html --cover-tests '
+                              '--with-coverage ' % reportdir + cover_packages +
+                              ' --cover-min-percentage=' + str(min_coverage) +
+                              ' --cover-erase --cover-html --cover-html-dir=report%s/coverage' % reportdir + test_paths)
         description = 'running ' + name_packages
         descriptionDone = name_packages
         ShellCommand.__init__(
             self,
-            name = name_packages,
-            command = command,
-            description = description,
-            descriptionDone = descriptionDone,
-            flunkOnWarnings = False,
-            flunkOnFailure = False,
-            haltOnFailure = False,
-            warnOnFailure = True,
-            warnOnWarnings = True,
-            workdir = "integration/tests",
-            locks = [integration_lock.access('exclusive')]
+            name=name_packages,
+            command=command,
+            description=description,
+            descriptionDone=descriptionDone,
+            flunkOnWarnings=False,
+            flunkOnFailure=False,
+            haltOnFailure=False,
+            warnOnFailure=True,
+            warnOnWarnings=True,
+            workdir="integration/tests",
+            locks=[integration_lock.access('exclusive')]
         )
 
         # this counter will feed Progress along the 'test cases' metric
@@ -97,18 +97,18 @@ def integration_factory():
 
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/cpp-ethereum.git',
             branch='develop',
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='cpp-ethereum',
             retry=(5, 3)
         ),
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/ethereum.js.git',
             branch='develop',
             mode='incremental',
@@ -117,8 +117,8 @@ def integration_factory():
             workdir="ethereumjs"
         ),
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/etherex/etherex.git',
             branch='master',
             mode='incremental',
@@ -127,35 +127,35 @@ def integration_factory():
             workdir="integration"
         ),
         Configure(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             command=["cmake", ".", "-DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++"],
             env={"PATH": "${QTDIR}/bin:${PATH}"}
         ),
         Compile(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             command="make -j $(cat /proc/cpuinfo | grep processor | wc -l)"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "make-install",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="make-install",
             description="installing",
             descriptionDone="install",
             command=["make", "install"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "ldconfig",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="ldconfig",
             description="running ldconfig",
             descriptionDone="ldconfig",
             command=["ldconfig"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="test-requirements",
             description="installing test requirements",
             descriptionDone="install test requirements",
@@ -163,8 +163,8 @@ def integration_factory():
             workdir="integration"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="upgrade-requirements",
             description="upgrading test requirements",
             descriptionDone="upgrade test requirements",
@@ -173,7 +173,7 @@ def integration_factory():
         ),
         Test(
             flunkOnFailure = False,
-            logEnviron = False,
+            logEnviron=False,
             description="py.testing",
             descriptionDone="py.test",
             name="py.test",
@@ -181,8 +181,8 @@ def integration_factory():
             workdir="integration"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="npm-install",
             description="npm installing",
             descriptionDone="npm install",
@@ -191,7 +191,7 @@ def integration_factory():
         ),
         Test(
             flunkOnFailure = False,
-            logEnviron = False,
+            logEnviron=False,
             description="npm testing",
             descriptionDone="npm test",
             name="npm-test",
@@ -199,16 +199,16 @@ def integration_factory():
             workdir="ethereumjs"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="clean-chain",
             description="cleaning up",
             descriptionDone="clean chain",
             command=["rm", "-rf", ".ethereum_eth"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="clean-up",
             description="cleaning up",
             descriptionDone="clean up",
@@ -216,14 +216,14 @@ def integration_factory():
             workdir="integration/tests"
         ),
         FileDownload(
-            haltOnFailure = True,
+            haltOnFailure=True,
             descriptionDone="download init script",
             mastersrc="startup/eth-supervisord-integration.conf",
             slavedest="eth-supervisord-integration.conf"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="start-eth",
             description="starting eth",
             descriptionDone="start eth",
@@ -236,8 +236,8 @@ def integration_factory():
             lazylogfiles=True
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="pyepm-deploy",
             description="deploying",
             descriptionDone="deploy",
@@ -246,16 +246,16 @@ def integration_factory():
             maxTime=1200
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="get-address",
             description="getting address",
             descriptionDone="get address",
             command="curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_coinbase\",\"params\":null,\"id\":2}' http://localhost:8080 > address.json"
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="parse-address",
             description="parsing address",
             descriptionDone="parse address",
@@ -263,7 +263,7 @@ def integration_factory():
             property="address"
         ),
         FileDownload(
-            haltOnFailure = True,
+            haltOnFailure=True,
             descriptionDone="download transfer definitions",
             mastersrc="integration-transfer.yaml",
             slavedest="integration-transfer.yaml"
@@ -276,32 +276,32 @@ def integration_factory():
             command=Interpolate('sed -i -e s/address/%(prop:address)s/ integration-transfer.yaml')
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="fill-address",
             description="filling address",
             descriptionDone="fill address",
             command=["pyepm", "integration-transfer.yaml"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="stop-eth",
             description="stopping",
             descriptionDone="stop",
             command="kill `ps aux | grep 'eth-supervisord-integration.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
-            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS},
+            decodeRC={-1: SUCCESS, 0: SUCCESS, 1: WARNINGS, 2: WARNINGS},
             alwaysRun=True
         ),
         FileDownload(
-            haltOnFailure = True,
+            haltOnFailure=True,
             descriptionDone="download init script",
             mastersrc="startup/eth-supervisord-integration-test.conf",
             slavedest="eth-supervisord-integration-test.conf"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="start-eth-test",
             description="starting eth",
             descriptionDone="start eth",
@@ -314,8 +314,8 @@ def integration_factory():
             lazylogfiles=True
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="create-folders",
             description="creating folders",
             descriptionDone="create folders",
@@ -323,7 +323,7 @@ def integration_factory():
             workdir="integration/tests"
         ),
         FileDownload(
-            haltOnFailure = True,
+            haltOnFailure=True,
             descriptionDone="download catalog test",
             mastersrc="tests/catalog.py",
             slavedest="tests/catalog.py",
@@ -331,24 +331,24 @@ def integration_factory():
         ),
         XvfbNoseTest(test_files, min_coverage),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="stop-eth",
             description="stopping",
             descriptionDone="stop",
             command="kill `ps aux | grep 'eth-supervisord-integration-test.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
-            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS},
+            decodeRC={-1: SUCCESS, 0: SUCCESS, 1: WARNINGS, 2: WARNINGS},
             alwaysRun=True
         ),
         FileDownload(
-            haltOnFailure = True,
+            haltOnFailure=True,
             descriptionDone="download init script",
             mastersrc="startup/eth-supervisord-integration-user.conf",
             slavedest="eth-supervisord-integration-user.conf"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="start-eth-user",
             description="starting eth",
             descriptionDone="start eth",
@@ -362,20 +362,20 @@ def integration_factory():
         ),
         XvfbNoseTest(user_test_files, min_coverage, reportdir="enduser"),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="stop-final",
             description="stopping",
             descriptionDone="stop",
             command="kill `ps aux | grep 'eth-supervisord-integration-user.conf' | grep -v grep | awk '{print $2}'` && kill `pidof eth` && sleep 5",
-            decodeRC={-1: SUCCESS, 0:SUCCESS, 1:WARNINGS, 2:WARNINGS},
+            decodeRC={-1: SUCCESS, 0: SUCCESS, 1: WARNINGS, 2: WARNINGS},
             alwaysRun=True
         ),
         ShellCommand(
-            haltOnFailure = False,
+            haltOnFailure=False,
             flunkOnFailure = False,
-            warnOnFailure = True,
-            logEnviron = False,
+            warnOnFailure=True,
+            logEnviron=False,
             name="move-screenshots",
             description="moving screenshots",
             descriptionDone="move screenshots",
@@ -384,20 +384,20 @@ def integration_factory():
         ),
         # Upload screenshots
         DirectoryUpload(
-            name = 'upload-screenshots',
+            name='upload-screenshots',
             compress = 'gz',
             slavesrc = "screenshots",
-            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots"),
-            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots/"),
+            masterdest=Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots"),
+            url=Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots/"),
             workdir="integration/tests"
         ),
         # Upload HTML and coverage report
         DirectoryUpload(
-            name = 'upload-reports',
+            name='upload-reports',
             compress = 'gz',
             slavesrc = "report",
-            masterdest = Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/report"),
-            url = Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/report/"),
+            masterdest=Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/report"),
+            url=Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/report/"),
             workdir="integration/tests"
         )
     ]: factory.addStep(step)

@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 13:42:45
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-22 05:45:38
 
 from buildbot import locks
 
@@ -71,7 +67,7 @@ from factories.poc_servers import *
 from factories.integration import *
 
 
-####### BUILDERS
+# ###### BUILDERS
 
 # The 'builders' list defines the Builders, which tell Buildbot how to perform a build:
 # what steps, and which slaves can execute them.  Note that any particular build will
@@ -80,21 +76,21 @@ from factories.integration import *
 distributions = ['trusty', 'utopic', 'vivid']
 builders = []
 
-self_lock = locks.SlaveLock("self_update", maxCount = 1)
-build_lock = locks.SlaveLock("slave_builds", maxCount = 2)
+self_lock = locks.SlaveLock("self_update", maxCount=1)
+build_lock = locks.SlaveLock("slave_builds", maxCount=2)
 # package_lock = locks.SlaveLock("slave_packaging",
-#                                 maxCount = 4,
+#                                 maxCount=4,
 #                                 maxCountForSlave = {
 #                                     'slave-cpp-one-deb': 2,
 #                                     'slave-cpp-two-deb': 2,
 #                                     'slave-go-one-deb': 2,
 #                                     'slave-go-two-deb': 2 })
-go_lock = locks.SlaveLock("go_builds", maxCount = 1)
-arm_lock = locks.SlaveLock("arm_builds", maxCount = 1)
-osx_lock = locks.SlaveLock("osx_builds", maxCount = 2)
-brew_lock = locks.SlaveLock("brew_builds", maxCount = 1)
-win_lock = locks.SlaveLock("win_builds", maxCount = 2)
-win_lock_go = locks.SlaveLock("win_go_builds", maxCount = 1)
+go_lock = locks.SlaveLock("go_builds", maxCount=1)
+arm_lock = locks.SlaveLock("arm_builds", maxCount=1)
+osx_lock = locks.SlaveLock("osx_builds", maxCount=2)
+brew_lock = locks.SlaveLock("brew_builds", maxCount=1)
+win_lock = locks.SlaveLock("win_builds", maxCount=2)
+win_lock_go = locks.SlaveLock("win_go_builds", maxCount=1)
 
 # Latent slaves for builders
 max_latents = 20
@@ -103,10 +99,10 @@ maxperslave = {}
 for n in range(1, max_latents + 1):
     name = "latentslave%s" % n
     latentslaves.append(name)
-    maxperslave[name] = 1 # One build per latent buildslave
+    maxperslave[name] = 1  # One build per latent buildslave
 latent_lock = locks.SlaveLock("latent_builds",
-                               maxCount=max_latents,
-                               maxCountForSlave=maxperslave)
+                              maxCount=max_latents,
+                              maxCountForSlave=maxperslave)
 
 #
 # Builders
@@ -332,7 +328,7 @@ for branch in ['master', 'develop']:
                     factory=deb_factory(
                         name="ethereum",
                         repourl="https://github.com/ethereum/go-ethereum.git",
-                        ppabranch="go-ethereum%s" % ("-develop" if branch=='develop' else ""),
+                        ppabranch="go-ethereum%s" % ("-develop" if branch == 'develop' else ""),
                         branch=branch,
                         architecture=architecture,
                         distribution=distribution),
@@ -544,13 +540,27 @@ for builder in [
 
     # Integration
     BuilderConfig(
-      name="Linux C++ integration",
-      builddir="build-cpp-ethereum-integration",
-      slavenames=[
-          "slave-cpp-three-integration",
-          "slave-cpp-four-integration"
-      ],
-      factory=integration_factory(),
-      locks=[build_lock.access('counting')])
+        name="Linux C++ integration",
+        builddir="build-cpp-ethereum-integration",
+        slavenames=[
+            "slave-cpp-three-integration",
+            "slave-cpp-four-integration"
+        ],
+        factory=integration_factory(),
+        locks=[build_lock.access('counting')]),
+
+    BuilderConfig(
+        name="Linux C++ deb tester",
+        builddir="build-cpp-ethereum-deb-tester",
+        slavenames=latentslaves,
+        factory=deb_factory(
+            name="cpp-ethereum",
+            repourl="https://github.com/ethereum/cpp-ethereum.git",
+            ppabranch="libethereum-lite",
+            branch="master",
+            architecture="amd64",
+            distribution="vivid",
+            testdeb=True),
+        locks=[latent_lock.access('counting')]),
 
 ]: builders.append(builder)

@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-04-20 22:03:29
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-24 03:00:29
 
 import factory
 reload(factory)
@@ -29,8 +25,8 @@ def arm_go_factory(branch='develop', isPullRequest=False):
 
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/go-ethereum.git',
             branch=branch,
             mode='full',
@@ -108,7 +104,9 @@ def arm_go_factory(branch='develop', isPullRequest=False):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("geth-ARM-%(kw:time_string)s-%(prop:version)s-%(kw:short_revision)s.tar.bz2", time_string=get_time_string, short_revision=get_short_revision_go)
+                value=Interpolate("geth-ARM-%(kw:time_string)s-%(prop:version)s-%(kw:short_revision)s.tar.bz2",
+                                  time_string=get_time_string,
+                                  short_revision=get_short_revision_go)
             ),
             FileUpload(
                 haltOnFailure=True,
@@ -120,7 +118,7 @@ def arm_go_factory(branch='develop', isPullRequest=False):
             MasterShellCommand(
                 name="clean-latest-link",
                 description='cleaning latest link',
-                descriptionDone= 'clean latest link',
+                descriptionDone='clean latest link',
                 command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/geth-ARM-latest.tar.bz2")]
             ),
             MasterShellCommand(

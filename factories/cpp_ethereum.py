@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:50:04
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-05 23:10:42
 
 import factory
 reload(factory)
@@ -13,13 +9,13 @@ distributions = ['trusty', 'utopic', 'vivid']
 
 @properties.renderer
 def get_cpp_revision(props):
-    if props.has_key('got_revision'):
+    if 'got_revision' in props:
         return props['got_revision']['cpp-ethereum']
     return None
 
 @properties.renderer
 def get_short_revision(props):
-    if props.has_key('got_revision'):
+    if 'got_revision' in props:
         return props['got_revision']['cpp-ethereum'][:7]
     return None
 
@@ -46,18 +42,18 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
 
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/cpp-ethereum.git',
             branch=branch,
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='cpp-ethereum',
             retry=(5, 3)
         ),
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/tests.git',
             branch=branch,
             mode='incremental',
@@ -66,50 +62,50 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
             workdir='tests'
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "set-protocol",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-protocol",
             command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
             property="protocol"
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "set-version",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-version",
             command='sed -ne "s/.*Version = \\"\(.*\)\\";/\\1/p" libdevcore/Common.cpp',
             property="version"
         ),
         Configure(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             command=cmake_cmd(["cmake", "."], evmjit=evmjit, headless=headless),
             env={"PATH": "${QTDIR}/bin:${PATH}"}
         ),
         Compile(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             command="make -j $(cat /proc/cpuinfo | grep processor | wc -l)"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "make-install",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="make-install",
             description="installing",
             descriptionDone="install",
             command=["make", "install"]
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "ldconfig",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="ldconfig",
             description="running ldconfig",
             descriptionDone="ldconfig",
             command=["ldconfig"]
         ),
         Test(
-            haltOnFailure = True,
-            warnOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            warnOnFailure=True,
+            logEnviron=False,
             name="test-cpp",
             description="testing",
             descriptionDone="test",
@@ -179,17 +175,17 @@ def cpp_check_factory(branch='develop'):
 
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/cpp-ethereum.git',
             branch=branch,
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='cpp-ethereum',
             retry=(5, 3)
         ),
         WarningCountingShellCommand(
-            logEnviron = False,
+            logEnviron=False,
             name="cppcheck",
             description="running cppcheck",
             descriptionDone="cppcheck",

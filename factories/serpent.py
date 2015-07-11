@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:50:30
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-03-28 21:24:27
 
 import factory
 reload(factory)
@@ -13,44 +9,44 @@ def serpent_factory(branch='develop'):
     factory = BuildFactory()
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/serpent.git',
             branch=branch,
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='serpent',
             retry=(5, 3)
         ),
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/pyethereum.git',
             branch=branch,
             mode='full',
-            method = 'copy',
+            method='copy',
             codebase='pyethereum',
             retry=(5, 3),
             workdir='pyethereum'
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="pip-install",
             description="installing",
             descriptionDone="install",
             command=["pip", "install", "-e", "."]
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="serpent-version",
             command=["serpent", "-v"],
             property="version"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="install-pyethereum",
             description="installing pyethereum",
             descriptionDone="install pyethereum",
@@ -58,8 +54,8 @@ def serpent_factory(branch='develop'):
             workdir="pyethereum"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="pyethereum-requirements",
             description="installing pyethereum requirements",
             descriptionDone="install pyethereum requirements",
@@ -67,8 +63,8 @@ def serpent_factory(branch='develop'):
             workdir="pyethereum"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="pyethereum-dev-requirements",
             description="installing pyethereum dev_requirements",
             descriptionDone="install pyethereum dev_requirements",
@@ -76,8 +72,8 @@ def serpent_factory(branch='develop'):
             workdir="pyethereum"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="test-submodule",
             descriptionDone="update test submodule",
             command="git submodule init && git submodule update --recursive",
@@ -94,4 +90,3 @@ def serpent_factory(branch='develop'):
         )
     ]: factory.addStep(step)
     return factory
-

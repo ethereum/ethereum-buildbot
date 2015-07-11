@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 14:50:18
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-02 09:35:39
 
 import factory
 reload(factory)
@@ -14,8 +10,8 @@ def ethereumj_factory(branch='master'):
     factory = BuildFactory()
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/ethereumj.git',
             branch=branch,
             mode='full',

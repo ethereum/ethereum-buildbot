@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-04-20 22:03:29
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-04-24 03:00:29
 
 import factory
 reload(factory)
@@ -34,8 +30,8 @@ def windows_go_factory(branch='develop', isPullRequest=False):
 
     for step in [
         Git(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             repourl='https://github.com/ethereum/go-ethereum.git',
             branch=branch,
             mode='full',
@@ -44,32 +40,32 @@ def windows_go_factory(branch='develop', isPullRequest=False):
             retry=(5, 3)
         ),
         SetPropertyFromCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "set-version",
-            command = '%s -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd\geth\main.go' % sed,
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-version",
+            command='%s -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd\geth\main.go' % sed,
             property = "version"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="go-cleanup",
             command=Interpolate("rd /s /q %(prop:workdir)s\\go && mkdir %(prop:workdir)s\\go"),
             description="cleaning up",
             descriptionDone="clean up"
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
-            name = "move-src",
+            haltOnFailure=True,
+            logEnviron=False,
+            name="move-src",
             description="moving src",
             descriptionDone="move src",
             command=_go_cmds_win(branch=branch),
             env={"GOPATH": Interpolate("%(prop:workdir)s\go")}
         ),
         ShellCommand(
-            haltOnFailure = True,
-            logEnviron = False,
+            haltOnFailure=True,
+            logEnviron=False,
             name="build-geth",
             description="building geth",
             descriptionDone="build geth",
@@ -87,7 +83,7 @@ def windows_go_factory(branch='develop', isPullRequest=False):
             description="go testing",
             descriptionDone="go test",
             command="go test github.com\ethereum\go-ethereum\...",
-            decodeRC={0:SUCCESS, -1:WARNINGS, 1:WARNINGS, 2:WARNINGS},
+            decodeRC={0: SUCCESS, -1: WARNINGS, 1: WARNINGS, 2: WARNINGS},
             env=env,
             maxTime=900
         )
@@ -108,27 +104,29 @@ def windows_go_factory(branch='develop', isPullRequest=False):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(kw:short_revision)s.zip", time_string=get_time_string, short_revision=get_short_revision_go)
+                value=Interpolate("Geth-Win64-%(kw:time_string)s-%(prop:version)s-%(kw:short_revision)s.zip",
+                                  time_string=get_time_string,
+                                  short_revision=get_short_revision_go)
             ),
             FileUpload(
-                haltOnFailure = True,
-                name = 'upload',
+                haltOnFailure=True,
+                name='upload',
                 slavesrc="geth.zip",
-                masterdest = Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
-                url = Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
+                masterdest=Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
+                url=Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
             ),
             MasterShellCommand(
-                name = "clean-latest-link",
-                description = 'cleaning latest link',
-                descriptionDone= 'clean latest link',
-                command = ['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.zip")]
+                name="clean-latest-link",
+                description='cleaning latest link',
+                descriptionDone='clean latest link',
+                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.zip")]
             ),
             MasterShellCommand(
-                haltOnFailure = True,
-                name = "link-latest",
-                description = 'linking latest',
-                descriptionDone= 'link latest',
-                command = ['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.zip")]
+                haltOnFailure=True,
+                name="link-latest",
+                description='linking latest',
+                descriptionDone='link latest',
+                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Geth-Win64-latest.zip")]
             )
         ]: factory.addStep(step)
 

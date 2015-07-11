@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: caktux
-# @Date:   2015-02-23 13:42:42
-# @Last Modified by:   caktux
-# @Last Modified time: 2015-05-05 08:39:14
 
-####### BUILDSLAVES
+# ###### BUILDSLAVES
 
 # The 'slaves' list defines the set of recognized buildslaves. Each element is
 # a BuildSlave object, specifying a unique slave name and password.  The same
