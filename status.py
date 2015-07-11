@@ -44,7 +44,7 @@ class WebStatus(html.WebStatus):
         self.putChild("buildstatusimage", BuildStatusImageResource())
 
 status.append(WebStatus(
-    http_port=8010,  # "ssl:port=8443:privateKey=/etc/ssl/server.key:certKey=/etc/ssl/server.crt:extraCertChain=/etc/ssl/server.ca-bundle",
+    http_port="ssl:port=8443:privateKey=/etc/ssl/server.key:certKey=/etc/ssl/server.crt:extraCertChain=/etc/ssl/server.ca-bundle",
     authz=authz_cfg,
     change_hook_auth=["file:changehook.passwd"],
     change_hook_dialects={'github': {}},
