@@ -52,14 +52,14 @@ def win_cpp_factory(branch='master', isPullRequest=False):
         Configure(
             haltOnFailure=True,
             logEnviron=False,
-            command=["cmake", "."]
+            command=["cmake", ".", "-G", "Visual Studio 2013 Win64"]
         ),
         MsBuild12(
             haltOnFailure=True,
             logEnviron=False,
             projectfile="ethereum.sln",
             config="release",
-            platform="Win32"
+            platform="x64"
         )
     ]: factory.addStep(step)
 
@@ -78,7 +78,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("AlethZero-Win32-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.7z",
+                value=Interpolate("AlethZero-Win64-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.7z",
                                   time_string=get_time_string,
                                   short_revision=get_short_revision)
             ),
@@ -93,14 +93,14 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 name="clean-latest-link",
                 description='cleaning latest link',
                 descriptionDone='clean latest link',
-                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win32-latest.7z")]
+                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win64-latest.7z")]
             ),
             MasterShellCommand(
                 haltOnFailure=True,
                 name="link-latest",
                 description='linking latest',
                 descriptionDone='link latest',
-                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win32-latest.7z")]
+                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win64-latest.7z")]
             )
         ]: factory.addStep(step)
 
