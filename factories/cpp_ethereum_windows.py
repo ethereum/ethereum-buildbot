@@ -71,13 +71,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 name="pack",
                 description='pack',
                 descriptionDone='packed',
-                command=[
-                    '7z',
-                    'a',
-                    'cpp-ethereum.7z',
-                    './alethzero/Release/*',
-                    './eth/Release/*'
-                ]
+                command=['7z', 'a', 'cpp-ethereum.7z', './alethzero/Release/*']
             ),
             SetProperty(
                 description="setting filename",
