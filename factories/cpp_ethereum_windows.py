@@ -58,7 +58,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             haltOnFailure=True,
             logEnviron=False,
             projectfile="ethereum.sln",
-            config="release",
+            config="Release",
             platform="x64"
         )
     ]: factory.addStep(step)
@@ -101,6 +101,23 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 description='linking latest',
                 descriptionDone='link latest',
                 command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win64-latest.7z")]
+            ),
+            MsBuild12(
+                name="installer",
+                haltOnFailure=True,
+                logEnviron=False,
+                projectfile="ethereum.sln",
+                project="CMakePredefinedTargets\\PACKAGE",
+                config="Release",
+                platform="x64"
+            ),
+            FileUpload(
+                name="upload-installer",
+                slavesrc=Interpolate("Ethereum (++)-%(prop:version)s-win64.exe"),
+                masterdest=Interpolate("public_html/builds/%(prop:buildername)s/"
+                                       "Ethereum (++)-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe"),
+                url=Interpolate("/builds/%(prop:buildername)s/"
+                                "Ethereum (++)-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe")
             )
         ]: factory.addStep(step)
 
