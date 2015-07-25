@@ -63,29 +63,28 @@ def win_cpp_factory(branch='master', isPullRequest=False):
         )
     ]: factory.addStep(step)
 
-    if isPullRequest is False:
+    if not isPullRequest:
         for step in [
-            ShellCommand(
+            MsBuild12(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="pack",
-                description='pack',
-                descriptionDone='packed',
-                command=['7z', 'a', 'cpp-ethereum.7z', './alethzero/Release/*']
+                name="installer",
+                projectfile="PACKAGE.vcxproj",
+                config="Release",
+                platform="x64"
             ),
             SetProperty(
                 description="setting filename",
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("AlethZero-Win64-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.7z",
+                value=Interpolate("Ethereum (++)-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe",
                                   time_string=get_time_string,
                                   short_revision=get_short_revision)
             ),
             FileUpload(
-                haltOnFailure=True,
-                name='upload',
-                slavesrc="cpp-ethereum.7z",
+                name="upload",
+                slavesrc=Interpolate("Ethereum (++)-%(prop:version)s-win64.exe"),
                 masterdest=Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
                 url=Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
             ),
@@ -93,30 +92,14 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 name="clean-latest-link",
                 description='cleaning latest link',
                 descriptionDone='clean latest link',
-                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win64-latest.7z")]
+                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Ethereum (++)-win64-latest.exe")]
             ),
             MasterShellCommand(
                 haltOnFailure=True,
                 name="link-latest",
                 description='linking latest',
                 descriptionDone='link latest',
-                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/AlethZero-Win64-latest.7z")]
-            ),
-            MsBuild12(
-                name="installer",
-                haltOnFailure=True,
-                logEnviron=False,
-                projectfile="PACKAGE.vcxproj",
-                config="Release",
-                platform="x64"
-            ),
-            FileUpload(
-                name="upload-installer",
-                slavesrc=Interpolate("Ethereum (++)-%(prop:version)s-win64.exe"),
-                masterdest=Interpolate("public_html/builds/%(prop:buildername)s/"
-                                       "Ethereum (++)-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe"),
-                url=Interpolate("/builds/%(prop:buildername)s/"
-                                "Ethereum (++)-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe")
+                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Ethereum (++)-win64-latest.exe")]
             )
         ]: factory.addStep(step)
 
