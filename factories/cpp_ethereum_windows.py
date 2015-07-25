@@ -106,8 +106,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 name="installer",
                 haltOnFailure=True,
                 logEnviron=False,
-                projectfile="ethereum.sln",
-                project="CMakePredefinedTargets\\PACKAGE",
+                projectfile="PACKAGE.vcxproj",
                 config="Release",
                 platform="x64"
             ),
