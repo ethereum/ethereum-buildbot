@@ -11,7 +11,7 @@ from buildbot.schedulers.timed import Nightly
 from buildbot.schedulers.triggerable import Triggerable
 from buildbot.changes import filter
 
-distributions = ['trusty', 'utopic', 'vivid']
+distributions = ['trusty', 'vivid']
 schedulers = []
 
 self_codebases = {
@@ -678,7 +678,7 @@ for distribution in distributions:
             ])
     ]: schedulers.append(scheduler)
 
-    if distribution in ['trusty', 'utopic']:
+    if distribution in ['trusty']:
         for scheduler in [
             ForceScheduler(
                 name="force-qt5-%s" % distribution,

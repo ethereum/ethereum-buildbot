@@ -5,7 +5,7 @@ import factory
 reload(factory)
 from factory import *
 
-distributions = ['trusty', 'utopic', 'vivid']
+distributions = ['trusty', 'vivid']
 
 @properties.renderer
 def get_short_revision_go(props):

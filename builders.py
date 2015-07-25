@@ -73,7 +73,7 @@ from factories.integration import *
 # what steps, and which slaves can execute them.  Note that any particular build will
 # only take place on one slave.
 
-distributions = ['trusty', 'utopic', 'vivid']
+distributions = ['trusty', 'vivid']
 builders = []
 
 self_lock = locks.SlaveLock("self_update", maxCount=1)
@@ -389,7 +389,7 @@ for distribution in distributions:
             locks=[latent_lock.access('counting')])
     ]: builders.append(builder)
 
-    if distribution in ['trusty', 'utopic']:
+    if distribution in ['trusty']:
         for builder in [
             BuilderConfig(
                 name="qt5 %s" % distribution,
