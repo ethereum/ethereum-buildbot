@@ -15,6 +15,8 @@ from cpp_ethereum import *
 def win_cpp_factory(branch='master', isPullRequest=False):
     factory = BuildFactory()
 
+    sed = '"C:\\Program Files (x86)\\GnuWin32\\bin\\sed.exe"'
+
     for step in [
         Git(
             haltOnFailure=True,
@@ -30,14 +32,14 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             haltOnFailure=True,
             logEnviron=False,
             name="set-protocol",
-            command=[r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp'],
+            command='%s -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore\Common.cpp' % sed,
             property="protocol"
         ),
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,
             name="set-version",
-            command=[r'C:\\Program Files (x86)\Git\bin\sh.exe', "--login", "-c", r'grep "Version" ./libdevcore/Common.cpp | sed "s/.*\"\(.*\)\".*/\1/"'],
+            command='%s -ne "s/^set(PROJECT_VERSION \\"\(.*\)\\")$/\\1/p" CMakeLists.txt' % sed,
             property = "version"
         ),
         ShellCommand(

@@ -72,7 +72,7 @@ def cpp_ethereum_factory(branch='master', deb=False, evmjit=False, headless=True
             haltOnFailure=True,
             logEnviron=False,
             name="set-version",
-            command='sed -ne "s/.*Version = \\"\(.*\)\\";/\\1/p" libdevcore/Common.cpp',
+            command='sed -ne "s/^set(PROJECT_VERSION \\"\(.*\)\\")$/\\1/p" CMakeLists.txt',
             property="version"
         ),
         Configure(

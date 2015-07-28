@@ -92,7 +92,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
             haltOnFailure=True,
             logEnviron=False,
             name="set-version",
-            command='sed -ne "s/.*Version = \\"\(.*\)\\";/\\1/p" libdevcore/Common.cpp',
+            command='sed -ne "s/^set(PROJECT_VERSION \\"\(.*\)\\")$/\\1/p" CMakeLists.txt',
             property="version"
         ),
         Configure(
