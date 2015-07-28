@@ -110,7 +110,7 @@ def brew_cpp_factory(branch='develop', headless=True):
             logEnviron=False,
             description='brewing',
             descriptionDone='brew',
-            command=brew_install_cmd(cmd=['brew', 'install', 'cpp-ethereum.rb', '-v', '--build-bottle'], branch=branch, headless=headless),
+            command=brew_install_cmd(cmd=['brew', 'install', 'cpp-ethereum.rb', '--with-evmjit', '-v', '--build-bottle'], branch=branch, headless=headless),
             workdir='brew'
         )
     ]: factory.addStep(step)
@@ -121,7 +121,7 @@ def brew_cpp_factory(branch='develop', headless=True):
                 haltOnFailure=True,
                 logEnviron=False,
                 name="bottle",
-                command=brew_install_cmd(cmd=["brew", "bottle", "cpp-ethereum.rb", "-v"], branch=branch, headless=headless),
+                command=brew_install_cmd(cmd=['brew', 'bottle', 'cpp-ethereum.rb', '--with-evmjit', '-v'], branch=branch, headless=headless),
                 description="bottling",
                 descriptionDone="bottle",
                 workdir='brew'
