@@ -430,7 +430,8 @@ for builder in [
         builddir="build-cpp-ethereum-pr",
         slavenames=[
             "slave-cpp-one-pr",
-            "slave-cpp-two-pr"
+            "slave-cpp-two-pr",
+            "slave-cpp-five-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
@@ -439,7 +440,8 @@ for builder in [
         builddir="build-cpp-ethereum-evmjit-pr",
         slavenames=[
             "slave-cpp-one-pr",
-            "slave-cpp-two-pr"
+            "slave-cpp-two-pr",
+            "slave-cpp-five-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
         locks=[build_lock.access('counting')]),
@@ -448,7 +450,8 @@ for builder in [
         builddir="build-go-ethereum-pr",
         slavenames=[
             "slave-go-one-pr",
-            "slave-go-two-pr"
+            "slave-go-two-pr",
+            "slave-cpp-five-pr"
         ],
         factory=go_ethereum_factory(branch='develop'),
         locks=[build_lock.access('counting')]),
@@ -457,7 +460,8 @@ for builder in [
         builddir="build-go-ethereum-arm-pr",
         slavenames=[
             "slave-go-one-arm",
-            "slave-go-two-arm"
+            "slave-go-two-arm",
+            "slave-cpp-five-arm"
         ],
         factory=arm_go_factory(branch='develop', isPullRequest=True),
         locks=[arm_lock.access('counting')]),
@@ -543,8 +547,7 @@ for builder in [
         name="Linux C++ integration",
         builddir="build-cpp-ethereum-integration",
         slavenames=[
-            "slave-cpp-three-integration",
-            "slave-cpp-four-integration"
+            "slave-cpp-five-integration"
         ],
         factory=integration_factory(),
         locks=[build_lock.access('counting')]),
