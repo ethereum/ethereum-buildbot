@@ -122,7 +122,7 @@ for builder in [
 ]: builders.append(builder)
 
 # Buildslave builders
-for buildslave in ['one', 'two', 'three', 'four']:
+for buildslave in ['one', 'two', 'three', 'four', 'five']:
     for builder in [
         BuilderConfig(
             name="buildslave-cpp-%s" % buildslave,

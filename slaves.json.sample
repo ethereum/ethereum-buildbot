@@ -4,6 +4,7 @@
     {"name": "buildslave-two", "password": "secret"},
     {"name": "buildslave-three", "password": "secret"},
     {"name": "buildslave-four", "password": "secret"},
+    {"name": "buildslave-five", "password": "secret"},
     {"name": "poc-server-master", "password": "secret"},
     {"name": "poc-server-develop", "password": "secret"},
     {"name": "slave-cpp-one", "password": "secret"},
