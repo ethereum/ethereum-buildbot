@@ -122,7 +122,7 @@ for builder in [
 ]: builders.append(builder)
 
 # Buildslave builders
-for buildslave in ['one', 'two', 'three', 'four', 'five']:
+for buildslave in ['one', 'two', 'three', 'four', 'five', 'six']:
     for builder in [
         BuilderConfig(
             name="buildslave-cpp-%s" % buildslave,
@@ -429,7 +429,8 @@ for builder in [
         name="Linux C++ pull requests",
         builddir="build-cpp-ethereum-pr",
         slavenames=[
-            "slave-cpp-five-pr"
+            "slave-cpp-five-pr",
+            "slave-cpp-six-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', headless=False),
         locks=[build_lock.access('counting')]),
@@ -437,7 +438,8 @@ for builder in [
         name="Linux C++ evmjit pull requests",
         builddir="build-cpp-ethereum-evmjit-pr",
         slavenames=[
-            "slave-cpp-five-pr"
+            "slave-cpp-five-pr",
+            "slave-cpp-six-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
         locks=[build_lock.access('counting')]),
@@ -445,8 +447,8 @@ for builder in [
         name="Linux Go pull requests",
         builddir="build-go-ethereum-pr",
         slavenames=[
-            "slave-go-one-pr",
-            "slave-go-two-pr"
+            "slave-go-five-pr",
+            "slave-go-six-pr"
         ],
         factory=go_ethereum_factory(branch='develop'),
         locks=[build_lock.access('counting')]),
@@ -454,8 +456,8 @@ for builder in [
         name="ARM Go pull requests",
         builddir="build-go-ethereum-arm-pr",
         slavenames=[
-            "slave-go-one-arm",
-            "slave-go-two-arm"
+            "slave-go-five-arm",
+            "slave-go-six-arm"
         ],
         factory=arm_go_factory(branch='develop', isPullRequest=True),
         locks=[arm_lock.access('counting')]),
