@@ -429,8 +429,6 @@ for builder in [
         name="Linux C++ pull requests",
         builddir="build-cpp-ethereum-pr",
         slavenames=[
-            "slave-cpp-one-pr",
-            "slave-cpp-two-pr",
             "slave-cpp-five-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', headless=False),
@@ -439,8 +437,6 @@ for builder in [
         name="Linux C++ evmjit pull requests",
         builddir="build-cpp-ethereum-evmjit-pr",
         slavenames=[
-            "slave-cpp-one-pr",
-            "slave-cpp-two-pr",
             "slave-cpp-five-pr"
         ],
         factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
@@ -450,8 +446,7 @@ for builder in [
         builddir="build-go-ethereum-pr",
         slavenames=[
             "slave-go-one-pr",
-            "slave-go-two-pr",
-            "slave-cpp-five-pr"
+            "slave-go-two-pr"
         ],
         factory=go_ethereum_factory(branch='develop'),
         locks=[build_lock.access('counting')]),
@@ -460,8 +455,7 @@ for builder in [
         builddir="build-go-ethereum-arm-pr",
         slavenames=[
             "slave-go-one-arm",
-            "slave-go-two-arm",
-            "slave-go-five-arm"
+            "slave-go-two-arm"
         ],
         factory=arm_go_factory(branch='develop', isPullRequest=True),
         locks=[arm_lock.access('counting')]),
