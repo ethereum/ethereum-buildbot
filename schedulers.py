@@ -329,7 +329,7 @@ for scheduler in [
         codebases=["ethereum-buildbot"])
 ]: schedulers.append(scheduler)
 
-for buildslave in ["one", "two", "three", "four"]:
+for buildslave in ["one", "two", "three", "four", "five"]:
     for scheduler in [
         ForceScheduler(
             name="force-buildslave-cpp-%s" % buildslave,
@@ -550,7 +550,7 @@ for scheduler in [
         ]),
 ]: schedulers.append(scheduler)
 
-for buildslave in ["one", "two", "three", "four"]:
+for buildslave in ["one", "two", "three", "four", "five"]:
     for scheduler in [
         Nightly(
             name="nightly-buildslave-cpp-%s" % buildslave,
