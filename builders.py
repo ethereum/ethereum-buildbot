@@ -461,7 +461,7 @@ for builder in [
         slavenames=[
             "slave-go-one-arm",
             "slave-go-two-arm",
-            "slave-cpp-five-arm"
+            "slave-go-five-arm"
         ],
         factory=arm_go_factory(branch='develop', isPullRequest=True),
         locks=[arm_lock.access('counting')]),
