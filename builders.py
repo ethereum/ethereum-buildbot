@@ -211,7 +211,7 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="OSX C++ %s branch" % branch,
             builddir="build-cpp-osx-%s" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=osx_cpp_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
         BuilderConfig(
@@ -229,13 +229,13 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="OSX Go %s branch" % branch,
             builddir="build-go-osx-%s" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=osx_go_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
         BuilderConfig(
             name="OSX C++ %s brew" % branch,
             builddir="build-cpp-osx-%s-brew" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=brew_cpp_factory(branch=branch),
             locks=[brew_lock.access('counting')]),
         BuilderConfig(
@@ -247,7 +247,7 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="OSX Go %s brew" % branch,
             builddir="build-go-ethereum-%s-brew" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=brew_go_factory(branch=branch),
             locks=[brew_lock.access('counting')]),
         BuilderConfig(
