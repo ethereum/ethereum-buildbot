@@ -311,10 +311,10 @@ for scheduler in [
         ]),
 
     # Integration tests
-    Triggerable(
-        name="cpp-ethereum-integration",
-        builderNames=["Linux C++ integration"],
-        codebases=all_integration_codebases)
+    # Triggerable(
+    #     name="cpp-ethereum-integration",
+    #     builderNames=["Linux C++ integration"],
+    #     codebases=all_integration_codebases)
 
 ]: schedulers.append(scheduler)
 
@@ -521,10 +521,10 @@ for scheduler in [
         codebases=["go-ethereum"]),
 
     # Integration
-    ForceScheduler(
-        name="force-cpp-ethereum-integration",
-        builderNames=["Linux C++ integration"],
-        codebases=["cpp-ethereum", "ethereumjs", "integration"]),
+    # ForceScheduler(
+    #     name="force-cpp-ethereum-integration",
+    #     builderNames=["Linux C++ integration"],
+    #     codebases=["cpp-ethereum", "ethereumjs", "integration"]),
 
     # deb tester
     ForceScheduler(

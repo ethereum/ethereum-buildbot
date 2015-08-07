@@ -490,7 +490,7 @@ for builder in [
     BuilderConfig(
         name="OSX C++ pull requests",
         builddir="build-cpp-ethereum-osx-pr",
-        slavenames=["osx"],
+        slavenames=["osx", "osx-two"],
         factory=osx_cpp_factory(branch='develop', isPullRequest=True, headless=False),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
@@ -502,7 +502,7 @@ for builder in [
     BuilderConfig(
         name="OSX Go pull requests",
         builddir="build-go-ethereum-osx-pr",
-        slavenames=["osx"],
+        slavenames=["osx", "osx-two"],
         factory=osx_go_factory(branch='develop', isPullRequest=True),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
@@ -539,14 +539,14 @@ for builder in [
         locks=[win_lock_go.access('counting')]),
 
     # Integration
-    BuilderConfig(
-        name="Linux C++ integration",
-        builddir="build-cpp-ethereum-integration",
-        slavenames=[
-            "slave-cpp-five-integration"
-        ],
-        factory=integration_factory(),
-        locks=[build_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Linux C++ integration",
+    #     builddir="build-cpp-ethereum-integration",
+    #     slavenames=[
+    #         "slave-cpp-five-integration"
+    #     ],
+    #     factory=integration_factory(),
+    #     locks=[build_lock.access('counting')]),
 
     BuilderConfig(
         name="Linux C++ deb tester",
