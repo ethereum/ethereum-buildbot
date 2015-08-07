@@ -33,6 +33,7 @@ def cmake_cmd(cmd=[], ccache=True, evmjit=False, headless=True):
     if evmjit:
         cmd.append("-DEVMJIT=1")
     elif ccache:
+        cmd.append("-DEVMJIT=0")
         cmd.append("-DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++")
     return cmd
 
