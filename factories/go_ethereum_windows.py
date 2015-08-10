@@ -83,7 +83,6 @@ def windows_go_factory(branch='develop', isPullRequest=False):
             description="go testing",
             descriptionDone="go test",
             command="go test github.com\ethereum\go-ethereum\...",
-            decodeRC={0: SUCCESS, -1: WARNINGS, 1: WARNINGS, 2: WARNINGS},
             env=env,
             maxTime=900
         )
