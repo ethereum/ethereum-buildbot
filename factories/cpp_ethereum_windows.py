@@ -80,13 +80,13 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("Ethereum (++)-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe",
+                value=Interpolate("Ethereum-%(prop:version)s-win64-%(kw:time_string)s-%(kw:short_revision)s.exe",
                                   time_string=get_time_string,
                                   short_revision=get_short_revision)
             ),
             FileUpload(
                 name="upload",
-                slavesrc=Interpolate("Ethereum (++)-%(prop:version)s-win64.exe"),
+                slavesrc=Interpolate("Ethereum-%(prop:version)s-win64.exe"),
                 masterdest=Interpolate("public_html/builds/%(prop:buildername)s/%(prop:filename)s"),
                 url=Interpolate("/builds/%(prop:buildername)s/%(prop:filename)s")
             ),
@@ -94,14 +94,14 @@ def win_cpp_factory(branch='master', isPullRequest=False):
                 name="clean-latest-link",
                 description='cleaning latest link',
                 descriptionDone='clean latest link',
-                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Ethereum (++)-win64-latest.exe")]
+                command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Ethereum-win64-latest.exe")]
             ),
             MasterShellCommand(
                 haltOnFailure=True,
                 name="link-latest",
                 description='linking latest',
                 descriptionDone='link latest',
-                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Ethereum (++)-win64-latest.exe")]
+                command=['ln', '-sf', Interpolate("%(prop:filename)s"), Interpolate("public_html/builds/%(prop:buildername)s/Ethereum-win64-latest.exe")]
             )
         ]: factory.addStep(step)
 
