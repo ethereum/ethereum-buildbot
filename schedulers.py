@@ -253,7 +253,7 @@ for scheduler in [
     # Pull requests
     AnyBranchScheduler(
         name="cpp-ethereum-develop-pr-git",
-        change_filter=filter.ChangeFilter(project='cpp-ethereum', category='pull'),
+        change_filter=filter.ChangeFilter(codebase='cpp-ethereum', category='pull'),
         codebases=all_cpp_ethereum_codebases,
         treeStableTimer=60,
         builderNames=[
@@ -265,7 +265,7 @@ for scheduler in [
         ]),
     AnyBranchScheduler(
         name="go-ethereum-develop-pr-git",
-        change_filter=filter.ChangeFilter(project='go-ethereum', category='pull'),
+        change_filter=filter.ChangeFilter(codebase='go-ethereum', category='pull'),
         codebases=all_go_ethereum_codebases,
         treeStableTimer=60,
         builderNames=[
@@ -276,7 +276,7 @@ for scheduler in [
         ]),
     AnyBranchScheduler(
         name="pyethereum-pr-git",
-        change_filter=filter.ChangeFilter(project='pyethereum', category='pull'),
+        change_filter=filter.ChangeFilter(codebase='pyethereum', category='pull'),
         codebases=all_pyethereum_codebases,
         treeStableTimer=60,
         builderNames=[
@@ -285,7 +285,7 @@ for scheduler in [
         ]),
     AnyBranchScheduler(
         name="pyethapp-pr-git",
-        change_filter=filter.ChangeFilter(project='pyethapp', category='pull'),
+        change_filter=filter.ChangeFilter(codebase='pyethapp', category='pull'),
         codebases=all_pyethapp_codebases,
         treeStableTimer=60,
         builderNames=[
@@ -294,7 +294,7 @@ for scheduler in [
         ]),
     AnyBranchScheduler(
         name="serpent-pr-git",
-        change_filter=filter.ChangeFilter(project='serpent', category='pull'),
+        change_filter=filter.ChangeFilter(codebase='serpent', category='pull'),
         codebases=all_serpent_codebases,
         treeStableTimer=60,
         builderNames=[
@@ -303,7 +303,7 @@ for scheduler in [
         ]),
     AnyBranchScheduler(
         name="ethereumj-pr-git",
-        change_filter=filter.ChangeFilter(project='ethereumj', category='pull'),
+        change_filter=filter.ChangeFilter(codebase='ethereumj', category='pull'),
         codebases=all_ethereumj_codebases,
         treeStableTimer=300,
         builderNames=[
