@@ -59,16 +59,6 @@ def brew_go_factory(branch='develop'):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="cleanup",
-            description='cleanup',
-            descriptionDone='clean',
-            command=["brew", "remove", "ethereum"],
-            workdir='brew',
-            decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
-        ),
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
             name="git-add",
             descriptionDone='git add',
             command='git add ethereum.rb',
@@ -78,8 +68,7 @@ def brew_go_factory(branch='develop'):
             logEnviron=False,
             name="git-commit",
             descriptionDone='git commit',
-            command=Interpolate('git commit -m "bump ethereum to %(prop:version)s"',
-                                go_revision=get_short_revision_go),
+            command=Interpolate('git commit -m "bump ethereum to %(prop:version)s on %(kw:branch)"', branch=branch),
             workdir='brew',
             decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
         ),
@@ -91,6 +80,16 @@ def brew_go_factory(branch='develop'):
             command='git pull --no-edit && git push',
             workdir='brew',
             decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            logEnviron=False,
+            name="cleanup",
+            description='cleanup',
+            descriptionDone='clean',
+            command=["brew", "remove", "ethereum"],
+            workdir='brew',
+            decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
         ),
         ShellCommand(
             haltOnFailure=True,
