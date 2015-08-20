@@ -72,7 +72,7 @@ def brew_cpp_factory(branch='develop', headless=True):
             logEnviron=False,
             name="git-commit",
             descriptionDone='git commit',
-            command=Interpolate('git commit -m "bump cpp-ethereum to %(prop:version)s-%(prop:protocol)s on %(kw:branch)"', branch=branch),
+            command=Interpolate('git commit -m "bump cpp-ethereum to %(prop:version)s-%(prop:protocol)s on %(kw:branch)s"', branch=branch),
             workdir='brew',
             decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
         ),

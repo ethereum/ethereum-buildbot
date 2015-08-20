@@ -68,7 +68,7 @@ def brew_go_factory(branch='develop'):
             logEnviron=False,
             name="git-commit",
             descriptionDone='git commit',
-            command=Interpolate('git commit -m "bump ethereum to %(prop:version)s on %(kw:branch)"', branch=branch),
+            command=Interpolate('git commit -m "bump ethereum to %(prop:version)s on %(kw:branch)s"', branch=branch),
             workdir='brew',
             decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
         ),
