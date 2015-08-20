@@ -1,5 +1,8 @@
 import os
 
+from monkeypatch import apply_patches
+apply_patches()
+
 from twisted.application import service
 from buildbot.master import BuildMaster
 
