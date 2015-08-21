@@ -84,13 +84,6 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="set-protocol",
-            command='sed -ne "s/.*c_protocolVersion = \(.*\);/\\1/p" libethcore/Common.cpp',
-            property="protocol"
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure=True,
-            logEnviron=False,
             name="set-version",
             command='sed -ne "s/^set(PROJECT_VERSION \\"\(.*\)\\")$/\\1/p" CMakeLists.txt',
             property="version"
@@ -151,7 +144,6 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                 schedulerNames=["cpp-ethereum-%s-osx-check" % branch],
                 waitForFinish=False,
                 set_properties={
-                    "protocol": Interpolate("%(prop:protocol)s"),
                     "version": Interpolate("%(prop:version)s")
                 }
             )
@@ -165,7 +157,6 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                     schedulerNames=["cpp-ethereum-%s-brew" % branch],
                     waitForFinish=False,
                     set_properties={
-                        "protocol": Interpolate("%(prop:protocol)s"),
                         "version": Interpolate("%(prop:version)s")
                     }
                 )
@@ -191,7 +182,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
                 descriptionDone="set filename",
                 name="set-filename",
                 property="filename",
-                value=Interpolate("AlethZero-OSX-%(kw:time_string)s-%(prop:version)s-%(prop:protocol)s-%(kw:short_revision)s.dmg",
+                value=Interpolate("AlethZero-OSX-%(kw:time_string)s-%(prop:version)s-%(kw:short_revision)s.dmg",
                                   time_string=get_time_string,
                                   short_revision=get_short_revision)
             ),
