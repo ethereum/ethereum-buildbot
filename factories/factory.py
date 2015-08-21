@@ -37,7 +37,7 @@ def urlbuildername(props):
 def brew_revision_suffix(props):
     if 'old_revision' in props and 'old_version' in props:
         if props['old_version'] == props['version']:
-            return "." + int(props['old_revision']) + 1
+            return ".%s" % (int(props['old_revision']) + 1)
         else:
             return ""
     return None
