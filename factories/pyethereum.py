@@ -38,9 +38,25 @@ def pyethereum_factory(branch='master'):
             haltOnFailure=True,
             logEnviron=False,
             name="upgrade-requirements",
-            description="upgrading test requirements",
-            descriptionDone="upgrade test requirements",
+            description="upgrading requirements",
+            descriptionDone="upgrade requirements",
             command=["pip", "install", "--upgrade", "--no-deps", "-r", "requirements.txt"]
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            logEnviron=False,
+            name="pip-dev_requirements",
+            description="installing dev requirements",
+            descriptionDone="install dev requirements",
+            command=["pip", "install", "-r", "dev_requirements.txt"]
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            logEnviron=False,
+            name="upgrade-requirements",
+            description="upgrading dev requirements",
+            descriptionDone="upgrade dev requirements",
+            command=["pip", "install", "--upgrade", "--no-deps", "-r", "dev_requirements.txt"]
         ),
         ShellCommand(
             haltOnFailure=True,
