@@ -98,6 +98,16 @@ def brew_cpp_factory(branch='develop', headless=True):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
+            name="clean-up-bottles",
+            description='cleaning up bottles',
+            descriptionDone='clean up bottles',
+            command=["rm", "*.tar.gz"],
+            workdir='brew',
+            decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            logEnviron=False,
             name="brew-update",
             description='brew updating',
             descriptionDone='brew update',
