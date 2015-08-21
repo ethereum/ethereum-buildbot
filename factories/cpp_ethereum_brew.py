@@ -101,7 +101,7 @@ def brew_cpp_factory(branch='develop', headless=True):
             name="clean-up-bottles",
             description='cleaning up bottles',
             descriptionDone='clean up bottles',
-            command=["rm", "*.tar.gz"],
+            command="rm *.tar.gz",
             workdir='brew',
             decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
         ),
