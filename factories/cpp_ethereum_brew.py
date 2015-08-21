@@ -68,32 +68,35 @@ def brew_cpp_factory(branch='develop', headless=True):
                 )
             ]: factory.addStep(step)
 
+        for step in [
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="git-add",
+                descriptionDone='git add',
+                command='git add cpp-ethereum.rb',
+                workdir='brew',
+            ),
+            ShellCommand(
+                logEnviron=False,
+                name="git-commit",
+                descriptionDone='git commit',
+                command=Interpolate('git commit -m "bump cpp-ethereum to %(prop:version)s on %(kw:branch)s"', branch=branch),
+                workdir='brew',
+                decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
+            ),
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="git-push",
+                descriptionDone='git push',
+                command='git pull --no-edit && git push',
+                workdir='brew',
+                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
+            )
+        ]: factory.addStep(step)
+
     for step in [
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="git-add",
-            descriptionDone='git add',
-            command='git add cpp-ethereum.rb',
-            workdir='brew',
-        ),
-        ShellCommand(
-            logEnviron=False,
-            name="git-commit",
-            descriptionDone='git commit',
-            command=Interpolate('git commit -m "bump cpp-ethereum to %(prop:version)s on %(kw:branch)s"', branch=branch),
-            workdir='brew',
-            decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
-        ),
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="git-push",
-            descriptionDone='git push',
-            command='git pull --no-edit && git push',
-            workdir='brew',
-            decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
-        ),
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
