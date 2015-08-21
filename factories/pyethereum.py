@@ -74,7 +74,7 @@ def pyethereum_factory(branch='master'):
             command="git submodule init && git submodule update --recursive"
         ),
         ShellCommand(
-            flunkOnFailure=False,
+            haltOnFailure=True,
             logEnviron=False,
             description="testing",
             descriptionDone="py.test",
