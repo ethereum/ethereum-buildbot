@@ -33,6 +33,15 @@ def brew_go_factory(branch='develop'):
             codebase='homebrew-ethereum',
             retry=(5, 3),
             workdir='brew'
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-old-version",
+            descriptionDone='set old version',
+            command='sed -ne "s/^%s  version \'\(.*\)\'/\\1/p" ethereum.rb' % ("" if branch == 'master' else "  "),
+            property='old_version',
+            workdir='brew',
         )
     ]: factory.addStep(step)
 
@@ -141,7 +150,7 @@ def brew_go_factory(branch='develop'):
             description="setting bottle",
             descriptionDone="set bottle",
             property="bottle",
-            value=Interpolate("ethereum-%(prop:version)s.yosemite.bottle.tar.gz")
+            value=Interpolate("ethereum-%(prop:version)s.yosemite.bottle%(kw:revision)s.tar.gz", revision=brew_revision_suffix)
         ),
         SetPropertyFromCommand(
             haltOnFailure=True,

@@ -31,6 +31,15 @@ def brew_cpp_factory(branch='develop', headless=True):
             codebase='homebrew-ethereum',
             retry=(5, 3),
             workdir='brew'
+        ),
+        SetPropertyFromCommand(
+            haltOnFailure=True,
+            logEnviron=False,
+            name="set-old-version",
+            descriptionDone='set old version',
+            command='sed -ne "s/^%s  version \'\(.*\)\'/\\1/p" cpp-ethereum.rb' % ("" if branch == 'master' else "  "),
+            property='old_version',
+            workdir='brew',
         )
     ]: factory.addStep(step)
 
@@ -148,7 +157,7 @@ def brew_cpp_factory(branch='develop', headless=True):
                 description="setting bottle",
                 descriptionDone="set bottle",
                 property="bottle",
-                value=Interpolate("cpp-ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle.tar.gz")
+                value=Interpolate("cpp-ethereum-%(prop:version)s-%(prop:protocol)s.yosemite.bottle%(kw:revision)s.tar.gz", revision=brew_revision_suffix)
             ),
             SetPropertyFromCommand(
                 haltOnFailure=True,

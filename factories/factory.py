@@ -33,6 +33,15 @@ def urlbuildername(props):
         return urllib.quote(props['buildername'])
     return None
 
+@properties.renderer
+def brew_revision_suffix(props):
+    if 'old_revision' in props and 'old_version' in props:
+        if props['old_version'] == props['version']:
+            return "." + int(props['old_revision']) + 1
+        else:
+            return ""
+    return None
+
 # @properties.renderer
 # def get_new_bottle_revision(props):
 #     if props.has_key('old_revision'):
