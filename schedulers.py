@@ -659,20 +659,11 @@ for distribution in distributions:
         ForceScheduler(
             name="force-golang-%s-%s" % ("amd64", distribution),
             builderNames=["golang %s-%s" % ("amd64", distribution)],
-            repository=FixedParameter(name="repository", default=""),
-            project=FixedParameter(name="project", default=""),
-            branch=StringParameter(name="branch", default="release-branch.go1.4"),
-            revision=StringParameter(
-                name="revision",
-                label="Revision:<br>",
-                default="883bc6ed0ea815293fe6309d66f967ea60630e87",
-                required=True,
-                size=40),
             properties=[
                 StringParameter(
                     name="version",
                     label="Version:<br>",
-                    default="2:1.4.2",
+                    default="2:1.4.2-3ubuntu2",
                     required=True,
                     size=10)
             ])

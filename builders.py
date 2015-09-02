@@ -23,6 +23,7 @@ from factories import pyethapp
 from factories import serpent
 from factories import debian
 from factories import debian_qt
+from factories import debian_golang
 from factories import poc_servers
 from factories import integration
 
@@ -43,6 +44,7 @@ reload(pyethapp)
 reload(serpent)
 reload(debian)
 reload(debian_qt)
+reload(debian_golang)
 reload(poc_servers)
 reload(integration)
 
@@ -63,6 +65,7 @@ from factories.pyethapp import *
 from factories.serpent import *
 from factories.debian import *
 from factories.debian_qt import *
+from factories.debian_golang import *
 from factories.poc_servers import *
 from factories.integration import *
 
@@ -379,11 +382,8 @@ for distribution in distributions:
             name="golang %s-%s" % ("amd64", distribution),
             builddir="build-golang-%s-%s" % ("amd64", distribution),
             slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-            factory=deb_factory(
+            factory=backport_golang_factory(
                 name="golang",
-                repourl="https://github.com/golang/go.git",
-                ppabranch="golang",
-                branch="release-branch.go1.4",
                 architecture="amd64",
                 distribution=distribution),
             locks=[latent_lock.access('counting')])
