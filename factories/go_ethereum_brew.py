@@ -141,7 +141,7 @@ def brew_go_factory(branch='develop'):
             haltOnFailure=True,
             logEnviron=False,
             name="set-old-revision",
-            command='sed -ne "s/^%s    revision \(.*\)/\\1/p" ethereum.rb' % ("" if branch == 'master' else "  "),
+            command='sed -ne "s/^    revision \(.*\)/\\1/p" ethereum.rb',
             property='old_revision',
             workdir='brew'
         ),
