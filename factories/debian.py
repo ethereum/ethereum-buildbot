@@ -163,44 +163,19 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         dev_ppa = "http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu"
         qt_ppa = "http://ppa.launchpad.net/ethereum/ethereum-qt/ubuntu"
 
-        # Set othermirror for pbuilder
-        if name == 'ethereum':
-            factory.addStep(ShellCommand(
+        for step in [
+            # Set PPA dependencies for pbuilder
+            ShellCommand(
                 logEnviron=False,
                 name="pbuilder-opts",
                 description="setting pbuilderrc",
                 descriptionDone="set pbuilderrc",
                 command="echo 'OTHERMIRROR=\""
                         "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
-                        "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main\"' > ~/.pbuilderrc"
-                            .format(distribution, main_ppa, qt_ppa)
-            ))
-        elif name == 'cpp-ethereum':
-            if branch == 'develop':
-                factory.addStep(ShellCommand(
-                    logEnviron=False,
-                    name="pbuilder-opts",
-                    description="setting pbuilderrc",
-                    descriptionDone="set pbuilderrc",
-                    command="echo 'OTHERMIRROR=\""
-                            "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
-                            "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main|"
-                            "deb [trusted=yes] {3} {0} main|deb-src [trusted=yes] {3} {0} main\"' > ~/.pbuilderrc"
-                                .format(distribution, main_ppa, dev_ppa, qt_ppa)
-                ))
-            else:
-                factory.addStep(ShellCommand(
-                    logEnviron=False,
-                    name="pbuilder-opts",
-                    description="setting pbuilderrc",
-                    descriptionDone="set pbuilderrc",
-                    command="echo 'OTHERMIRROR=\""
-                            "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
-                            "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main\"' > ~/.pbuilderrc"
-                                .format(distribution, main_ppa, qt_ppa)
-                ))
-
-        for step in [
+                        "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main|"
+                        "deb [trusted=yes] {3} {0} main|deb-src [trusted=yes] {3} {0} main\"' > ~/.pbuilderrc"
+                            .format(distribution, main_ppa, dev_ppa, qt_ppa)
+            ),
             # Package that thing already
             UbuCowbuilder(
                 logEnviron=False,
