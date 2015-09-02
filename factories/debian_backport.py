@@ -6,7 +6,7 @@ reload(factory)
 from factory import *
 
 
-def backport_factory(name=None, setVersion=False, distribution='trusty', architecture='amd64', packages=[]):
+def backport_factory(name=None, setVersion=False, repo='ethereum-qt', distribution='trusty', architecture='amd64', packages=[]):
     factory = BuildFactory()
 
     for package in packages:
@@ -92,8 +92,8 @@ def backport_factory(name=None, setVersion=False, distribution='trusty', archite
             name='dput',
             description='dputting',
             descriptionDone='dput',
-            command=Interpolate("dput ppa:ethereum/ethereum-qt changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes",
-                                dist=distribution, arch=architecture, name=name)
+            command=Interpolate("dput ppa:ethereum/%(kw:repo)s changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes",
+                                repo=repo, dist=distribution, arch=architecture, name=name)
         )
     ]: factory.addStep(step)
 

@@ -382,6 +382,7 @@ for distribution in distributions:
             factory=backport_factory(
                 name="golang",
                 setVersion=True,
+                repo="ethereum",
                 architecture="amd64",
                 distribution=distribution,
                 packages=["golang"]),
@@ -393,6 +394,7 @@ for distribution in distributions:
             factory=backport_factory(
                 name="cmake",
                 setVersion=True,
+                repo="ethereum",
                 architecture="amd64",
                 distribution=distribution,
                 packages=["cmake"]),
@@ -407,6 +409,7 @@ for distribution in distributions:
                 slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
                 factory=backport_factory(
                     name="qt5",
+                    repo="ethereum-qt",
                     architecture="amd64",
                     distribution=distribution,
                     packages=[
