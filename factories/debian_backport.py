@@ -9,11 +9,12 @@ from factory import *
 def backport_factory(name=None, setVersion=False, distribution='trusty', architecture='amd64', packages=[]):
     factory = BuildFactory()
 
-    cmd = ["backportpackage", "--dont-sign", "-w", "result", "-d", distribution]
-    if setVersion:
-        cmd.extend(["-v", Interpolate("%(prop:version)s")])
-
     for package in packages:
+        cmd = ["backportpackage", "--dont-sign", "-w", "result", "-d", distribution]
+        if setVersion:
+            cmd.extend(["-v", Interpolate("%(prop:version)s")])
+        cmd.append(package)
+
         for step in [
             # Create backport
             ShellCommand(
@@ -22,7 +23,7 @@ def backport_factory(name=None, setVersion=False, distribution='trusty', archite
                 name="backport-%s" % package,
                 description='backporting %s' % package,
                 descriptionDone='backport %s' % package,
-                command=cmd.append(package),
+                command=cmd,
                 env={
                     "DEBFULLNAME": "caktux (Buildserver key)",
                     "DEBEMAIL": "caktux@gmail.com",
