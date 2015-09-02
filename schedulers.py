@@ -666,6 +666,17 @@ for distribution in distributions:
                     default="2:1.4.2-3ubuntu2",
                     required=True,
                     size=10)
+            ]),
+        ForceScheduler(
+            name="force-cmake-%s-%s" % ("amd64", distribution),
+            builderNames=["cmake %s-%s" % ("amd64", distribution)],
+            properties=[
+                StringParameter(
+                    name="version",
+                    label="Version:<br>",
+                    default="3.2.2-2ubuntu3",
+                    required=True,
+                    size=10)
             ])
     ]: schedulers.append(scheduler)
 

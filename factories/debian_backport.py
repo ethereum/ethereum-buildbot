@@ -6,12 +6,12 @@ reload(factory)
 from factory import *
 
 
-def backport_golang_factory(name=None, distribution='trusty', architecture='amd64'):
+def backport_factory(name=None, setVersion=False, distribution='trusty', architecture='amd64', packages=[]):
     factory = BuildFactory()
 
-    packages = [
-        "golang"
-    ]
+    cmd = ["backportpackage", "--dont-sign", "-w", "result", "-d", distribution]
+    if setVersion:
+        cmd.extend(["-v", Interpolate("%(prop:version)s")])
 
     for package in packages:
         for step in [
@@ -22,7 +22,7 @@ def backport_golang_factory(name=None, distribution='trusty', architecture='amd6
                 name="backport-%s" % package,
                 description='backporting %s' % package,
                 descriptionDone='backport %s' % package,
-                command=["backportpackage", "--dont-sign", "-w", "result", "-v", Interpolate("%(prop:version)s"), "-d", distribution, package],
+                command=cmd.append(package),
                 env={
                     "DEBFULLNAME": "caktux (Buildserver key)",
                     "DEBEMAIL": "caktux@gmail.com",
@@ -91,7 +91,7 @@ def backport_golang_factory(name=None, distribution='trusty', architecture='amd6
             name='dput',
             description='dputting',
             descriptionDone='dput',
-            command=Interpolate("dput ppa:ethereum/ethereum changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes",
+            command=Interpolate("dput ppa:ethereum/ethereum-qt changes/%(kw:dist)s/%(kw:arch)s/%(kw:name)s/%(prop:buildnumber)s/*.changes",
                                 dist=distribution, arch=architecture, name=name)
         )
     ]: factory.addStep(step)
