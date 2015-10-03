@@ -194,8 +194,8 @@ for branch in ['master', 'develop']:
             name="Linux Go %s branch" % branch,
             builddir="build-go-ethereum-%s-docker" % branch,
             slavenames=[
-                "slave-go-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-go-four%s" % ("" if branch == 'master' else "-develop")
+                "slave-go-five%s" % ("" if branch == 'master' else "-develop"),
+                "slave-go-six%s" % ("" if branch == 'master' else "-develop")
             ],
             factory=go_ethereum_factory(branch=branch, deb=True),
             locks=[go_lock.access('counting')]),
@@ -203,8 +203,8 @@ for branch in ['master', 'develop']:
             name="ARM Go %s branch" % branch,
             builddir="build-go-ethereum-%s-arm" % branch,
             slavenames=[
-                "slave-go-three-arm",
-                "slave-go-four-arm"
+                "slave-go-five-arm",
+                "slave-go-six-arm"
             ],
             factory=arm_go_factory(branch=branch),
             locks=[arm_lock.access('counting')]),
