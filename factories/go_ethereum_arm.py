@@ -38,7 +38,7 @@ def arm_go_factory(branch='develop', isPullRequest=False):
             haltOnFailure=True,
             logEnviron=False,
             name="set-version",
-            command='sed -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
+            command='sed -ne "s/^\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" VERSION',
             property="version"
         ),
         ShellCommand(

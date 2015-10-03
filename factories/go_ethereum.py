@@ -41,7 +41,7 @@ def go_ethereum_factory(branch='master', deb=False):
             haltOnFailure=True,
             logEnviron=False,
             name="set-version",
-            command='sed -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
+            command='sed -ne "s/^\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" VERSION',
             property="version"
         ),
         ShellCommand(

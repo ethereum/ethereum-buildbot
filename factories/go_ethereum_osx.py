@@ -33,7 +33,7 @@ def osx_go_factory(branch='develop', isPullRequest=False):
             haltOnFailure=True,
             logEnviron=False,
             name="update-version",
-            command='gsed -ne "s/.*Version.*=\s*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" cmd/geth/main.go',
+            command='gsed -ne "s/^\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" VERSION',
             property="version"
         ),
         ShellCommand(
