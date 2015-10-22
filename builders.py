@@ -8,10 +8,10 @@ reload(factories)
 
 from factories import self_update
 from factories import buildslaves
-from factories import cpp_ethereum
-from factories import cpp_ethereum_osx
-from factories import cpp_ethereum_brew
-from factories import cpp_ethereum_windows
+# from factories import cpp_ethereum
+# from factories import cpp_ethereum_osx
+# from factories import cpp_ethereum_brew
+# from factories import cpp_ethereum_windows
 from factories import go_ethereum
 from factories import go_ethereum_arm
 from factories import go_ethereum_osx
@@ -28,10 +28,10 @@ from factories import integration
 
 reload(self_update)
 reload(buildslaves)
-reload(cpp_ethereum)
-reload(cpp_ethereum_osx)
-reload(cpp_ethereum_brew)
-reload(cpp_ethereum_windows)
+# reload(cpp_ethereum)
+# reload(cpp_ethereum_osx)
+# reload(cpp_ethereum_brew)
+# reload(cpp_ethereum_windows)
 reload(go_ethereum)
 reload(go_ethereum_arm)
 reload(go_ethereum_osx)
@@ -48,10 +48,10 @@ reload(integration)
 
 from factories.self_update import *
 from factories.buildslaves import *
-from factories.cpp_ethereum import *
-from factories.cpp_ethereum_osx import *
-from factories.cpp_ethereum_brew import *
-from factories.cpp_ethereum_windows import *
+# from factories.cpp_ethereum import *
+# from factories.cpp_ethereum_osx import *
+# from factories.cpp_ethereum_brew import *
+# from factories.cpp_ethereum_windows import *
 from factories.go_ethereum import *
 from factories.go_ethereum_arm import *
 from factories.go_ethereum_osx import *
@@ -124,12 +124,12 @@ for builder in [
 # Buildslave builders
 for buildslave in ['one', 'two', 'three', 'four', 'five', 'six']:
     for builder in [
-        BuilderConfig(
-            name="buildslave-cpp-%s" % buildslave,
-            builddir="build-buildslave-cpp-%s" % buildslave,
-            slavenames=["buildslave-%s" % buildslave],
-            factory=buildslave_factory("cpp", "cpp-ethereum"),
-            locks=[build_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="buildslave-cpp-%s" % buildslave,
+        #     builddir="build-buildslave-cpp-%s" % buildslave,
+        #     slavenames=["buildslave-%s" % buildslave],
+        #     factory=buildslave_factory("cpp", "cpp-ethereum"),
+        #     locks=[build_lock.access('counting')]),
         BuilderConfig(
             name="buildslave-go-%s" % buildslave,
             builddir="build-buildslave-go-%s" % buildslave,
@@ -157,39 +157,39 @@ for buildslave in ['one', 'two']:
 # Main builders
 for branch in ['master', 'develop']:
     for builder in [
-        BuilderConfig(
-            name="Linux C++ %s branch" % branch,
-            builddir="build-cpp-ethereum-%s-docker" % branch,
-            slavenames=[
-                "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
-            ],
-            factory=cpp_ethereum_factory(branch=branch, deb=True),
-            locks=[build_lock.access('counting')]),
-        BuilderConfig(
-            name="Linux C++ GUI %s branch" % branch,
-            builddir="build-cpp-ethereum-gui-%s" % branch,
-            slavenames=[
-                "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
-            ],
-            factory=cpp_ethereum_factory(branch=branch, deb=True, headless=False),
-            locks=[build_lock.access('counting')]),
-        BuilderConfig(
-            name="Linux C++ %s server" % branch,
-            builddir="build-cpp-ethereum-%s-server" % branch,
-            slavenames=["poc-server-%s" % branch],
-            factory=cpp_ethereum_server_factory(branch=branch),
-            locks=[build_lock.access('counting')]),
-        BuilderConfig(
-            name="Linux C++ %s evmjit" % branch,
-            builddir="build-cpp-ethereum-%s-evmjit" % branch,
-            slavenames=[
-                "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
-                "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
-            ],
-            factory=cpp_ethereum_factory(branch=branch, deb=True, evmjit=True),
-            locks=[build_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="Linux C++ %s branch" % branch,
+        #     builddir="build-cpp-ethereum-%s-docker" % branch,
+        #     slavenames=[
+        #         "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
+        #         "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
+        #     ],
+        #     factory=cpp_ethereum_factory(branch=branch, deb=True),
+        #     locks=[build_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="Linux C++ GUI %s branch" % branch,
+        #     builddir="build-cpp-ethereum-gui-%s" % branch,
+        #     slavenames=[
+        #         "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
+        #         "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
+        #     ],
+        #     factory=cpp_ethereum_factory(branch=branch, deb=True, headless=False),
+        #     locks=[build_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="Linux C++ %s server" % branch,
+        #     builddir="build-cpp-ethereum-%s-server" % branch,
+        #     slavenames=["poc-server-%s" % branch],
+        #     factory=cpp_ethereum_server_factory(branch=branch),
+        #     locks=[build_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="Linux C++ %s evmjit" % branch,
+        #     builddir="build-cpp-ethereum-%s-evmjit" % branch,
+        #     slavenames=[
+        #         "slave-cpp-three%s" % ("" if branch == 'master' else "-develop"),
+        #         "slave-cpp-four%s" % ("" if branch == 'master' else "-develop")
+        #     ],
+        #     factory=cpp_ethereum_factory(branch=branch, deb=True, evmjit=True),
+        #     locks=[build_lock.access('counting')]),
         BuilderConfig(
             name="Linux Go %s branch" % branch,
             builddir="build-go-ethereum-%s-docker" % branch,
@@ -208,54 +208,54 @@ for branch in ['master', 'develop']:
             ],
             factory=arm_go_factory(branch=branch),
             locks=[arm_lock.access('counting')]),
-        BuilderConfig(
-            name="OSX C++ %s branch" % branch,
-            builddir="build-cpp-osx-%s" % branch,
-            slavenames=["osx", "osx-two"],
-            factory=osx_cpp_factory(branch=branch),
-            locks=[osx_lock.access('counting')]),
-        BuilderConfig(
-            name="OSX C++ GUI %s branch" % branch,
-            builddir="build-cpp-gui-osx-%s" % branch,
-            slavenames=["osx"],
-            factory=osx_cpp_factory(branch=branch, headless=False),
-            locks=[osx_lock.access('counting')]),
-        BuilderConfig(
-            name="OSX C++ %s evmjit" % branch,
-            builddir="build-cpp-osx-%s-evmjit" % branch,
-            slavenames=["osx"],
-            factory=osx_cpp_factory(branch=branch, evmjit=True),
-            locks=[osx_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="OSX C++ %s branch" % branch,
+        #     builddir="build-cpp-osx-%s" % branch,
+        #     slavenames=["osx", "osx-two"],
+        #     factory=osx_cpp_factory(branch=branch),
+        #     locks=[osx_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="OSX C++ GUI %s branch" % branch,
+        #     builddir="build-cpp-gui-osx-%s" % branch,
+        #     slavenames=["osx"],
+        #     factory=osx_cpp_factory(branch=branch, headless=False),
+        #     locks=[osx_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="OSX C++ %s evmjit" % branch,
+        #     builddir="build-cpp-osx-%s-evmjit" % branch,
+        #     slavenames=["osx"],
+        #     factory=osx_cpp_factory(branch=branch, evmjit=True),
+        #     locks=[osx_lock.access('counting')]),
         BuilderConfig(
             name="OSX Go %s branch" % branch,
             builddir="build-go-osx-%s" % branch,
             slavenames=["osx", "osx-two"],
             factory=osx_go_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
-        BuilderConfig(
-            name="OSX C++ %s brew" % branch,
-            builddir="build-cpp-osx-%s-brew" % branch,
-            slavenames=["osx", "osx-two"],
-            factory=brew_cpp_factory(branch=branch),
-            locks=[brew_lock.access('counting')]),
-        BuilderConfig(
-            name="OSX C++ GUI %s brew" % branch,
-            builddir="build-cpp-gui-osx-%s-brew" % branch,
-            slavenames=["osx"],
-            factory=brew_cpp_factory(branch=branch, headless=False),
-            locks=[brew_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="OSX C++ %s brew" % branch,
+        #     builddir="build-cpp-osx-%s-brew" % branch,
+        #     slavenames=["osx", "osx-two"],
+        #     factory=brew_cpp_factory(branch=branch),
+        #     locks=[brew_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="OSX C++ GUI %s brew" % branch,
+        #     builddir="build-cpp-gui-osx-%s-brew" % branch,
+        #     slavenames=["osx"],
+        #     factory=brew_cpp_factory(branch=branch, headless=False),
+        #     locks=[brew_lock.access('counting')]),
         BuilderConfig(
             name="OSX Go %s brew" % branch,
             builddir="build-go-ethereum-%s-brew" % branch,
             slavenames=["osx", "osx-two"],
             factory=brew_go_factory(branch=branch),
             locks=[brew_lock.access('counting')]),
-        BuilderConfig(
-            name="Windows C++ %s branch" % branch,
-            builddir="build-cpp-ethereum-%s-win" % branch,
-            slavenames=["winslave"],
-            factory=win_cpp_factory(branch=branch),
-            locks=[win_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="Windows C++ %s branch" % branch,
+        #     builddir="build-cpp-ethereum-%s-win" % branch,
+        #     slavenames=["winslave"],
+        #     factory=win_cpp_factory(branch=branch),
+        #     locks=[win_lock.access('counting')]),
         BuilderConfig(
             name="Windows Go %s branch" % branch,
             builddir="build-go-win-%s" % branch,
@@ -288,39 +288,39 @@ for branch in ['master', 'develop']:
             locks=[osx_lock.access('counting')]),
 
         # Extra checks
-        BuilderConfig(
-            name="Linux C++ %s check" % branch,
-            builddir="build-cpp-ethereum-%s-check" % branch,
-            slavenames=[
-                "slave-cpp-one",
-                "slave-cpp-two"
-            ],
-            factory=cpp_check_factory(branch=branch),
-            locks=[build_lock.access('counting')]),
-        BuilderConfig(
-            name="OSX C++ %s check" % branch,
-            builddir="build-cpp-ethereum-%s-osx-check" % branch,
-            slavenames=["osx"],
-            factory=osx_cpp_check_factory(branch=branch),
-            locks=[osx_lock.access('counting')])
+        # BuilderConfig(
+        #     name="Linux C++ %s check" % branch,
+        #     builddir="build-cpp-ethereum-%s-check" % branch,
+        #     slavenames=[
+        #         "slave-cpp-one",
+        #         "slave-cpp-two"
+        #     ],
+        #     factory=cpp_check_factory(branch=branch),
+        #     locks=[build_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="OSX C++ %s check" % branch,
+        #     builddir="build-cpp-ethereum-%s-osx-check" % branch,
+        #     slavenames=["osx"],
+        #     factory=osx_cpp_check_factory(branch=branch),
+        #     locks=[osx_lock.access('counting')])
     ]: builders.append(builder)
 
     # deb packaging
     for architecture in ['i386', 'amd64']:
         for distribution in distributions:
             for builder in [
-                BuilderConfig(
-                    name="Linux C++ %s deb %s-%s" % (branch, architecture, distribution),
-                    builddir="build-cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
-                    slavenames=latentslaves,
-                    factory=deb_factory(
-                        name="cpp-ethereum",
-                        repourl="https://github.com/ethereum/cpp-ethereum.git",
-                        ppabranch=branch,
-                        branch=branch,
-                        architecture=architecture,
-                        distribution=distribution),
-                    locks=[latent_lock.access('counting')]),
+                # BuilderConfig(
+                #     name="Linux C++ %s deb %s-%s" % (branch, architecture, distribution),
+                #     builddir="build-cpp-ethereum-%s-%s-%s" % (branch, architecture, distribution),
+                #     slavenames=latentslaves,
+                #     factory=deb_factory(
+                #         name="cpp-ethereum",
+                #         repourl="https://github.com/ethereum/cpp-ethereum.git",
+                #         ppabranch=branch,
+                #         branch=branch,
+                #         architecture=architecture,
+                #         distribution=distribution),
+                #     locks=[latent_lock.access('counting')]),
                 BuilderConfig(
                     name="Linux Go %s deb %s-%s" % (branch, architecture, distribution),
                     builddir="build-go-ethereum-%s-%s-%s" % (branch, architecture, distribution),
@@ -339,46 +339,46 @@ for branch in ['master', 'develop']:
 # for architecture in ['i386', 'amd64']:
 for distribution in distributions:
     for builder in [
-        BuilderConfig(
-            name="libcryptopp %s-%s" % ("amd64", distribution),
-            builddir="build-libcryptopp-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-            factory=deb_factory(
-                name="libcryptopp",
-                repourl="https://github.com/mmoss/cryptopp.git",
-                ppabranch="libcrypto++",
-                branch="master",
-                architecture="amd64",
-                distribution=distribution),
-            locks=[latent_lock.access('counting')]),
-        BuilderConfig(
-            name="libjson-rpc-cpp %s-%s" % ("amd64", distribution),
-            builddir="build-libjson-rpc-cpp-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-            factory=deb_factory(
-                name="libjson-rpc-cpp",
-                repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
-                ppabranch="libjson-rpc-cpp",
-                branch="master",
-                architecture="amd64",
-                distribution=distribution),
-            locks=[latent_lock.access('counting')]),
-        BuilderConfig(
-            name="qtwebengine %s-%s" % ("amd64", distribution),
-            builddir="build-qtwebengine-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-            factory=deb_factory(
-                name="qtwebengine-opensource-src",
-                repourl="https://github.com/qtproject/qtwebengine.git",
-                ppabranch="qt5webengine",
-                branch="5.4.1",
-                architecture="amd64",
-                distribution=distribution),
-            locks=[latent_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="libcryptopp %s-%s" % ("amd64", distribution),
+        #     builddir="build-libcryptopp-%s-%s" % ("amd64", distribution),
+        #     slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+        #     factory=deb_factory(
+        #         name="libcryptopp",
+        #         repourl="https://github.com/mmoss/cryptopp.git",
+        #         ppabranch="libcrypto++",
+        #         branch="master",
+        #         architecture="amd64",
+        #         distribution=distribution),
+        #     locks=[latent_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="libjson-rpc-cpp %s-%s" % ("amd64", distribution),
+        #     builddir="build-libjson-rpc-cpp-%s-%s" % ("amd64", distribution),
+        #     slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+        #     factory=deb_factory(
+        #         name="libjson-rpc-cpp",
+        #         repourl="https://github.com/cinemast/libjson-rpc-cpp.git",
+        #         ppabranch="libjson-rpc-cpp",
+        #         branch="master",
+        #         architecture="amd64",
+        #         distribution=distribution),
+        #     locks=[latent_lock.access('counting')]),
+        # BuilderConfig(
+        #     name="qtwebengine %s-%s" % ("amd64", distribution),
+        #     builddir="build-qtwebengine-%s-%s" % ("amd64", distribution),
+        #     slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+        #     factory=deb_factory(
+        #         name="qtwebengine-opensource-src",
+        #         repourl="https://github.com/qtproject/qtwebengine.git",
+        #         ppabranch="qt5webengine",
+        #         branch="5.4.1",
+        #         architecture="amd64",
+        #         distribution=distribution),
+        #     locks=[latent_lock.access('counting')]),
         BuilderConfig(
             name="golang %s-%s" % ("amd64", distribution),
             builddir="build-golang-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+            slavenames=["slave-cpp-five-deb", "slave-cpp-six-deb"],
             factory=backport_factory(
                 name="golang",
                 setVersion=True,
@@ -387,47 +387,47 @@ for distribution in distributions:
                 distribution=distribution,
                 packages=["golang"]),
             locks=[latent_lock.access('counting')]),
-        BuilderConfig(
-            name="cmake %s-%s" % ("amd64", distribution),
-            builddir="build-cmake-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-            factory=backport_factory(
-                name="cmake",
-                setVersion=True,
-                repo="ethereum",
-                architecture="amd64",
-                distribution=distribution,
-                packages=["cmake"]),
-            locks=[latent_lock.access('counting')])
+        # BuilderConfig(
+        #     name="cmake %s-%s" % ("amd64", distribution),
+        #     builddir="build-cmake-%s-%s" % ("amd64", distribution),
+        #     slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+        #     factory=backport_factory(
+        #         name="cmake",
+        #         setVersion=True,
+        #         repo="ethereum",
+        #         architecture="amd64",
+        #         distribution=distribution,
+        #         packages=["cmake"]),
+        #     locks=[latent_lock.access('counting')])
     ]: builders.append(builder)
 
-    if distribution in ['trusty']:
-        for builder in [
-            BuilderConfig(
-                name="qt5 %s" % distribution,
-                builddir="build-qt-%s" % distribution,
-                slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
-                factory=backport_factory(
-                    name="qt5",
-                    repo="ethereum-qt",
-                    architecture="amd64",
-                    distribution=distribution,
-                    packages=[
-                        "harfbuzz",
-                        "libinput",
-                        "qtbase-opensource-src",
-                        "qtxmlpatterns-opensource-src",
-                        "qtdeclarative-opensource-src",
-                        "qtscript-opensource-src",
-                        "qtwebsockets-opensource-src",
-                        "qtwebkit-opensource-src",
-                        "qttools-opensource-src",
-                        "qtquick1-opensource-src",
-                        "qtquickcontrols-opensource-src",
-                        "qtlocation-opensource-src"
-                    ]),
-                locks=[latent_lock.access('counting')])
-        ]: builders.append(builder)
+    # if distribution in ['trusty']:
+    #     for builder in [
+    #         BuilderConfig(
+    #             name="qt5 %s" % distribution,
+    #             builddir="build-qt-%s" % distribution,
+    #             slavenames=["slave-cpp-one-deb", "slave-cpp-two-deb"],
+    #             factory=backport_factory(
+    #                 name="qt5",
+    #                 repo="ethereum-qt",
+    #                 architecture="amd64",
+    #                 distribution=distribution,
+    #                 packages=[
+    #                     "harfbuzz",
+    #                     "libinput",
+    #                     "qtbase-opensource-src",
+    #                     "qtxmlpatterns-opensource-src",
+    #                     "qtdeclarative-opensource-src",
+    #                     "qtscript-opensource-src",
+    #                     "qtwebsockets-opensource-src",
+    #                     "qtwebkit-opensource-src",
+    #                     "qttools-opensource-src",
+    #                     "qtquick1-opensource-src",
+    #                     "qtquickcontrols-opensource-src",
+    #                     "qtlocation-opensource-src"
+    #                 ]),
+    #             locks=[latent_lock.access('counting')])
+    #     ]: builders.append(builder)
 
 for builder in [
     BuilderConfig(
@@ -452,24 +452,24 @@ for builder in [
 
     # Pull requests
     # Linux
-    BuilderConfig(
-        name="Linux C++ pull requests",
-        builddir="build-cpp-ethereum-pr",
-        slavenames=[
-            "slave-cpp-five-pr",
-            "slave-cpp-six-pr"
-        ],
-        factory=cpp_ethereum_factory(branch='develop', headless=False),
-        locks=[build_lock.access('counting')]),
-    BuilderConfig(
-        name="Linux C++ evmjit pull requests",
-        builddir="build-cpp-ethereum-evmjit-pr",
-        slavenames=[
-            "slave-cpp-five-pr",
-            "slave-cpp-six-pr"
-        ],
-        factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
-        locks=[build_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Linux C++ pull requests",
+    #     builddir="build-cpp-ethereum-pr",
+    #     slavenames=[
+    #         "slave-cpp-five-pr",
+    #         "slave-cpp-six-pr"
+    #     ],
+    #     factory=cpp_ethereum_factory(branch='develop', headless=False),
+    #     locks=[build_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Linux C++ evmjit pull requests",
+    #     builddir="build-cpp-ethereum-evmjit-pr",
+    #     slavenames=[
+    #         "slave-cpp-five-pr",
+    #         "slave-cpp-six-pr"
+    #     ],
+    #     factory=cpp_ethereum_factory(branch='develop', evmjit=True, headless=False),
+    #     locks=[build_lock.access('counting')]),
     BuilderConfig(
         name="Linux Go pull requests",
         builddir="build-go-ethereum-pr",
@@ -514,18 +514,18 @@ for builder in [
         locks=[build_lock.access('counting')]),
 
     # OSX
-    BuilderConfig(
-        name="OSX C++ pull requests",
-        builddir="build-cpp-ethereum-osx-pr",
-        slavenames=["osx", "osx-two"],
-        factory=osx_cpp_factory(branch='develop', isPullRequest=True, headless=False),
-        locks=[osx_lock.access('counting')]),
-    BuilderConfig(
-        name="OSX C++ evmjit pull requests",
-        builddir="build-cpp-ethereum-osx-evmjit-pr",
-        slavenames=["osx"],
-        factory=osx_cpp_factory(branch=branch, isPullRequest=True, evmjit=True, headless=False),
-        locks=[osx_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="OSX C++ pull requests",
+    #     builddir="build-cpp-ethereum-osx-pr",
+    #     slavenames=["osx", "osx-two"],
+    #     factory=osx_cpp_factory(branch='develop', isPullRequest=True, headless=False),
+    #     locks=[osx_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="OSX C++ evmjit pull requests",
+    #     builddir="build-cpp-ethereum-osx-evmjit-pr",
+    #     slavenames=["osx"],
+    #     factory=osx_cpp_factory(branch=branch, isPullRequest=True, evmjit=True, headless=False),
+    #     locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX Go pull requests",
         builddir="build-go-ethereum-osx-pr",
@@ -552,12 +552,12 @@ for builder in [
         locks=[osx_lock.access('counting')]),
 
     # Windows
-    BuilderConfig(
-        name="Windows C++ pull requests",
-        builddir="build-cpp-ethereum-win-pr",
-        slavenames=["winslave"],
-        factory=win_cpp_factory(branch='develop', isPullRequest=True),
-        locks=[win_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Windows C++ pull requests",
+    #     builddir="build-cpp-ethereum-win-pr",
+    #     slavenames=["winslave"],
+    #     factory=win_cpp_factory(branch='develop', isPullRequest=True),
+    #     locks=[win_lock.access('counting')]),
     BuilderConfig(
         name="Windows Go pull requests",
         builddir="build-go-ethereum-win-pr",
@@ -575,18 +575,18 @@ for builder in [
     #     factory=integration_factory(),
     #     locks=[build_lock.access('counting')]),
 
-    BuilderConfig(
-        name="Linux C++ deb tester",
-        builddir="build-cpp-ethereum-deb-tester",
-        slavenames=latentslaves,
-        factory=deb_factory(
-            name="cpp-ethereum",
-            repourl="https://github.com/ethereum/cpp-ethereum.git",
-            ppabranch="libethereum-lite",
-            branch="master",
-            architecture="amd64",
-            distribution="vivid",
-            testdeb=True),
-        locks=[latent_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Linux C++ deb tester",
+    #     builddir="build-cpp-ethereum-deb-tester",
+    #     slavenames=latentslaves,
+    #     factory=deb_factory(
+    #         name="cpp-ethereum",
+    #         repourl="https://github.com/ethereum/cpp-ethereum.git",
+    #         ppabranch="libethereum-lite",
+    #         branch="master",
+    #         architecture="amd64",
+    #         distribution="vivid",
+    #         testdeb=True),
+    #     locks=[latent_lock.access('counting')]),
 
 ]: builders.append(builder)
