@@ -5,8 +5,6 @@ import factory
 reload(factory)
 from factory import *
 
-distributions = ['trusty', 'vivid']
-
 @properties.renderer
 def get_cpp_revision(props):
     if 'got_revision' in props:

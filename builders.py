@@ -46,6 +46,7 @@ reload(debian_backport)
 reload(poc_servers)
 reload(integration)
 
+from factories.factory import distributions
 from factories.self_update import *
 from factories.buildslaves import *
 # from factories.cpp_ethereum import *
@@ -73,7 +74,6 @@ from factories.integration import *
 # what steps, and which slaves can execute them.  Note that any particular build will
 # only take place on one slave.
 
-distributions = ['trusty', 'vivid']
 builders = []
 
 self_lock = locks.SlaveLock("self_update", maxCount=1)

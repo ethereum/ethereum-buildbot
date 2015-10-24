@@ -5,8 +5,6 @@ import factory
 reload(factory)
 from factory import *
 
-distributions = ['trusty', 'vivid']
-
 @properties.renderer
 def get_short_revision_go(props):
     if 'got_revision' in props:

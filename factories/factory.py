@@ -19,6 +19,8 @@ from buildbot.steps.vstudio import MsBuild12  # NOQA
 from buildbot.status.results import SUCCESS, WARNINGS, SKIPPED, FAILURE  # EXCEPTION, RETRY  # NOQA
 # from buildbot.steps.cppcheck import Cppcheck # TODO native on nine
 
+distributions = ['trusty', 'vivid', 'wily']
+
 @properties.renderer
 def get_time_string(props):
     return time.strftime("%Y%m%d%H%M%S", time.localtime())

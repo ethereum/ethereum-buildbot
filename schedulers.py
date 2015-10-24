@@ -11,7 +11,8 @@ from buildbot.schedulers.timed import Nightly
 from buildbot.schedulers.triggerable import Triggerable
 from buildbot.changes import filter
 
-distributions = ['trusty', 'vivid']
+from factories.factory import distributions
+
 schedulers = []
 
 self_codebases = {
