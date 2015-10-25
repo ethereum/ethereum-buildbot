@@ -163,7 +163,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             name="buildslave-%s-run" % lang,
             description="starting %s buildslave" % lang,
             descriptionDone="start %s buildslave" % lang,
-            command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s" % lang]
+            command=["docker", "run", "--restart", "always", "-d", "-t", "cptobvious/buildslave-%s" % lang]
         ),
         ShellCommand(
             warnOnFailure=True,
@@ -171,7 +171,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             name="buildslave-%s-pr-run" % lang,
             description="starting %s pr buildslave" % lang,
             descriptionDone="start %s pr buildslave" % lang,
-            command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-pr" % lang]
+            command=["docker", "run", "--restart", "always", "-d", "-t", "cptobvious/buildslave-%s-pr" % lang]
         )
     ]: factory.addStep(step)
 
@@ -184,7 +184,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 name="buildslave-%s-develop-run" % lang,
                 description="starting %s develop buildslave" % lang,
                 descriptionDone="start %s develop buildslave" % lang,
-                command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-develop" % lang]
+                command=["docker", "run", "--restart", "always", "-d", "-t", "cptobvious/buildslave-%s-develop" % lang]
             )
         ]: factory.addStep(step)
 
@@ -197,7 +197,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 name="buildslave-%s-deb-run" % lang,
                 description="starting %s deb buildslave" % lang,
                 descriptionDone="start %s deb buildslave" % lang,
-                command=["docker", "run", "-d", "--privileged=true", "-t", "cptobvious/buildslave-%s-deb" % lang]
+                command=["docker", "run", "--restart", "always", "-d", "--privileged=true", "-t", "cptobvious/buildslave-%s-deb" % lang]
             )
         ]: factory.addStep(step)
 
@@ -210,7 +210,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 name="buildslave-%s-integration-run" % lang,
                 description="starting %s integration buildslave" % lang,
                 descriptionDone="start %s integration buildslave" % lang,
-                command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-integration" % lang]
+                command=["docker", "run", "--restart", "always", "-d", "-t", "cptobvious/buildslave-%s-integration" % lang]
             )
         ]: factory.addStep(step)
 
@@ -223,7 +223,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
                 name="buildslave-%s-arm-run" % lang,
                 description="starting %s ARM buildslave" % lang,
                 descriptionDone="start %s ARM buildslave" % lang,
-                command=["docker", "run", "-d", "-t", "cptobvious/buildslave-%s-arm" % lang]
+                command=["docker", "run", "--restart", "always", "-d", "-t", "cptobvious/buildslave-%s-arm" % lang]
             )
         ]: factory.addStep(step)
 

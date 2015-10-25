@@ -46,23 +46,44 @@ def brew_go_factory(branch='develop'):
     ]: factory.addStep(step)
 
     if branch == 'master':
-        factory.addStep(ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="update-version",
-            descriptionDone='update go-ethereum version',
-            command=Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s\'/" ethereum.rb'),
-            workdir='brew',
-        ))
+        for step in [
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="update-version",
+                descriptionDone='update go-ethereum version',
+                command=Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s\'/" ethereum.rb'),
+                workdir='brew',
+            ),
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="update-brew-revision",
+                descriptionDone='update brew revision',
+                command=Interpolate('sed -i "" "s/^    revision \(.*\)/    revision %(prop:buildnumber)s/" ethereum.rb'),
+                workdir='brew'
+            )
+        ]: factory.addStep(step)
+
     elif branch == 'develop':
-        factory.addStep(ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="update-version",
-            descriptionDone='update go-ethereum version',
-            command=Interpolate('sed -i "" "s/^    version \'\(.*\)\'/    version \'%(prop:version)s\'/" ethereum.rb'),
-            workdir='brew',
-        ))
+        for step in [
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="update-version",
+                descriptionDone='update go-ethereum version',
+                command=Interpolate('sed -i "" "s/^    version \'\(.*\)\'/    version \'%(prop:version)s\'/" ethereum.rb'),
+                workdir='brew',
+            ),
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="update-brew-revision",
+                descriptionDone='update brew revision',
+                command=Interpolate('sed -i "" "s/^      revision \(.*\)/      revision %(prop:buildnumber)s/" ethereum.rb'),
+                workdir='brew'
+            )
+        ]: factory.addStep(step)
 
     for step in [
         ShellCommand(
@@ -186,14 +207,6 @@ def brew_go_factory(branch='develop'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-brew-revision",
-                descriptionDone='update brew revision',
-                command=Interpolate('sed -i "" "s/^    revision \(.*\)/    revision %(prop:buildnumber)s/" ethereum.rb'),
-                workdir='brew'
-            ),
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
                 name="update-sha1sum",
                 descriptionDone='update sha1sum',
                 command=Interpolate('sed -i "" "s/^    sha1 \'\(.*\)\' => :yosemite/    sha1 \'%(prop:sha1sum)s\' => :yosemite/" ethereum.rb'),
@@ -236,14 +249,6 @@ def brew_go_factory(branch='develop'):
                 descriptionDone='update bottle url',
                 command=Interpolate('sed -i "" "s/^      root_url \'\(.*\)\'/      root_url \'https:\/\/build.ethdev.com\/builds\/%(kw:urlbuildername)s\/'
                                     '%(prop:buildnumber)s\/bottle\'/" ethereum.rb', urlbuildername=urlbuildername),
-                workdir='brew'
-            ),
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
-                name="update-brew-revision",
-                descriptionDone='update brew revision',
-                command=Interpolate('sed -i "" "s/^      revision \(.*\)/      revision %(prop:buildnumber)s/" ethereum.rb'),
                 workdir='brew'
             ),
             ShellCommand(

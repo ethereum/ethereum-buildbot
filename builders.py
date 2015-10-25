@@ -122,7 +122,7 @@ for builder in [
 ]: builders.append(builder)
 
 # Buildslave builders
-for buildslave in ['one', 'two', 'three', 'four', 'five', 'six']:
+for buildslave in ['five', 'six']:
     for builder in [
         # BuilderConfig(
         #     name="buildslave-cpp-%s" % buildslave,
@@ -135,23 +135,19 @@ for buildslave in ['one', 'two', 'three', 'four', 'five', 'six']:
             builddir="build-buildslave-go-%s" % buildslave,
             slavenames=["buildslave-%s" % buildslave],
             factory=buildslave_factory("go", "go-ethereum"),
-            locks=[build_lock.access('counting')])
-    ]: builders.append(builder)
-
-for buildslave in ['one', 'two']:
-    for builder in [
+            locks=[build_lock.access('counting')]),
         BuilderConfig(
             name="buildslave-python-%s" % buildslave,
             builddir="build-buildslave-python-%s" % buildslave,
             slavenames=["buildslave-%s" % buildslave],
             factory=buildslave_factory("python", "pyethereum"),
             locks=[build_lock.access('counting')]),
-        BuilderConfig(
-            name="buildslave-java-%s" % buildslave,
-            builddir="build-buildslave-java-%s" % buildslave,
-            slavenames=["buildslave-%s" % buildslave],
-            factory=buildslave_factory("java", "ethereumj"),
-            locks=[build_lock.access('counting')])
+        # BuilderConfig(
+        #     name="buildslave-java-%s" % buildslave,
+        #     builddir="build-buildslave-java-%s" % buildslave,
+        #     slavenames=["buildslave-%s" % buildslave],
+        #     factory=buildslave_factory("java", "ethereumj"),
+        #     locks=[build_lock.access('counting')])
     ]: builders.append(builder)
 
 # Main builders
@@ -265,13 +261,13 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="Linux PyEthereum %s" % branch,
             builddir="build-pyethereum-%s" % branch,
-            slavenames=["slave-python-one", "slave-python-two"],
+            slavenames=["slave-python-five", "slave-python-six"],
             factory=pyethereum_factory(branch=branch),
             locks=[build_lock.access('counting')]),
         BuilderConfig(
             name="Linux Serpent %s" % branch,
             builddir="build-serpent-%s" % branch,
-            slavenames=["slave-python-one", "slave-python-two"],
+            slavenames=["slave-python-five", "slave-python-six"],
             factory=serpent_factory(branch=branch),
             locks=[build_lock.access('counting')]),
         BuilderConfig(
@@ -433,7 +429,7 @@ for builder in [
     BuilderConfig(
         name="Linux PyEthApp",
         builddir="build-pyethapp",
-        slavenames=["slave-python-one", "slave-python-two"],
+        slavenames=["slave-python-five", "slave-python-six"],
         factory=pyethapp_factory(branch='master'),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
@@ -443,12 +439,12 @@ for builder in [
         factory=pyethapp_factory(branch='master'),
         locks=[osx_lock.access('counting')]),
 
-    BuilderConfig(
-        name="Linux EthereumJ",
-        builddir="build-ethereumj-docker",
-        slavenames=["slave-java-one", "slave-java-two"],
-        factory=ethereumj_factory(),
-        locks=[build_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Linux EthereumJ",
+    #     builddir="build-ethereumj-docker",
+    #     slavenames=["slave-java-one", "slave-java-two"],
+    #     factory=ethereumj_factory(),
+    #     locks=[build_lock.access('counting')]),
 
     # Pull requests
     # Linux
@@ -491,27 +487,27 @@ for builder in [
     BuilderConfig(
         name="Linux PyEthereum PRs",
         builddir="build-pyethereum-pr",
-        slavenames=["slave-python-one-pr", "slave-python-two-pr"],
+        slavenames=["slave-python-five-pr", "slave-python-six-pr"],
         factory=pyethereum_factory(branch='develop'),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
         name="Linux PyEthApp PRs",
         builddir="build-pyethapp-pr",
-        slavenames=["slave-python-one-pr", "slave-python-two-pr"],
+        slavenames=["slave-python-five-pr", "slave-python-six-pr"],
         factory=pyethapp_factory(branch='master'),
         locks=[build_lock.access('counting')]),
     BuilderConfig(
         name="Linux Serpent PRs",
         builddir="build-serpent-pr",
-        slavenames=["slave-python-one-pr", "slave-python-two-pr"],
+        slavenames=["slave-python-five-pr", "slave-python-six-pr"],
         factory=serpent_factory(branch='develop'),
         locks=[build_lock.access('counting')]),
-    BuilderConfig(
-        name="Linux EthereumJ PRs",
-        builddir="build-ethereumj-pr",
-        slavenames=["slave-java-one-pr", "slave-java-two-pr"],
-        factory=ethereumj_factory(branch='master'),
-        locks=[build_lock.access('counting')]),
+    # BuilderConfig(
+    #     name="Linux EthereumJ PRs",
+    #     builddir="build-ethereumj-pr",
+    #     slavenames=["slave-java-one-pr", "slave-java-two-pr"],
+    #     factory=ethereumj_factory(branch='master'),
+    #     locks=[build_lock.access('counting')]),
 
     # OSX
     # BuilderConfig(

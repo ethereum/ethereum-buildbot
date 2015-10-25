@@ -48,13 +48,13 @@ go_ethereum_codebases = {
         'revision': None
     }
 }
-ethereumj_codebases = {
-    'ethereumj': {
-        'repository': 'https://github.com/ethereum/ethereumj.git',
-        'branch': 'master',
-        'revision': None
-    }
-}
+# ethereumj_codebases = {
+#     'ethereumj': {
+#         'repository': 'https://github.com/ethereum/ethereumj.git',
+#         'branch': 'master',
+#         'revision': None
+#     }
+# }
 pyethereum_codebases = {
     'pyethereum': {
         'repository': 'https://github.com/ethereum/pyethereum.git',
@@ -83,20 +83,20 @@ brew_codebases = {
         'revision': None
     }
 }
-ethereumjs_codebases = {
-    'ethereumjs': {
-        'repository': 'https://github.com/ethereum/ethereum.js.git',
-        'branch': 'master',
-        'revision': None
-    }
-}
-integration_codebases = {
-    'integration': {
-        'repository': 'https://github.com/etherex/etherex.git',
-        'branch': 'master',
-        'revision': None
-    }
-}
+# ethereumjs_codebases = {
+#     'ethereumjs': {
+#         'repository': 'https://github.com/ethereum/ethereum.js.git',
+#         'branch': 'master',
+#         'revision': None
+#     }
+# }
+# integration_codebases = {
+#     'integration': {
+#         'repository': 'https://github.com/etherex/etherex.git',
+#         'branch': 'master',
+#         'revision': None
+#     }
+# }
 
 # all_cpp_ethereum_codebases = cpp_ethereum_codebases.copy()
 # all_cpp_ethereum_codebases.update(brew_codebases)
@@ -104,7 +104,7 @@ integration_codebases = {
 all_go_ethereum_codebases = go_ethereum_codebases.copy()
 all_go_ethereum_codebases.update(brew_codebases)
 
-all_ethereumj_codebases = ethereumj_codebases.copy()
+# all_ethereumj_codebases = ethereumj_codebases.copy()
 
 all_pyethereum_codebases = pyethereum_codebases.copy()
 all_pyethapp_codebases = pyethapp_codebases.copy()
@@ -230,12 +230,12 @@ for scheduler in [
         builderNames=[
             "Linux PyEthApp",
             "OSX PyEthApp"]),
-    SingleBranchScheduler(
-        name="ethereumj-git",
-        change_filter=filter.ChangeFilter(project='ethereumj', branch='master'),
-        codebases=all_ethereumj_codebases,
-        treeStableTimer=300,
-        builderNames=["Linux EthereumJ"]),
+    # SingleBranchScheduler(
+    #     name="ethereumj-git",
+    #     change_filter=filter.ChangeFilter(project='ethereumj', branch='master'),
+    #     codebases=all_ethereumj_codebases,
+    #     treeStableTimer=300,
+    #     builderNames=["Linux EthereumJ"]),
 
     # Brew
     # SingleBranchScheduler(
@@ -302,14 +302,14 @@ for scheduler in [
             "Linux Serpent PRs",
             "OSX Serpent PRs"
         ]),
-    AnyBranchScheduler(
-        name="ethereumj-pr-git",
-        change_filter=filter.ChangeFilter(codebase='ethereumj', category='pull'),
-        codebases=all_ethereumj_codebases,
-        treeStableTimer=300,
-        builderNames=[
-            "Linux EthereumJ PRs"
-        ]),
+    # AnyBranchScheduler(
+    #     name="ethereumj-pr-git",
+    #     change_filter=filter.ChangeFilter(codebase='ethereumj', category='pull'),
+    #     codebases=all_ethereumj_codebases,
+    #     treeStableTimer=300,
+    #     builderNames=[
+    #         "Linux EthereumJ PRs"
+    #     ]),
 
     # Integration tests
     # Triggerable(
@@ -330,7 +330,7 @@ for scheduler in [
         codebases=["ethereum-buildbot"])
 ]: schedulers.append(scheduler)
 
-for buildslave in ["one", "two", "three", "four", "five", "six"]:
+for buildslave in ['five', 'six']:
     for scheduler in [
         # ForceScheduler(
         #     name="force-buildslave-cpp-%s" % buildslave,
@@ -339,18 +339,15 @@ for buildslave in ["one", "two", "three", "four", "five", "six"]:
         ForceScheduler(
             name="force-buildslave-go-%s" % buildslave,
             builderNames=["buildslave-go-%s" % buildslave],
-            codebases=["ethereum-dockers"])
-    ]: schedulers.append(scheduler)
-for buildslave in ["one", "two"]:
-    for scheduler in [
+            codebases=["ethereum-dockers"]),
         ForceScheduler(
             name="force-buildslave-python-%s" % buildslave,
             builderNames=["buildslave-python-%s" % buildslave],
             codebases=["ethereum-dockers"]),
-        ForceScheduler(
-            name="force-buildslave-java-%s" % buildslave,
-            builderNames=["buildslave-java-%s" % buildslave],
-            codebases=["ethereum-dockers"])
+        # ForceScheduler(
+        #     name="force-buildslave-java-%s" % buildslave,
+        #     builderNames=["buildslave-java-%s" % buildslave],
+        #     codebases=["ethereum-dockers"])
     ]: schedulers.append(scheduler)
 
 for branch in ['master', 'develop']:
@@ -445,10 +442,10 @@ for scheduler in [
         name="force-pyethapp-osx",
         builderNames=["OSX PyEthApp"],
         codebases=["pyethapp"]),
-    ForceScheduler(
-        name="force-ethereumj",
-        builderNames=["Linux EthereumJ"],
-        codebases=["ethereumj"]),
+    # ForceScheduler(
+    #     name="force-ethereumj",
+    #     builderNames=["Linux EthereumJ"],
+    #     codebases=["ethereumj"]),
 
     # Pull requests
     # Linux
@@ -480,10 +477,10 @@ for scheduler in [
         name="force-serpent-pr",
         builderNames=["Linux Serpent PRs"],
         codebases=["serpent", "pyethereum"]),
-    ForceScheduler(
-        name="force-ethereumj-pr",
-        builderNames=["Linux EthereumJ PRs"],
-        codebases=["ethereumj"]),
+    # ForceScheduler(
+    #     name="force-ethereumj-pr",
+    #     builderNames=["Linux EthereumJ PRs"],
+    #     codebases=["ethereumj"]),
 
     # OSX
     # ForceScheduler(
@@ -550,7 +547,7 @@ for scheduler in [
     #     ]),
 ]: schedulers.append(scheduler)
 
-for buildslave in ["one", "two", "three", "four", "five", "six"]:
+for buildslave in ['five', 'six']:
     for scheduler in [
         # Nightly(
         #     name="nightly-buildslave-cpp-%s" % buildslave,
@@ -565,10 +562,7 @@ for buildslave in ["one", "two", "three", "four", "five", "six"]:
             codebases=dockers_codebases,
             branch=None,
             hour=3,
-            minute=0)
-    ]: schedulers.append(scheduler)
-for buildslave in ["one", "two"]:
-    for scheduler in [
+            minute=0),
         Nightly(
             name="nightly-buildslave-python-%s" % buildslave,
             builderNames=["buildslave-python-%s" % buildslave],
@@ -576,13 +570,13 @@ for buildslave in ["one", "two"]:
             branch=None,
             hour=3,
             minute=30),
-        Nightly(
-            name="nightly-buildslave-java-%s" % buildslave,
-            builderNames=["buildslave-java-%s" % buildslave],
-            codebases=dockers_codebases,
-            branch=None,
-            hour=3,
-            minute=30)
+        # Nightly(
+        #     name="nightly-buildslave-java-%s" % buildslave,
+        #     builderNames=["buildslave-java-%s" % buildslave],
+        #     codebases=dockers_codebases,
+        #     branch=None,
+        #     hour=3,
+        #     minute=30)
     ]: schedulers.append(scheduler)
 
 # for architecture in ['i386', 'amd64']:
