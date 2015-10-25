@@ -163,19 +163,23 @@ def deb_factory(name=None, repourl=None, ppabranch=None, branch='master', distri
         dev_ppa = "http://ppa.launchpad.net/ethereum/ethereum-dev/ubuntu"
         qt_ppa = "http://ppa.launchpad.net/ethereum/ethereum-qt/ubuntu"
 
+        if name is not 'ethereum' or distribution is not 'wily':
+            for step in [
+                # Set PPA dependencies for pbuilder
+                ShellCommand(
+                    logEnviron=False,
+                    name="pbuilder-opts",
+                    description="setting pbuilderrc",
+                    descriptionDone="set pbuilderrc",
+                    command="echo 'OTHERMIRROR=\""
+                            "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
+                            "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main|"
+                            "deb [trusted=yes] {3} {0} main|deb-src [trusted=yes] {3} {0} main\"' > ~/.pbuilderrc"
+                                .format(distribution, main_ppa, dev_ppa, qt_ppa)
+                )
+            ]: factory.addStep(step)
+
         for step in [
-            # Set PPA dependencies for pbuilder
-            ShellCommand(
-                logEnviron=False,
-                name="pbuilder-opts",
-                description="setting pbuilderrc",
-                descriptionDone="set pbuilderrc",
-                command="echo 'OTHERMIRROR=\""
-                        "deb [trusted=yes] {1} {0} main|deb-src [trusted=yes] {1} {0} main|"
-                        "deb [trusted=yes] {2} {0} main|deb-src [trusted=yes] {2} {0} main|"
-                        "deb [trusted=yes] {3} {0} main|deb-src [trusted=yes] {3} {0} main\"' > ~/.pbuilderrc"
-                            .format(distribution, main_ppa, dev_ppa, qt_ppa)
-            ),
             # Package that thing already
             UbuCowbuilder(
                 logEnviron=False,
