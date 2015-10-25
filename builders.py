@@ -378,7 +378,7 @@ for distribution in distributions:
         BuilderConfig(
             name="golang %s-%s" % ("amd64", distribution),
             builddir="build-golang-%s-%s" % ("amd64", distribution),
-            slavenames=["slave-cpp-five-deb", "slave-cpp-six-deb"],
+            slavenames=["slave-go-five-deb", "slave-go-six-deb"],
             factory=backport_factory(
                 name="golang",
                 setVersion=True,
