@@ -44,12 +44,6 @@ def brew_revision_suffix(props):
             return ""
     return None
 
-# @properties.renderer
-# def get_new_bottle_revision(props):
-#     if props.has_key('old_revision'):
-#         return "." + str(int(props['old_revision']) + 1)
-#     return 1
-
 def warnings(self):
     fail = False
     steps = self.build.getStatus().getSteps()

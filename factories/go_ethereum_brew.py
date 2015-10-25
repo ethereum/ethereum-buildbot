@@ -33,15 +33,6 @@ def brew_go_factory(branch='develop'):
             codebase='homebrew-ethereum',
             retry=(5, 3),
             workdir='brew'
-        ),
-        SetPropertyFromCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="set-old-version",
-            descriptionDone='set old version',
-            command='sed -ne "s/^%s  version \'\(.*\)\'/\\1/p" ethereum.rb' % ("" if branch == 'master' else "  "),
-            property='old_version',
-            workdir='brew',
         )
     ]: factory.addStep(step)
 
@@ -153,32 +144,27 @@ def brew_go_factory(branch='develop'):
             haltOnFailure=True,
             logEnviron=False,
             name="bottle",
-            command=brew_install_cmd(cmd=["brew", "bottle", "ethereum.rb", "-v"], branch=branch),
+            command="brew bottle ethereum.rb -v%s > bottle.log" % " --devel" if branch is "develop" else "",
+            logfiles={"bottle.log": "bottle.log"},
+            lazylogfiles=True,
             description="bottling",
             descriptionDone="bottle",
             workdir='brew'
         ),
         SetPropertyFromCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="set-old-revision",
-            command='sed -ne "s/^    revision \(.*\)/\\1/p" ethereum.rb',
-            property='old_revision',
-            workdir='brew'
-        ),
-        SetProperty(
             name="set-bottle",
+            command='sed -ne "s/.*Bottling \(.*\).../\\1/p" bottle.log',
             description="setting bottle",
             descriptionDone="set bottle",
             property="bottle",
-            value=Interpolate("ethereum-%(prop:version)s.yosemite.bottle%(kw:revision)s.tar.gz", revision=brew_revision_suffix)
+            workdir="brew"
         ),
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="set-sha1sum",
-            command=Interpolate('sha1sum %(prop:bottle)s | grep -o -w "\w\{40\}"'),
-            property='sha1sum',
+            name="set-sha256sum",
+            command='sed -ne "s/.*sha256 \\"\(.*\)\\".*/\\1/p" bottle.log',
+            property='sha256sum',
             workdir='brew'
         ),
         FileUpload(
@@ -207,9 +193,9 @@ def brew_go_factory(branch='develop'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-sha1sum",
-                descriptionDone='update sha1sum',
-                command=Interpolate('sed -i "" "s/^    sha1 \'\(.*\)\' => :yosemite/    sha1 \'%(prop:sha1sum)s\' => :yosemite/" ethereum.rb'),
+                name="update-sha256sum",
+                descriptionDone='update sha256sum',
+                command=Interpolate('sed -i "" "s/^    sha256 \'\(.*\)\' => :yosemite/    sha256 \'%(prop:sha256sum)s\' => :yosemite/" ethereum.rb'),
                 workdir='brew'
             ),
             ShellCommand(
@@ -254,9 +240,9 @@ def brew_go_factory(branch='develop'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-sha1sum",
-                descriptionDone='update sha1sum',
-                command=Interpolate('sed -i "" "s/^      sha1 \'\(.*\)\' => :yosemite/      sha1 \'%(prop:sha1sum)s\' => :yosemite/" ethereum.rb'),
+                name="update-sha256sum",
+                descriptionDone='update sha256sum',
+                command=Interpolate('sed -i "" "s/^      sha256 \'\(.*\)\' => :yosemite/      sha256 \'%(prop:sha256sum)s\' => :yosemite/" ethereum.rb'),
                 workdir='brew'
             ),
             ShellCommand(
