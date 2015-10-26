@@ -188,12 +188,14 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             haltOnFailure=True,
             name='upload-bottle',
             slavesrc=Interpolate("%(prop:bottle)s"),
-            masterdest=Interpolate("public_html/builds/bottles%s/"
-                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz" % ("-dev" if branch == 'develop' else ""),
+            masterdest=Interpolate(("public_html/builds/bottles%(kw:dev)s/"
+                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz"),
+                                   dev="-dev" if branch == 'develop' else "",
                                    release=release,
                                    revision=revision_or_buildnumber),
-            url=Interpolate("/builds/bottles%s/"
-                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz" % ("-dev" if branch == 'develop' else ""),
+            url=Interpolate("/builds/bottles%(kw:dev)s/"
+                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz",
+                            dev="-dev" if branch == 'develop' else "",
                             release=release,
                             revision=revision_or_buildnumber),
             workdir='brew'
