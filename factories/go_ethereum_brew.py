@@ -184,9 +184,9 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             haltOnFailure=True,
             name='upload-bottle',
             slavesrc=Interpolate("%(prop:bottle)s"),
-            masterdest=Interpolate("public_html/builds/%(prop:buildername)s/bottles/"
+            masterdest=Interpolate("public_html/builds/bottles/"
                                    "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(prop:buildnumber)s.tar.gz", release=release),
-            url=Interpolate("/builds/%(prop:buildername)s/bottles/"
+            url=Interpolate("/builds/bottles/"
                             "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(prop:buildnumber)s.tar.gz", release=release),
             workdir='brew'
         )
@@ -201,8 +201,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 descriptionDone='update bottle url',
                 command=Interpolate('sed -i "" "s/^'
                                     '    root_url \'\(.*\)\'/'
-                                    '    root_url \'https:\/\/build.ethdev.com\/builds\/'
-                                    '%(kw:urlbuildername)s\/bottles\'/" ethereum.rb', urlbuildername=urlbuildername),
+                                    '    root_url \'https:\/\/build.ethdev.com\/builds\/bottles\'/" ethereum.rb'),
                 workdir='brew'
             ),
             ShellCommand(
@@ -252,8 +251,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 descriptionDone='update bottle url',
                 command=Interpolate('sed -i "" "s/^'
                                     '      root_url \'\(.*\)\'/'
-                                    '      root_url \'https:\/\/build.ethdev.com\/builds\/'
-                                    '%(kw:urlbuildername)s\/bottles\'/" ethereum.rb', urlbuildername=urlbuildername),
+                                    '      root_url \'https:\/\/build.ethdev.com\/builds\/bottles-dev\'/" ethereum.rb'),
                 workdir='brew'
             ),
             ShellCommand(
