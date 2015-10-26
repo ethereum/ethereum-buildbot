@@ -10,7 +10,7 @@ reload(go_ethereum)
 from go_ethereum import *
 
 
-def brew_go_factory(branch='develop'):
+def brew_go_factory(branch='develop', release='yosemite'):
     factory = BuildFactory()
 
     for step in [
@@ -43,7 +43,9 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-version",
                 descriptionDone='update go-ethereum version',
-                command=Interpolate('sed -i "" "s/^  version \'\(.*\)\'/  version \'%(prop:version)s\'/" ethereum.rb'),
+                command=Interpolate('sed -i "" "s/^'
+                                    '  version \'\(.*\)\'/'
+                                    '  version \'%(prop:version)s\'/" ethereum.rb'),
                 workdir='brew',
             ),
             ShellCommand(
@@ -51,7 +53,9 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-brew-revision",
                 descriptionDone='update brew revision',
-                command=Interpolate('sed -i "" "s/^    revision \(.*\)/    revision %(prop:buildnumber)s/" ethereum.rb'),
+                command=Interpolate('sed -i "" "s/^'
+                                    '    revision \(.*\)/'
+                                    '    revision %(prop:buildnumber)s/" ethereum.rb'),
                 workdir='brew'
             )
         ]: factory.addStep(step)
@@ -63,7 +67,9 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-version",
                 descriptionDone='update go-ethereum version',
-                command=Interpolate('sed -i "" "s/^    version \'\(.*\)\'/    version \'%(prop:version)s\'/" ethereum.rb'),
+                command=Interpolate('sed -i "" "s/^'
+                                    '    version \'\(.*\)\'/'
+                                    '    version \'%(prop:version)s\'/" ethereum.rb'),
                 workdir='brew',
             ),
             ShellCommand(
@@ -71,7 +77,9 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-brew-revision",
                 descriptionDone='update brew revision',
-                command=Interpolate('sed -i "" "s/^      revision \(.*\)/      revision %(prop:buildnumber)s/" ethereum.rb'),
+                command=Interpolate('sed -i "" "s/^'
+                                    '      revision \(.*\)/'
+                                    '      revision %(prop:buildnumber)s/" ethereum.rb'),
                 workdir='brew'
             )
         ]: factory.addStep(step)
@@ -171,10 +179,10 @@ def brew_go_factory(branch='develop'):
             haltOnFailure=True,
             name='upload-bottle',
             slavesrc=Interpolate("%(prop:bottle)s"),
-            masterdest=Interpolate("public_html/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/"
-                                   "ethereum-%(prop:version)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
-            url=Interpolate("/builds/%(prop:buildername)s/%(prop:buildnumber)s/bottle/"
-                            "ethereum-%(prop:version)s.yosemite.bottle.%(prop:buildnumber)s.tar.gz"),
+            masterdest=Interpolate("public_html/builds/%(prop:buildername)s/bottles/"
+                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(prop:buildnumber)s.tar.gz", release=release),
+            url=Interpolate("/builds/%(prop:buildername)s/bottles/"
+                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(prop:buildnumber)s.tar.gz", release=release),
             workdir='brew'
         )
     ]: factory.addStep(step)
@@ -186,8 +194,10 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-bottle-url",
                 descriptionDone='update bottle url',
-                command=Interpolate('sed -i "" "s/^    root_url \'\(.*\)\'/    root_url \'https:\/\/build.ethdev.com\/builds\/'
-                                    '%(kw:urlbuildername)s\/%(prop:buildnumber)s\/bottle\'/" ethereum.rb', urlbuildername=urlbuildername),
+                command=Interpolate('sed -i "" "s/^'
+                                    '    root_url \'\(.*\)\'/'
+                                    '    root_url \'https:\/\/build.ethdev.com\/builds\/'
+                                    '%(kw:urlbuildername)s\/bottles\'/" ethereum.rb', urlbuildername=urlbuildername),
                 workdir='brew'
             ),
             ShellCommand(
@@ -195,7 +205,9 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-sha256sum",
                 descriptionDone='update sha256sum',
-                command=Interpolate('sed -i "" "s/^    sha256 \'\(.*\)\' => :yosemite/    sha256 \'%(prop:sha256sum)s\' => :yosemite/" ethereum.rb'),
+                command=Interpolate('sed -i "" "s/^'
+                                    '    sha256 \'\(.*\)\' => :%(kw:release)s/'
+                                    '    sha256 \'%(prop:sha256sum)s\' => :%(kw:release)s/" ethereum.rb', release=release),
                 workdir='brew'
             ),
             ShellCommand(
@@ -233,8 +245,10 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-bottle-url",
                 descriptionDone='update bottle url',
-                command=Interpolate('sed -i "" "s/^      root_url \'\(.*\)\'/      root_url \'https:\/\/build.ethdev.com\/builds\/%(kw:urlbuildername)s\/'
-                                    '%(prop:buildnumber)s\/bottle\'/" ethereum.rb', urlbuildername=urlbuildername),
+                command=Interpolate('sed -i "" "s/^'
+                                    '      root_url \'\(.*\)\'/'
+                                    '      root_url \'https:\/\/build.ethdev.com\/builds\/'
+                                    '%(kw:urlbuildername)s\/bottles\'/" ethereum.rb', urlbuildername=urlbuildername),
                 workdir='brew'
             ),
             ShellCommand(
@@ -242,7 +256,9 @@ def brew_go_factory(branch='develop'):
                 logEnviron=False,
                 name="update-sha256sum",
                 descriptionDone='update sha256sum',
-                command=Interpolate('sed -i "" "s/^      sha256 \'\(.*\)\' => :yosemite/      sha256 \'%(prop:sha256sum)s\' => :yosemite/" ethereum.rb'),
+                command=Interpolate('sed -i "" "s/^'
+                                    '      sha256 \'\(.*\)\' => :%(kw:release)s/'
+                                    '      sha256 \'%(prop:sha256sum)s\' => :%(kw:release)s/" ethereum.rb', release=release),
                 workdir='brew'
             ),
             ShellCommand(

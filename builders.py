@@ -241,10 +241,16 @@ for branch in ['master', 'develop']:
         #     factory=brew_cpp_factory(branch=branch, headless=False),
         #     locks=[brew_lock.access('counting')]),
         BuilderConfig(
-            name="OSX Go %s brew" % branch,
-            builddir="build-go-ethereum-%s-brew" % branch,
-            slavenames=["osx", "osx-two"],
-            factory=brew_go_factory(branch=branch),
+            name="OSX Go %s Yosemite" % branch,
+            builddir="build-go-ethereum-%s-yosemite" % branch,
+            slavenames=["osx"],
+            factory=brew_go_factory(branch=branch, release='yosemite'),
+            locks=[brew_lock.access('counting')]),
+        BuilderConfig(
+            name="OSX Go %s El Capitan" % branch,
+            builddir="build-go-ethereum-%s-el-capitan" % branch,
+            slavenames=["osx-two"],
+            factory=brew_go_factory(branch=branch, release='el_capitan'),
             locks=[brew_lock.access('counting')]),
         # BuilderConfig(
         #     name="Windows C++ %s branch" % branch,
@@ -273,13 +279,13 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="OSX PyEthereum %s" % branch,
             builddir="build-pyethereum-osx-%s" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=pyethereum_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
         BuilderConfig(
             name="OSX Serpent %s" % branch,
             builddir="build-serpent-osx-%s" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=serpent_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
 
@@ -435,7 +441,7 @@ for builder in [
     BuilderConfig(
         name="OSX PyEthApp",
         builddir="build-pyethapp-osx",
-        slavenames=["osx"],
+        slavenames=["osx", "osx-two"],
         factory=pyethapp_factory(branch='master'),
         locks=[osx_lock.access('counting')]),
 
@@ -525,25 +531,25 @@ for builder in [
     BuilderConfig(
         name="OSX Go pull requests",
         builddir="build-go-ethereum-osx-pr",
-        slavenames=["osx", "osx-two"],
+        slavenames=["osx-two"],
         factory=osx_go_factory(branch='develop', isPullRequest=True),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX PyEthereum PRs",
         builddir="build-pyethereum-osx-pr",
-        slavenames=["osx"],
+        slavenames=["osx", "osx-two"],
         factory=pyethereum_factory(branch='develop'),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX PyEthApp PRs",
         builddir="build-pyethapp-osx-pr",
-        slavenames=["osx"],
+        slavenames=["osx", "osx-two"],
         factory=pyethapp_factory(branch='master'),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX Serpent PRs",
         builddir="build-serpent-osx-pr",
-        slavenames=["osx"],
+        slavenames=["osx", "osx-two"],
         factory=serpent_factory(branch='develop'),
         locks=[osx_lock.access('counting')]),
 

@@ -187,9 +187,15 @@ for branch in ['master', 'develop']:
         #         "OSX C++ GUI %s brew" % branch],
         #     codebases=all_cpp_ethereum_codebases),
         Triggerable(
-            name="go-ethereum-%s-brew" % branch,
+            name="go-ethereum-%s-yosemite" % branch,
             builderNames=[
-                "OSX Go %s brew" % branch
+                "OSX Go %s Yosemite" % branch
+            ],
+            codebases=all_go_ethereum_codebases),
+        Triggerable(
+            name="go-ethereum-%s-el-capitan" % branch,
+            builderNames=[
+                "OSX Go %s El Capitan" % branch
             ],
             codebases=all_go_ethereum_codebases),
 
@@ -400,8 +406,12 @@ for branch in ['master', 'develop']:
         #     builderNames=["OSX C++ GUI %s brew" % branch],
         #     codebases=["homebrew-ethereum", "cpp-ethereum", "tests"]),
         ForceScheduler(
-            name="force-go-ethereum-%s-brew" % branch,
-            builderNames=["OSX Go %s brew" % branch],
+            name="force-go-ethereum-%s-yosemite" % branch,
+            builderNames=["OSX Go %s Yosemite" % branch],
+            codebases=["homebrew-ethereum", "go-ethereum"]),
+        ForceScheduler(
+            name="force-go-ethereum-%s-el-capitan" % branch,
+            builderNames=["OSX Go %s El Capitan" % branch],
             codebases=["homebrew-ethereum", "go-ethereum"]),
 
         # Windows C++/Go
