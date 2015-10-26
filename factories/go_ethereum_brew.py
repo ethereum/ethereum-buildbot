@@ -303,14 +303,16 @@ def brew_go_factory(branch='develop', release='el_capitan'):
 
     # Trigger Yosemite build
     if release == 'el_capitan':
-        Trigger(
-            name='brew-yosemite',
-            schedulerNames=["go-ethereum-%s-yosemite" % branch],
-            waitForFinish=False,
-            set_properties={
-                "version": Interpolate("%(prop:version)s"),
-                "revision": Interpolate("%(prop:buildnumber)s")
-            }
-        )
+        for step in [
+            Trigger(
+                name='brew-yosemite',
+                schedulerNames=["go-ethereum-%s-yosemite" % branch],
+                waitForFinish=False,
+                set_properties={
+                    "version": Interpolate("%(prop:version)s"),
+                    "revision": Interpolate("%(prop:buildnumber)s")
+                }
+            )
+        ]: factory.addStep(step)
 
     return factory
