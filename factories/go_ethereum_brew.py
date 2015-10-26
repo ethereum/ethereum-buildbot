@@ -9,6 +9,11 @@ import go_ethereum
 reload(go_ethereum)
 from go_ethereum import *
 
+@properties.renderer
+def revision_or_buildnumber(props):
+    if 'revision' in props:
+        return props['revision']
+    return props['buildnumber']
 
 def brew_go_factory(branch='develop', release='el_capitan'):
     factory = BuildFactory()
@@ -157,7 +162,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             haltOnFailure=True,
             logEnviron=False,
             name="bottle",
-            command="brew bottle ethereum.rb -v%s > bottle.log" % " --devel" if branch is "develop" else "",
+            command="brew bottle ethereum.rb -v%s > bottle.log" % (" --devel" if branch is "develop" else ""),
             logfiles={"bottle.log": "bottle.log"},
             lazylogfiles=True,
             description="bottling",
@@ -185,9 +190,13 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             name='upload-bottle',
             slavesrc=Interpolate("%(prop:bottle)s"),
             masterdest=Interpolate("public_html/builds/bottles/"
-                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(prop:buildnumber)s.tar.gz", release=release),
+                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz",
+                                   release=release,
+                                   revision=revision_or_buildnumber),
             url=Interpolate("/builds/bottles/"
-                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(prop:buildnumber)s.tar.gz", release=release),
+                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz",
+                            release=release,
+                            revision=revision_or_buildnumber),
             workdir='brew'
         )
     ]: factory.addStep(step)
@@ -291,5 +300,17 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             )
         ]: factory.addStep(step)
+
+    # Trigger Yosemite build
+    if release == 'el_capitan':
+        Trigger(
+            name='brew-yosemite',
+            schedulerNames=["go-ethereum-%s-yosemite" % branch],
+            waitForFinish=False,
+            set_properties={
+                "version": Interpolate("%(prop:version)s"),
+                "revision": Interpolate("%(prop:buildnumber)s")
+            }
+        )
 
     return factory

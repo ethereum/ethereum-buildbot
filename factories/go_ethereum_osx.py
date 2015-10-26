@@ -81,14 +81,6 @@ def osx_go_factory(branch='develop', isPullRequest=False):
     if not isPullRequest:
         for step in [
             Trigger(
-                name='brew-yosemite',
-                schedulerNames=["go-ethereum-%s-yosemite" % branch],
-                waitForFinish=False,
-                set_properties={
-                    "version": Interpolate("%(prop:version)s")
-                }
-            ),
-            Trigger(
                 name='brew-el-capitan',
                 schedulerNames=["go-ethereum-%s-el-capitan" % branch],
                 waitForFinish=False,
