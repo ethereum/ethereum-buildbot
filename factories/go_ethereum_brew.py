@@ -10,7 +10,7 @@ reload(go_ethereum)
 from go_ethereum import *
 
 
-def brew_go_factory(branch='develop', release='yosemite'):
+def brew_go_factory(branch='develop', release='el_capitan'):
     factory = BuildFactory()
 
     for step in [
@@ -36,80 +36,85 @@ def brew_go_factory(branch='develop', release='yosemite'):
         )
     ]: factory.addStep(step)
 
-    if branch == 'master':
-        for step in [
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
-                name="update-version",
-                descriptionDone='update go-ethereum version',
-                command=Interpolate('sed -i "" "s/^'
-                                    '  version \'\(.*\)\'/'
-                                    '  version \'%(prop:version)s\'/" ethereum.rb'),
-                workdir='brew',
-            ),
-            ShellCommand(
-                haltOnFailure=True,
-                logEnviron=False,
-                name="update-brew-revision",
-                descriptionDone='update brew revision',
-                command=Interpolate('sed -i "" "s/^'
-                                    '    revision \(.*\)/'
-                                    '    revision %(prop:buildnumber)s/" ethereum.rb'),
-                workdir='brew'
-            )
-        ]: factory.addStep(step)
+    # Bump version and revision only once
+    if release == 'el_capitan':
+        if branch == 'master':
+            for step in [
+                ShellCommand(
+                    haltOnFailure=True,
+                    logEnviron=False,
+                    name="update-version",
+                    descriptionDone='update go-ethereum version',
+                    command=Interpolate('sed -i "" "s/^'
+                                        '  version \'\(.*\)\'/'
+                                        '  version \'%(prop:version)s\'/" ethereum.rb'),
+                    workdir='brew',
+                ),
+                ShellCommand(
+                    haltOnFailure=True,
+                    logEnviron=False,
+                    name="update-brew-revision",
+                    descriptionDone='update brew revision',
+                    command=Interpolate('sed -i "" "s/^'
+                                        '    revision \(.*\)/'
+                                        '    revision %(prop:buildnumber)s/" ethereum.rb'),
+                    workdir='brew'
+                )
+            ]: factory.addStep(step)
 
-    elif branch == 'develop':
+        elif branch == 'develop':
+            for step in [
+                ShellCommand(
+                    haltOnFailure=True,
+                    logEnviron=False,
+                    name="update-version",
+                    descriptionDone='update go-ethereum version',
+                    command=Interpolate('sed -i "" "s/^'
+                                        '    version \'\(.*\)\'/'
+                                        '    version \'%(prop:version)s\'/" ethereum.rb'),
+                    workdir='brew',
+                ),
+                ShellCommand(
+                    haltOnFailure=True,
+                    logEnviron=False,
+                    name="update-brew-revision",
+                    descriptionDone='update brew revision',
+                    command=Interpolate('sed -i "" "s/^'
+                                        '      revision \(.*\)/'
+                                        '      revision %(prop:buildnumber)s/" ethereum.rb'),
+                    workdir='brew'
+                )
+            ]: factory.addStep(step)
+
         for step in [
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-version",
-                descriptionDone='update go-ethereum version',
-                command=Interpolate('sed -i "" "s/^'
-                                    '    version \'\(.*\)\'/'
-                                    '    version \'%(prop:version)s\'/" ethereum.rb'),
+                name="git-add",
+                descriptionDone='git add',
+                command='git add ethereum.rb',
+                workdir='brew'
+            ),
+            ShellCommand(
+                logEnviron=False,
+                name="git-commit",
+                descriptionDone='git commit',
+                command=Interpolate('git commit -m "bump ethereum to %(prop:version)s on %(kw:branch)s"', branch=branch),
                 workdir='brew',
+                decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
             ),
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-brew-revision",
-                descriptionDone='update brew revision',
-                command=Interpolate('sed -i "" "s/^'
-                                    '      revision \(.*\)/'
-                                    '      revision %(prop:buildnumber)s/" ethereum.rb'),
-                workdir='brew'
+                name="git-push",
+                descriptionDone='git push',
+                command='git pull --no-edit && git push',
+                workdir='brew',
+                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             )
         ]: factory.addStep(step)
 
     for step in [
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="git-add",
-            descriptionDone='git add',
-            command='git add ethereum.rb',
-            workdir='brew'
-        ),
-        ShellCommand(
-            logEnviron=False,
-            name="git-commit",
-            descriptionDone='git commit',
-            command=Interpolate('git commit -m "bump ethereum to %(prop:version)s on %(kw:branch)s"', branch=branch),
-            workdir='brew',
-            decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
-        ),
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="git-push",
-            descriptionDone='git push',
-            command='git pull --no-edit && git push',
-            workdir='brew',
-            decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
-        ),
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
