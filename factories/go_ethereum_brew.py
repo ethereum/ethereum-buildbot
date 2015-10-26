@@ -106,7 +106,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 descriptionDone='git commit',
                 command=Interpolate('git commit -m "bump ethereum to %(prop:version)s on %(kw:branch)s"', branch=branch),
                 workdir='brew',
-                decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
+                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             ),
             ShellCommand(
                 haltOnFailure=True,
@@ -114,8 +114,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 name="git-push",
                 descriptionDone='git push',
                 command='git pull --no-edit && git push',
-                workdir='brew',
-                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
+                workdir='brew'
             )
         ]: factory.addStep(step)
 
@@ -189,12 +188,12 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             haltOnFailure=True,
             name='upload-bottle',
             slavesrc=Interpolate("%(prop:bottle)s"),
-            masterdest=Interpolate("public_html/builds/bottles/"
-                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz",
+            masterdest=Interpolate("public_html/builds/bottles%s/"
+                                   "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz" % ("-dev" if branch == 'develop' else ""),
                                    release=release,
                                    revision=revision_or_buildnumber),
-            url=Interpolate("/builds/bottles/"
-                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz",
+            url=Interpolate("/builds/bottles%s/"
+                            "ethereum-%(prop:version)s.%(kw:release)s.bottle.%(kw:revision)s.tar.gz" % ("-dev" if branch == 'develop' else ""),
                             release=release,
                             revision=revision_or_buildnumber),
             workdir='brew'
@@ -206,11 +205,9 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-bottle-url",
-                descriptionDone='update bottle url',
-                command=Interpolate('sed -i "" "s/^'
-                                    '    root_url \'\(.*\)\'/'
-                                    '    root_url \'https:\/\/build.ethdev.com\/builds\/bottles\'/" ethereum.rb'),
+                name="git-pull",
+                descriptionDone='git pull',
+                command='git pull --no-edit',
                 workdir='brew'
             ),
             ShellCommand(
@@ -238,7 +235,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 command=Interpolate('git commit -m "bump ethereum to %(prop:version)s at ethereum/go-ethereum@%(kw:go_revision)s"',
                                     go_revision=get_short_revision_go),
                 workdir='brew',
-                decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
+                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             ),
             ShellCommand(
                 haltOnFailure=True,
@@ -246,8 +243,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 name="git-push",
                 descriptionDone='git push',
                 command='git pull --no-edit && git push',
-                workdir='brew',
-                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
+                workdir='brew'
             )
         ]: factory.addStep(step)
 
@@ -256,11 +252,9 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
-                name="update-bottle-url",
-                descriptionDone='update bottle url',
-                command=Interpolate('sed -i "" "s/^'
-                                    '      root_url \'\(.*\)\'/'
-                                    '      root_url \'https:\/\/build.ethdev.com\/builds\/bottles-dev\'/" ethereum.rb'),
+                name="git-pull",
+                descriptionDone='git pull',
+                command='git pull --no-edit',
                 workdir='brew'
             ),
             ShellCommand(
@@ -288,7 +282,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 command=Interpolate('git commit -m "bump ethereum to %(prop:version)s at ethereum/go-ethereum@%(kw:go_revision)s"',
                                     go_revision=get_short_revision_go),
                 workdir='brew',
-                decodeRC={0: SUCCESS, 1: SUCCESS, 2: WARNINGS}
+                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             ),
             ShellCommand(
                 haltOnFailure=True,
@@ -296,8 +290,7 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 name="git-push",
                 descriptionDone='git push',
                 command='git pull --no-edit && git push',
-                workdir='brew',
-                decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
+                workdir='brew'
             )
         ]: factory.addStep(step)
 
