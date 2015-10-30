@@ -15,6 +15,9 @@ def revision_or_buildnumber(props):
         return props['revision']
     return props['buildnumber']
 
+def release_name(release):
+    return 'Yosemite' if release == 'yosemite' else 'El Capitan'
+
 def brew_go_factory(branch='develop', release='el_capitan'):
     factory = BuildFactory()
 
@@ -54,16 +57,6 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                                         '  version \'\(.*\)\'/'
                                         '  version \'%(prop:version)s\'/" ethereum.rb'),
                     workdir='brew',
-                ),
-                ShellCommand(
-                    haltOnFailure=True,
-                    logEnviron=False,
-                    name="update-brew-revision",
-                    descriptionDone='update brew revision',
-                    command=Interpolate('sed -i "" "s/^'
-                                        '    revision \(.*\)/'
-                                        '    revision %(prop:buildnumber)s/" ethereum.rb'),
-                    workdir='brew'
                 )
             ]: factory.addStep(step)
 
@@ -78,16 +71,6 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                                         '    version \'\(.*\)\'/'
                                         '    version \'%(prop:version)s\'/" ethereum.rb'),
                     workdir='brew',
-                ),
-                ShellCommand(
-                    haltOnFailure=True,
-                    logEnviron=False,
-                    name="update-brew-revision",
-                    descriptionDone='update brew revision',
-                    command=Interpolate('sed -i "" "s/^'
-                                        '      revision \(.*\)/'
-                                        '      revision %(prop:buildnumber)s/" ethereum.rb'),
-                    workdir='brew'
                 )
             ]: factory.addStep(step)
 
@@ -215,6 +198,16 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
+                name="update-brew-revision",
+                descriptionDone='update brew revision',
+                command=Interpolate('sed -i "" "s/^'
+                                    '    revision \(.*\)/'
+                                    '    revision %(prop:buildnumber)s/" ethereum.rb'),
+                workdir='brew'
+            ),
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
                 name="update-sha256sum",
                 descriptionDone='update sha256sum',
                 command=Interpolate('sed -i "" "s/^'
@@ -234,8 +227,10 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 logEnviron=False,
                 name="git-commit",
                 descriptionDone='git commit',
-                command=Interpolate('git commit -m "bump ethereum to %(prop:version)s at ethereum/go-ethereum@%(kw:go_revision)s"',
-                                    go_revision=get_short_revision_go),
+                command=Interpolate('git commit -m "ethereum %(prop:version)s on %(kw:branch)s at ethereum/go-ethereum@%(kw:go_revision)s for %(kw:release)s"',
+                                    branch=branch,
+                                    go_revision=get_short_revision_go,
+                                    release=release_name(release)),
                 workdir='brew',
                 decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             ),
@@ -262,6 +257,16 @@ def brew_go_factory(branch='develop', release='el_capitan'):
             ShellCommand(
                 haltOnFailure=True,
                 logEnviron=False,
+                name="update-brew-revision",
+                descriptionDone='update brew revision',
+                command=Interpolate('sed -i "" "s/^'
+                                    '      revision \(.*\)/'
+                                    '      revision %(prop:buildnumber)s/" ethereum.rb'),
+                workdir='brew'
+            ),
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
                 name="update-sha256sum",
                 descriptionDone='update sha256sum',
                 command=Interpolate('sed -i "" "s/^'
@@ -281,8 +286,10 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 logEnviron=False,
                 name="git-commit",
                 descriptionDone='git commit',
-                command=Interpolate('git commit -m "bump ethereum to %(prop:version)s at ethereum/go-ethereum@%(kw:go_revision)s"',
-                                    go_revision=get_short_revision_go),
+                command=Interpolate('git commit -m "ethereum %(prop:version)s on %(kw:branch)s at ethereum/go-ethereum@%(kw:go_revision)s for %(kw:release)s"',
+                                    branch=branch,
+                                    go_revision=get_short_revision_go,
+                                    release=release_name(release)),
                 workdir='brew',
                 decodeRC={0: SUCCESS, 1: WARNINGS, 2: WARNINGS}
             ),
