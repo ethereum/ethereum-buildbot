@@ -100,6 +100,17 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 workdir='brew'
             )
         ]: factory.addStep(step)
+    else:
+        for step in [
+            ShellCommand(
+                haltOnFailure=True,
+                logEnviron=False,
+                name="git-pull",
+                descriptionDone='git pull',
+                command='git pull --no-edit',
+                workdir='brew'
+            )
+        ]: factory.addStep(step)
 
     for step in [
         ShellCommand(
