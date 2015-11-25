@@ -213,7 +213,8 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 descriptionDone='update brew revision',
                 command=Interpolate('sed -i "" "s/^'
                                     '    revision \(.*\)/'
-                                    '    revision %(prop:buildnumber)s/" ethereum.rb'),
+                                    '    revision %(kw:revision)s/" ethereum.rb',
+                                    revision=revision_or_buildnumber),
                 workdir='brew'
             ),
             ShellCommand(
@@ -272,7 +273,8 @@ def brew_go_factory(branch='develop', release='el_capitan'):
                 descriptionDone='update brew revision',
                 command=Interpolate('sed -i "" "s/^'
                                     '      revision \(.*\)/'
-                                    '      revision %(prop:buildnumber)s/" ethereum.rb'),
+                                    '      revision %(kw:revision)s/" ethereum.rb',
+                                    revision=revision_or_buildnumber),
                 workdir='brew'
             ),
             ShellCommand(
