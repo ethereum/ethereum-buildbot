@@ -225,7 +225,7 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="OSX Go %s branch" % branch,
             builddir="build-go-osx-%s" % branch,
-            slavenames=["osx", "osx-two"],
+            slavenames=["osx"],
             factory=osx_go_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
         # BuilderConfig(
@@ -241,16 +241,16 @@ for branch in ['master', 'develop']:
         #     factory=brew_cpp_factory(branch=branch, headless=False),
         #     locks=[brew_lock.access('counting')]),
         BuilderConfig(
-            name="OSX Go %s Yosemite" % branch,
-            builddir="build-go-ethereum-%s-yosemite" % branch,
-            slavenames=["osx"],
-            factory=brew_go_factory(branch=branch, release='yosemite'),
-            locks=[brew_lock.access('counting')]),
-        BuilderConfig(
             name="OSX Go %s El Capitan" % branch,
             builddir="build-go-ethereum-%s-el-capitan" % branch,
-            slavenames=["osx-two"],
+            slavenames=["osx"],
             factory=brew_go_factory(branch=branch, release='el_capitan'),
+            locks=[brew_lock.access('counting')]),
+        BuilderConfig(
+            name="OSX Go %s Yosemite" % branch,
+            builddir="build-go-ethereum-%s-yosemite" % branch,
+            slavenames=["osx-two"],
+            factory=brew_go_factory(branch=branch, release='yosemite'),
             locks=[brew_lock.access('counting')]),
         # BuilderConfig(
         #     name="Windows C++ %s branch" % branch,

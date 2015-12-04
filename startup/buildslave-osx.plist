@@ -24,7 +24,7 @@
 	<string>net.buildbot.slave</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>twistd</string>
+		<string>/usr/local/bin/twistd</string>
 		<string>--nodaemon</string>
 		<string>-y</string>
 		<string>./buildbot.tac</string>
