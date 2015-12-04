@@ -225,7 +225,7 @@ for branch in ['master', 'develop']:
         BuilderConfig(
             name="OSX Go %s branch" % branch,
             builddir="build-go-osx-%s" % branch,
-            slavenames=["osx"],
+            slavenames=["osx", "osx-two"],
             factory=osx_go_factory(branch=branch),
             locks=[osx_lock.access('counting')]),
         # BuilderConfig(
@@ -531,7 +531,7 @@ for builder in [
     BuilderConfig(
         name="OSX Go pull requests",
         builddir="build-go-ethereum-osx-pr",
-        slavenames=["osx-two"],
+        slavenames=["osx", "osx-two"],
         factory=osx_go_factory(branch='develop', isPullRequest=True),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
