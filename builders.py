@@ -17,6 +17,7 @@ from factories import go_ethereum_arm
 from factories import go_ethereum_osx
 from factories import go_ethereum_brew
 from factories import go_ethereum_windows
+from factories import mist
 from factories import ethereumj
 from factories import pyethereum
 from factories import pyethapp
@@ -37,6 +38,7 @@ reload(go_ethereum_arm)
 reload(go_ethereum_osx)
 reload(go_ethereum_brew)
 reload(go_ethereum_windows)
+reload(mist)
 reload(ethereumj)
 reload(pyethereum)
 reload(pyethapp)
@@ -58,6 +60,7 @@ from factories.go_ethereum_arm import *
 from factories.go_ethereum_osx import *
 from factories.go_ethereum_brew import *
 from factories.go_ethereum_windows import *
+from factories.mist import *
 from factories.ethereumj import *
 from factories.pyethereum import *
 from factories.pyethapp import *
@@ -264,6 +267,12 @@ for branch in ['master', 'develop']:
             slavenames=["winslave-go"],
             factory=windows_go_factory(branch=branch),
             locks=[win_lock_go.access('counting')]),
+        BuilderConfig(
+            name="Mist %s branch" % branch,
+            builddir="build-mist-%s" % branch,
+            slavenames=["osx", "osx-two"],
+            factory=mist_factory(branch=branch),
+            locks=[osx_lock.access('counting')]),
         BuilderConfig(
             name="Linux PyEthereum %s" % branch,
             builddir="build-pyethereum-%s" % branch,
@@ -533,6 +542,12 @@ for builder in [
         builddir="build-go-ethereum-osx-pr",
         slavenames=["osx", "osx-two"],
         factory=osx_go_factory(branch='develop', isPullRequest=True),
+        locks=[osx_lock.access('counting')]),
+    BuilderConfig(
+        name="Mist pull requests",
+        builddir="build-mist-pr",
+        slavenames=["osx", "osx-two"],
+        factory=mist_factory(branch='develop', isPullRequest=True),
         locks=[osx_lock.access('counting')]),
     BuilderConfig(
         name="OSX PyEthereum PRs",

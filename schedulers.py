@@ -48,6 +48,13 @@ go_ethereum_codebases = {
         'revision': None
     }
 }
+mist_codebases = {
+    'mist': {
+        'repository': 'https://github.com/ethereum/mist.git',
+        'branch': None,
+        'revision': None
+    }
+}
 # ethereumj_codebases = {
 #     'ethereumj': {
 #         'repository': 'https://github.com/ethereum/ethereumj.git',
@@ -103,6 +110,8 @@ brew_codebases = {
 
 all_go_ethereum_codebases = go_ethereum_codebases.copy()
 all_go_ethereum_codebases.update(brew_codebases)
+
+all_mist_codebases = mist_codebases.copy()
 
 # all_ethereumj_codebases = ethereumj_codebases.copy()
 
@@ -161,6 +170,14 @@ for branch in ['master', 'develop']:
                 "ARM Go %s branch" % branch,
                 "OSX Go %s branch" % branch,
                 "Windows Go %s branch" % branch
+            ]),
+        SingleBranchScheduler(
+            name="mist-%s-git" % branch,
+            change_filter=filter.ChangeFilter(project='mist', branch=branch),
+            codebases=all_mist_codebases,
+            treeStableTimer=60,
+            builderNames=[
+                "Mist %s branch" % branch
             ]),
         SingleBranchScheduler(
             name="pyethereum-%s-git" % branch,
@@ -280,6 +297,14 @@ for scheduler in [
             "ARM Go pull requests",
             "OSX Go pull requests",
             "Windows Go pull requests"
+        ]),
+    AnyBranchScheduler(
+        name="mist-develop-pr-git",
+        change_filter=filter.ChangeFilter(codebase='go-ethereum', category='pull'),
+        codebases=all_mist_codebases,
+        treeStableTimer=60,
+        builderNames=[
+            "Mist pull requests"
         ]),
     AnyBranchScheduler(
         name="pyethereum-pr-git",
@@ -423,6 +448,10 @@ for branch in ['master', 'develop']:
             name="force-go-ethereum-%s-win" % branch,
             builderNames=["Windows Go %s branch" % branch],
             codebases=["go-ethereum"]),
+        ForceScheduler(
+            name="force-mist-%s" % branch,
+            builderNames=["Mist %s branch" % branch],
+            codebases=["mist"]),
 
         # Other schedulers
         ForceScheduler(
@@ -505,6 +534,10 @@ for scheduler in [
         name="force-go-ethereum-osx-pr",
         builderNames=["OSX Go pull requests"],
         codebases=["go-ethereum"]),
+    ForceScheduler(
+        name="force-mist-pr",
+        builderNames=["Mist pull requests"],
+        codebases=["mist"]),
     ForceScheduler(
         name="force-pyethereum-osx-pr",
         builderNames=["OSX PyEthereum PRs"],
