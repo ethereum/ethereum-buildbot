@@ -43,7 +43,7 @@ def mist_factory(branch='master', isPullRequest=False):
             haltOnFailure=True,
             logEnviron=False,
             name="set-version",
-            command='sed -ne "s/.*\"version\": \"\([0-9]*\.[0-9]*\.[0-9]*\)\".*/\\1/p" package.json',
+            command='sed -ne "s/.*\\"version\\": \\"\([0-9]*\.[0-9]*\.[0-9]*\)\\".*/\\1/p" package.json',
             property="version"
         ),
         ShellCommand(
