@@ -70,13 +70,15 @@ def mist_factory(branch='master', isPullRequest=False):
                 ShellCommand(
                     haltOnFailure=True,
                     logEnviron=False,
-                    name="zip-mist-%s" % arch,
+                    name="pack-mist-%s" % arch,
                     description='packing %s' % arch,
                     descriptionDone='pack %s' % arch,
-                    command=['zip', '-r',
-                             Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
+                    command=['zip' if arch.startswith('win') else 'tar',
+                             '-r' if arch.startswith('win') else '-cjf',
+                             Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.%(kw:ext)s",
                                          arch=arch,
-                                         short_revision=get_short_revision_mist),
+                                         short_revision=get_short_revision_mist,
+                                         ext='zip' if arch.startswith('win') else 'tar.bz2'),
                              Interpolate('Mist-%(kw:arch)s-%(kw:folder_version)s',
                                          arch=arch,
                                          folder_version=folder_version)],
@@ -86,31 +88,36 @@ def mist_factory(branch='master', isPullRequest=False):
                     haltOnFailure=True,
                     logEnviron=False,
                     name="sha256sum-%s" % arch,
-                    command=Interpolate('sha256sum Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip | grep -o -w "\w\{64\}"',
+                    command=Interpolate('sha256sum Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.%(kw:ext)s | grep -o -w "\w\{64\}"',
                                         arch=arch,
-                                        short_revision=get_short_revision_mist),
+                                        short_revision=get_short_revision_mist,
+                                        ext='zip' if arch.startswith('win') else 'tar.bz2'),
                     property='sha256sum-%s' % arch,
                     workdir='build/dist_mist'
                 ),
                 FileUpload(
                     haltOnFailure=True,
                     name='upload-mist-%s' % arch,
-                    slavesrc=Interpolate("dist_mist/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
+                    slavesrc=Interpolate("dist_mist/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.%(kw:ext)s",
                                          arch=arch,
-                                         short_revision=get_short_revision_mist),
-                    masterdest=Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
+                                         short_revision=get_short_revision_mist,
+                                         ext='zip' if arch.startswith('win') else 'tar.bz2'),
+                    masterdest=Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.%(kw:ext)s",
                                            arch=arch,
-                                           short_revision=get_short_revision_mist),
-                    url=Interpolate("/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
+                                           short_revision=get_short_revision_mist,
+                                           ext='zip' if arch.startswith('win') else 'tar.bz2'),
+                    url=Interpolate("/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.%(kw:ext)s",
                                     arch=arch,
-                                    short_revision=get_short_revision_mist)
+                                    short_revision=get_short_revision_mist,
+                                    ext='zip' if arch.startswith('win') else 'tar.bz2')
                 ),
                 MasterShellCommand(
                     name="clean-latest-link-%s" % arch,
                     description='cleaning latest link %s' % arch,
                     descriptionDone='clean latest link %s' % arch,
-                    command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.zip",
-                                                     arch=arch)]
+                    command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.%(kw:ext)s",
+                                                     arch=arch,
+                                                     ext='zip' if arch.startswith('win') else 'tar.bz2')]
                 ),
                 MasterShellCommand(
                     haltOnFailure=True,
@@ -118,11 +125,13 @@ def mist_factory(branch='master', isPullRequest=False):
                     description='linking latest %s' % arch,
                     descriptionDone='link latest %s' % arch,
                     command=['ln', '-sf',
-                             Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
+                             Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.%(kw:ext)s",
                                          arch=arch,
-                                         short_revision=get_short_revision_mist),
-                             Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.zip",
-                                         arch=arch)]
+                                         short_revision=get_short_revision_mist,
+                                         ext='zip' if arch.startswith('win') else 'tar.bz2'),
+                             Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.%(kw:ext)s",
+                                         arch=arch,
+                                         ext='zip' if arch.startswith('win') else 'tar.bz2')]
                 )
             ]: factory.addStep(step)
 
