@@ -80,7 +80,7 @@ def mist_factory(branch='master', isPullRequest=False):
                              Interpolate('Mist-%(kw:arch)s-%(kw:folder_version)s',
                                          arch=arch,
                                          folder_version=folder_version)],
-                    workdir='dist_mist'
+                    workdir='build/dist_mist'
                 ),
                 SetPropertyFromCommand(
                     haltOnFailure=True,
@@ -90,7 +90,7 @@ def mist_factory(branch='master', isPullRequest=False):
                                         arch=arch,
                                         short_revision=get_short_revision_mist),
                     property='sha256sum-%s' % arch,
-                    workdir='dist_mist'
+                    workdir='build/dist_mist'
                 ),
                 FileUpload(
                     haltOnFailure=True,
