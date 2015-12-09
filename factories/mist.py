@@ -70,35 +70,38 @@ def mist_factory(branch='master', isPullRequest=False):
                 ShellCommand(
                     haltOnFailure=True,
                     logEnviron=False,
-                    name="tar-mist-%s" % arch,
+                    name="zip-mist-%s" % arch,
                     description='packing %s' % arch,
                     descriptionDone='pack %s' % arch,
-                    command=['tar', '-cjf', Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.tar.bz2",
-                                                        arch=arch,
-                                                        short_revision=get_short_revision_mist),
-                             Interpolate('dist_mist/Mist-%(kw:arch)s-%(kw:folder_version)s',
+                    command=['zip', '-r',
+                             Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
                                          arch=arch,
-                                         folder_version=folder_version)]
+                                         short_revision=get_short_revision_mist),
+                             Interpolate('Mist-%(kw:arch)s-%(kw:folder_version)s',
+                                         arch=arch,
+                                         folder_version=folder_version)],
+                    workdir='dist_mist'
                 ),
                 SetPropertyFromCommand(
                     haltOnFailure=True,
                     logEnviron=False,
                     name="sha256sum-%s" % arch,
-                    command=Interpolate('sha256sum Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.tar.bz2 | grep -o -w "\w\{64\}"',
+                    command=Interpolate('sha256sum Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip | grep -o -w "\w\{64\}"',
                                         arch=arch,
                                         short_revision=get_short_revision_mist),
-                    property='sha256sum-%s' % arch
+                    property='sha256sum-%s' % arch,
+                    workdir='dist_mist'
                 ),
                 FileUpload(
                     haltOnFailure=True,
                     name='upload-mist-%s' % arch,
-                    slavesrc=Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.tar.bz2",
+                    slavesrc=Interpolate("dist_mist/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
                                          arch=arch,
                                          short_revision=get_short_revision_mist),
-                    masterdest=Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.tar.bz2",
+                    masterdest=Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
                                            arch=arch,
                                            short_revision=get_short_revision_mist),
-                    url=Interpolate("/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.tar.bz2",
+                    url=Interpolate("/builds/%(prop:buildername)s/Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
                                     arch=arch,
                                     short_revision=get_short_revision_mist)
                 ),
@@ -106,7 +109,7 @@ def mist_factory(branch='master', isPullRequest=False):
                     name="clean-latest-link-%s" % arch,
                     description='cleaning latest link %s' % arch,
                     descriptionDone='clean latest link %s' % arch,
-                    command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.tar.bz2",
+                    command=['rm', '-f', Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.zip",
                                                      arch=arch)]
                 ),
                 MasterShellCommand(
@@ -114,10 +117,11 @@ def mist_factory(branch='master', isPullRequest=False):
                     name="link-latest-%s" % arch,
                     description='linking latest %s' % arch,
                     descriptionDone='link latest %s' % arch,
-                    command=['ln', '-sf', Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.tar.bz2",
-                                                      arch=arch,
-                                                      short_revision=get_short_revision_mist),
-                             Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.tar.bz2",
+                    command=['ln', '-sf',
+                             Interpolate("Mist-%(prop:version)s-%(kw:arch)s-%(kw:short_revision)s.zip",
+                                         arch=arch,
+                                         short_revision=get_short_revision_mist),
+                             Interpolate("public_html/builds/%(prop:buildername)s/Mist-%(kw:arch)s-latest.zip",
                                          arch=arch)]
                 )
             ]: factory.addStep(step)
