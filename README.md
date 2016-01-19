@@ -1,13 +1,13 @@
 # Ethereum Buildbot
 
-This project contains the configuration for the [Ethereum Buildbot](https://build.ethdev.com/waterfall)
+This project contains the configuration for the [Ethereum Buildbot](https://builds.ethereum.org/waterfall)
 
 Changes to this repository are automatically deployed once they are pushed to GitHub. Please open a pull request unless you really know what you are doing.
 
 
 ## Configuration / Development
 
-This is to create a local installation of buildbot for development purposes or to test changes to the buildbot's configurations. 
+This is to create a local installation of buildbot for development purposes or to test changes to the buildbot's configurations.
 
 Start by cloning this repository locally and follow the steps below for your platform.
 
