@@ -36,11 +36,11 @@ def self_update_factory():
             description='running checkconfig',
             descriptionDone='checkconfig',
             command=['buildbot', 'checkconfig', '.'],
-            flunkOnWarnings = True,
-            flunkOnFailure = True,
+            flunkOnWarnings=True,
+            flunkOnFailure=True,
             haltOnFailure=True,
-            warnOnFailure = False,
-            interruptSignal = 15
+            warnOnFailure=False,
+            interruptSignal=15
         ),
         MasterShellCommand(
             haltOnFailure=True,

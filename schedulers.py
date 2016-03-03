@@ -700,7 +700,7 @@ for distribution in distributions:
                 StringParameter(
                     name="version",
                     label="Version:<br>",
-                    default="2:1.5.1-0ubuntu2",
+                    default="2:1.6-0ubuntu3",
                     required=True,
                     size=10)
             ]),

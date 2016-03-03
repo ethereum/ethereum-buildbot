@@ -44,7 +44,7 @@ def windows_go_factory(branch='develop', isPullRequest=False):
             logEnviron=False,
             name="set-version",
             command='%s -ne "s/^\([0-9]*\.[0-9]*\.[0-9]*\).*/\\1/p" VERSION' % sed,
-            property = "version"
+            property="version"
         ),
         ShellCommand(
             haltOnFailure=True,

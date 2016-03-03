@@ -31,7 +31,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             retry=(5, 3)
         ),
         ShellCommand(
-            flunkOnFailure = False,
+            flunkOnFailure=False,
             logEnviron=False,
             name="cleanup-containers",
             description="cleaning up containers",
@@ -40,7 +40,7 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             decodeRC={0: SUCCESS, 1: WARNINGS, 123: WARNINGS}
         ),
         ShellCommand(
-            flunkOnFailure = False,
+            flunkOnFailure=False,
             logEnviron=False,
             name="cleanup-images",
             description="cleaning up images",

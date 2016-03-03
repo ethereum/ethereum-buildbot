@@ -40,7 +40,7 @@ def win_cpp_factory(branch='master', isPullRequest=False):
             logEnviron=False,
             name="set-version",
             command='%s -ne "s/^set(PROJECT_VERSION \\"\(.*\)\\")$/\\1/p" CMakeLists.txt' % sed,
-            property = "version"
+            property="version"
         ),
         ShellCommand(
             haltOnFailure=True,

@@ -172,7 +172,7 @@ def integration_factory():
             workdir="integration"
         ),
         Test(
-            flunkOnFailure = False,
+            flunkOnFailure=False,
             logEnviron=False,
             description="py.testing",
             descriptionDone="py.test",
@@ -190,7 +190,7 @@ def integration_factory():
             workdir="ethereumjs"
         ),
         Test(
-            flunkOnFailure = False,
+            flunkOnFailure=False,
             logEnviron=False,
             description="npm testing",
             descriptionDone="npm test",
@@ -373,7 +373,7 @@ def integration_factory():
         ),
         ShellCommand(
             haltOnFailure=False,
-            flunkOnFailure = False,
+            flunkOnFailure=False,
             warnOnFailure=True,
             logEnviron=False,
             name="move-screenshots",
@@ -385,8 +385,8 @@ def integration_factory():
         # Upload screenshots
         DirectoryUpload(
             name='upload-screenshots',
-            compress = 'gz',
-            slavesrc = "screenshots",
+            compress='gz',
+            slavesrc="screenshots",
             masterdest=Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots"),
             url=Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/screenshots/"),
             workdir="integration/tests"
@@ -394,8 +394,8 @@ def integration_factory():
         # Upload HTML and coverage report
         DirectoryUpload(
             name='upload-reports',
-            compress = 'gz',
-            slavesrc = "report",
+            compress='gz',
+            slavesrc="report",
             masterdest=Interpolate("public_html/reports/%(prop:buildername)s/%(prop:buildnumber)s/report"),
             url=Interpolate("/reports/%(prop:buildername)s/%(prop:buildnumber)s/report/"),
             workdir="integration/tests"

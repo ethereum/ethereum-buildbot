@@ -91,7 +91,7 @@ def osx_cpp_factory(branch='develop', isPullRequest=False, evmjit=False, headles
         Configure(
             haltOnFailure=True,
             logEnviron=False,
-            command = cmake_osx_cmd(['cmake', '.'], evmjit=evmjit, headless=headless)
+            command=cmake_osx_cmd(['cmake', '.'], evmjit=evmjit, headless=headless)
         ),
         Compile(
             haltOnFailure=True,
