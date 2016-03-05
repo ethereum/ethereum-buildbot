@@ -6,12 +6,12 @@ reload(factory)
 from factory import *
 
 osVersions = [
-    'darwin-x64',
+    'macosx',
     # 'linux-arm',
-    'linux-ia32',
-    'linux-x64',
-    'win32-ia32',
-    'win32-x64'
+    'linux32',
+    'linux64',
+    'win32',
+    'win64'
 ]
 
 @properties.renderer
