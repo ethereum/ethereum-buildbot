@@ -22,7 +22,7 @@ for slave in json.load(open("slaves.json")):
             slave['password'],
             'c3.large',
             max_builds=1,
-            ami='ami-adb4edc8',
+            ami='ami-ec6c7186',
             region='us-east-1',
             placement='c',
             user_data='{"SLAVENAME": "%s"}' % slave['name'],
