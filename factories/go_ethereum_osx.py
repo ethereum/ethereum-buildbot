@@ -5,18 +5,9 @@ import factory
 reload(factory)
 from factory import *
 
-import go_ethereum
-reload(go_ethereum)
-from go_ethereum import _go_cmds
-
 
 def osx_go_factory(branch='develop', isPullRequest=False):
     factory = BuildFactory()
-
-    env = {
-        "GOPATH": Interpolate("%(prop:workdir)s/go:%(prop:workdir)s/build/Godeps/_workspace"),
-        'PATH': [Interpolate("%(prop:workdir)s/go/bin"), "${PATH}"]
-    }
 
     for step in [
         Git(
@@ -39,41 +30,25 @@ def osx_go_factory(branch='develop', isPullRequest=False):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="go-cleanup",
-            command=Interpolate("rm -rf %(prop:workdir)s/go"),
+            name="make-clean",
             description="cleaning up",
             descriptionDone="clean up",
-            env={"GOPATH": Interpolate("%(prop:workdir)s/go")}
+            command=["make", "clean"]
         ),
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="move-src",
-            description="moving src",
-            descriptionDone="move src",
-            command=_go_cmds(branch=branch),
-            env={"GOPATH": Interpolate("%(prop:workdir)s/go")}
+            name="make-all",
+            description="installing",
+            descriptionDone="install",
+            command=["make", "all"]
         ),
         ShellCommand(
             haltOnFailure=True,
-            logEnviron=False,
-            name="install-geth",
-            description="installing geth",
-            descriptionDone="install geth",
-            command="go install -v github.com/ethereum/go-ethereum/cmd/geth",
-            env=env
-        )
-    ]: factory.addStep(step)
-
-    for step in [
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
             name="go-test",
             description="go testing",
             descriptionDone="go test",
-            command="go test github.com/ethereum/go-ethereum/...",
-            env=env,
+            command=["make", "test"],
             maxTime=900
         )
     ]: factory.addStep(step)

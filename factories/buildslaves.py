@@ -57,13 +57,13 @@ def buildslave_factory(lang="cpp", client="cpp-ethereum"):
             command=["docker", "build", "--no-cache", "-t", "cptobvious/%s-base" % client, "%s-base" % client],
             timeout=1800
         ),
-        ShellCommand(
-            logEnviron=False,
-            name="docker-%s-push" % lang,
-            command=["docker", "push", "cptobvious/%s-base" % client],
-            warnOnFailure=True,
-            decodeRC={0: SUCCESS, 1: WARNINGS}
-        ),
+        # ShellCommand(
+        #     logEnviron=False,
+        #     name="docker-%s-push" % lang,
+        #     command=["docker", "push", "cptobvious/%s-base" % client],
+        #     warnOnFailure=True,
+        #     decodeRC={0: SUCCESS, 1: WARNINGS}
+        # ),
         SetPropertyFromCommand(
             haltOnFailure=True,
             logEnviron=False,

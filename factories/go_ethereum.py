@@ -45,38 +45,25 @@ def go_ethereum_factory(branch='master', deb=False):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="go-cleanup",
-            command="rm -rf $GOPATH",
+            name="make-clean",
+            command=["make", "clean"],
             description="cleaning up",
             descriptionDone="clean up"
         ),
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="move-src",
-            command=_go_cmds(branch=branch),
-            description="moving src",
-            descriptionDone="move src"
+            name="make-all",
+            description="installing",
+            descriptionDone="install",
+            command=["make", "all"]
         ),
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="install-geth",
-            description="installing geth",
-            descriptionDone="install geth",
-            command="go install -v github.com/ethereum/go-ethereum/cmd/geth",
-            env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")}
-        )
-    ]: factory.addStep(step)
-
-    for step in [
         ShellCommand(
             haltOnFailure=True,
             name="go-test",
             description="go testing",
             descriptionDone="go test",
-            command="go test github.com/ethereum/go-ethereum/...",
-            env={"GOPATH": Interpolate("${GOPATH}:%(prop:workdir)s/build/Godeps/_workspace")},
+            command=["make", "test"],
             maxTime=900
         )
     ]: factory.addStep(step)

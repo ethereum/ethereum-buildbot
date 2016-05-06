@@ -7,20 +7,18 @@ from factory import *
 
 import go_ethereum
 reload(go_ethereum)
-from go_ethereum import get_short_revision_go, _go_cmds
+from go_ethereum import get_short_revision_go
 
 
 def arm_go_factory(branch='develop', isPullRequest=False):
     factory = BuildFactory()
 
     env = {
-        "GOPATH": Interpolate("%(prop:workdir)s/go:%(prop:workdir)s/build/Godeps/_workspace"),
-        "CC": "arm-linux-gnueabi-gcc",
+        "CC": "arm-linux-gnueabi-gcc-5",
         "GOOS": "linux",
         "GOARCH": "arm",
-        "CGO_ENABLED": "1",
         "GOARM": "5",
-        'PATH': [Interpolate("%(prop:workdir)s/go/bin"), "${PATH}"]
+        "CGO_ENABLED": "1"
     }
 
     for step in [
@@ -44,43 +42,29 @@ def arm_go_factory(branch='develop', isPullRequest=False):
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="go-cleanup",
-            command=Interpolate("rm -rf %(prop:workdir)s/go"),
+            name="make-clean",
+            command=["make", "clean"],
             description="cleaning up",
-            descriptionDone="clean up",
-            env={"GOPATH": Interpolate("%(prop:workdir)s/go")}
+            descriptionDone="clean up"
         ),
         ShellCommand(
             haltOnFailure=True,
             logEnviron=False,
-            name="move-src",
-            command=_go_cmds(branch=branch),
-            description="moving src",
-            descriptionDone="move src",
-            env={"GOPATH": Interpolate("%(prop:workdir)s/go")}
-        ),
-        ShellCommand(
-            haltOnFailure=True,
-            logEnviron=False,
-            name="build-geth",
-            description="building geth",
-            descriptionDone="build geth",
-            command="go build -v github.com/ethereum/go-ethereum/cmd/geth",
+            name="make-all",
+            description="installing",
+            descriptionDone="install",
+            command=["make", "all"],
             env=env
+        ),
+        ShellCommand(
+            haltOnFailure=True,
+            name="go-test",
+            description="go testing",
+            descriptionDone="go test",
+            command=["make", "test"],
+            maxTime=900
         )
     ]: factory.addStep(step)
-
-    # for step in [
-    #     ShellCommand(
-    #         haltOnFailure=True,
-    #         name="go-test",
-    #         description="go testing",
-    #         descriptionDone="go test",
-    #         command="go test github.com/ethereum/go-ethereum/...",
-    #         env=env,
-    #         maxTime=900
-    #     )
-    # ]: factory.addStep(step)
 
     if not isPullRequest:
         for step in [
@@ -90,7 +74,7 @@ def arm_go_factory(branch='develop', isPullRequest=False):
                 name="tar-geth",
                 description='packing',
                 descriptionDone='pack',
-                command=['tar', '-cjf', 'geth.tar.bz2', 'geth']
+                command=['tar', '-cjf', 'geth.tar.bz2', 'build/bin/geth']
             ),
             SetPropertyFromCommand(
                 haltOnFailure=True,
