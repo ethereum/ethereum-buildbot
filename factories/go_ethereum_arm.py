@@ -56,15 +56,15 @@ def arm_go_factory(branch='develop', isPullRequest=False):
             command=["make", "all"],
             env=env
         ),
-        ShellCommand(
-            haltOnFailure=True,
-            name="go-test",
-            description="go testing",
-            descriptionDone="go test",
-            command=["make", "test"],
-            maxTime=900,
-            env=env
-        )
+        # ShellCommand(
+        #     haltOnFailure=True,
+        #     name="go-test",
+        #     description="go testing",
+        #     descriptionDone="go test",
+        #     command=["make", "test"],
+        #     maxTime=900,
+        #     env=env
+        # )
     ]: factory.addStep(step)
 
     if not isPullRequest:
