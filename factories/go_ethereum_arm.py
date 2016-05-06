@@ -62,7 +62,8 @@ def arm_go_factory(branch='develop', isPullRequest=False):
             description="go testing",
             descriptionDone="go test",
             command=["make", "test"],
-            maxTime=900
+            maxTime=900,
+            env=env
         )
     ]: factory.addStep(step)
 
