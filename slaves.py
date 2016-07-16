@@ -20,11 +20,11 @@ for slave in json.load(open("slaves.json")):
         slaves.append(EC2LatentBuildSlave(
             slave['name'],
             slave['password'],
-            'c3.large',
+            'c4.large',
             max_builds=1,
             ami='ami-ec6c7186',
             region='us-east-1',
-            placement='c',
+            placement='e',
             user_data='{"SLAVENAME": "%s"}' % slave['name'],
             spot_instance=True,
             max_spot_price=0.05,
